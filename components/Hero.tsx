@@ -36,45 +36,47 @@ const Hero: React.FC = () => {
 
   return (
     <div 
-      className="relative flex flex-col items-center justify-center text-center py-10 md:py-16 overflow-hidden cursor-pointer group"
+      className="relative flex flex-col items-center justify-center text-center py-10 md:py-24 overflow-hidden cursor-pointer group"
     >
       {/* Dynamic Background Glow */}
       <motion.div 
         animate={{ 
-          scale: [1, 1.2, 1],
-          opacity: [0.3, 0.5, 0.3],
+          scale: [1, 1.4, 1],
+          opacity: [0.2, 0.4, 0.2],
+          rotate: [0, 90, 180, 270, 360]
         }}
-        transition={{ duration: 4, repeat: Infinity }}
-        className="absolute inset-0 bg-[#FAB520]/10 blur-[120px] rounded-full z-0 pointer-events-none"
+        transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+        className="absolute inset-0 bg-gradient-to-tr from-[#FAB520]/20 to-transparent blur-[150px] rounded-full z-0 pointer-events-none"
       />
 
       <motion.img 
         onClick={scrollToMenu}
-        initial={{ y: -100, opacity: 0, rotate: -20 }}
-        animate={{ y: 0, opacity: 1, rotate: 0 }}
-        transition={{ type: 'spring', bounce: 0.5, duration: 1 }}
-        whileHover={{ scale: 1.1, rotate: 5 }}
+        initial={{ y: -100, opacity: 0, rotate: -20, scale: 0.5 }}
+        animate={{ y: 0, opacity: 1, rotate: 0, scale: 1 }}
+        transition={{ type: 'spring', bounce: 0.6, duration: 1.2 }}
+        whileHover={{ scale: 1.15, rotate: [0, -5, 5, 0] }}
         src={LOGO_URL} 
         alt="Ya3m Logo" 
-        className="h-32 md:h-48 object-contain mb-6 drop-shadow-[0_0_40px_rgba(250,181,32,0.4)] relative z-10"
+        className="h-32 md:h-56 object-contain mb-6 drop-shadow-[0_0_60px_rgba(250,181,32,0.5)] relative z-10 logo-wobble"
       />
       
-      {/* App Install Button - Positioned Under Logo */}
+      {/* App Install Button */}
       <AnimatePresence>
         {deferredPrompt && (
           <motion.button
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             onClick={handleInstallClick}
-            className="z-20 mb-8 flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/20 px-5 py-3 rounded-2xl transition-all shadow-xl group/btn"
+            className="z-20 mb-8 flex items-center gap-3 bg-[#FAB520] text-black border-4 border-black px-6 py-4 rounded-3xl transition-all shadow-[0_10px_30px_rgba(250,181,32,0.4)] group/btn"
           >
-            <img src={LOGO_URL} className="h-8 w-8 object-contain" alt="app icon" />
+            <Download className="w-6 h-6 animate-bounce" />
             <div className="text-right">
-              <p className="text-[10px] font-bold text-gray-500 leading-none">تطبيق يا عم</p>
-              <p className="text-sm font-bold text-[#FAB520]">تثبيت كـ تطبيق موبايل</p>
+              <p className="text-xs font-black leading-none uppercase">نزّل التطبيق</p>
+              <p className="text-lg font-bold">يا عم على موبايلك</p>
             </div>
-            <Download className="w-5 h-5 text-[#FAB520] group-hover/btn:translate-y-0.5 transition-transform" />
           </motion.button>
         )}
       </AnimatePresence>
@@ -83,84 +85,90 @@ const Hero: React.FC = () => {
         onClick={scrollToMenu}
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 0.3, type: 'spring' }}
+        transition={{ delay: 0.4, type: 'spring' }}
         className="relative z-10"
       >
-        <h1 className="text-5xl md:text-7xl font-normal mb-6 leading-[1.1] tracking-tight font-['Lalezar'] group-hover:text-[#FAB520] transition-colors">
+        <h1 className="text-6xl md:text-8xl font-normal mb-6 leading-[1] tracking-tighter font-['Lalezar'] transition-colors">
           أسرع دليفري في <br/> 
-          <span className="text-[#FAB520] drop-shadow-[0_5px_15_rgba(250,181,32,0.3)]">مصر يا عم!</span>
+          <span className="text-[#FAB520] drop-shadow-[0_10px_30px_rgba(250,181,32,0.5)] inline-block hover:scale-110 transition-transform cursor-pointer">مصر يا عم!</span>
         </h1>
         
-        <div className="flex flex-col items-center gap-4">
+        <div className="flex flex-col items-center gap-6">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            className="bg-white/5 backdrop-blur-md border border-white/10 px-6 py-4 rounded-[2rem] inline-block shadow-2xl"
+            transition={{ delay: 0.7 }}
+            className="bg-white/5 backdrop-blur-xl border-2 border-[#FAB520]/20 px-8 py-5 rounded-[3rem] inline-block shadow-2xl"
           >
-            <p className="text-lg md:text-xl text-gray-300 font-bold mb-2">
+            <p className="text-xl md:text-2xl text-gray-200 font-bold mb-2">
               كبدة • سجق • حواوشي
             </p>
-            <div className="flex items-center justify-center gap-2 text-xs md:text-sm text-[#FAB520]">
-                <Star className="w-3 h-3 fill-current" />
-                <span className="font-bold">أكل بيتي عالي الجودة بيتحضرلك أول بأول</span>
-                <Star className="w-3 h-3 fill-current" />
+            <div className="flex items-center justify-center gap-3 text-sm md:text-base text-[#FAB520]">
+                <Star className="w-4 h-4 fill-current animate-spin-slow" />
+                <span className="font-black">أكل بيتي بيتحضرلك طازة مخصوص</span>
+                <Star className="w-4 h-4 fill-current animate-spin-slow" />
             </div>
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
-            className="flex items-center gap-2 text-[#FAB520] bg-[#FAB520]/10 px-4 py-2 rounded-full border border-[#FAB520]/20 font-bold text-xs md:text-sm"
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.9, type: 'spring' }}
+            className="flex items-center gap-3 text-black bg-[#FAB520] px-6 py-3 rounded-full font-black text-sm md:text-lg shadow-[0_15px_35px_rgba(250,181,32,0.5)]"
           >
-            <Truck className="w-4 h-4" />
-            <span>خدمة التوصيل بـ 20 جنيه بس!</span>
+            <Truck className="w-6 h-6" />
+            <span>التوصيل بـ 20 جنيه بس.. يا بلاش!</span>
           </motion.div>
 
           <motion.div
-            animate={{ y: [0, 10, 0] }}
+            animate={{ y: [0, 15, 0] }}
             transition={{ duration: 1.5, repeat: Infinity }}
-            className="mt-4 text-[#FAB520]/50"
+            className="mt-6 text-[#FAB520]"
           >
-            <ChevronDown className="w-8 h-8" />
+            <ChevronDown className="w-12 h-12" />
           </motion.div>
         </div>
       </motion.div>
       
-      {/* Entertaining floating elements */}
-      <motion.div
-        animate={{ 
-          x: [-200, 1200],
-          y: [0, -10, 0]
-        }}
-        transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-        className="absolute bottom-10 left-0 text-5xl opacity-40 pointer-events-none select-none z-0"
-      >
+      {/* Fun Background Assets */}
+      {[
+        { icon: '🍔', top: '15%', left: '10%', delay: 0 },
+        { icon: '🥪', top: '25%', right: '15%', delay: 1 },
+        { icon: '🥘', bottom: '20%', left: '20%', delay: 2 },
+        { icon: '🍟', bottom: '30%', right: '10%', delay: 1.5 },
+        { icon: '🌮', top: '50%', left: '5%', delay: 0.5 },
+      ].map((item, i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0 }}
+          animate={{ 
+            opacity: [0.1, 0.3, 0.1],
+            y: [0, -40, 0],
+            rotate: [0, 20, -20, 0]
+          }}
+          transition={{ 
+            duration: 6 + i, 
+            repeat: Infinity, 
+            delay: item.delay,
+            ease: "easeInOut"
+          }}
+          style={{ 
+            position: 'absolute', 
+            top: item.top, 
+            left: item.left, 
+            right: item.right, 
+            bottom: item.bottom,
+            fontSize: '3rem'
+          }}
+          className="pointer-events-none z-0 hidden md:block"
+        >
+          {item.icon}
+        </motion.div>
+      ))}
+
+      <div className="absolute bottom-10 left-0 text-6xl opacity-30 scooter pointer-events-none select-none z-0">
         🛵💨
-      </motion.div>
-
-      <motion.div
-        animate={{ 
-          y: [0, -20, 0],
-          rotate: [0, 10, -10, 0]
-        }}
-        transition={{ duration: 5, repeat: Infinity }}
-        className="absolute top-20 right-[10%] text-4xl opacity-20 pointer-events-none z-0"
-      >
-        🥪
-      </motion.div>
-
-      <motion.div
-        animate={{ 
-          y: [0, 20, 0],
-          rotate: [0, -15, 15, 0]
-        }}
-        transition={{ duration: 6, repeat: Infinity }}
-        className="absolute bottom-40 left-[15%] text-4xl opacity-20 pointer-events-none z-0"
-      >
-        🥘
-      </motion.div>
+      </div>
     </div>
   );
 };

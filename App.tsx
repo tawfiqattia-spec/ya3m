@@ -5,7 +5,8 @@ import Hero from './components/Hero';
 import SpecialModal from './components/SpecialModals';
 import { LOGO_URL, SANDWICH_ITEMS, TRAY_ITEMS, SWEET_ITEMS } from './constants';
 import { SpecialOrderState } from './types';
-import { Utensils, IceCream, Sandwich, ShoppingBasket, X, Trash2, Send, Plus, Minus, Truck, Loader2, AlertCircle, Phone, Facebook, MessageCircle, Download } from 'lucide-react';
+/* Added Sparkles to the import list from lucide-react to fix the undefined variable error */
+import { Utensils, IceCream, Sandwich, ShoppingBasket, X, Trash2, Send, Plus, Minus, Truck, Loader2, Star, Phone, Facebook, MessageCircle, Download, Sparkles } from 'lucide-react';
 
 const DELIVERY_FEE = 20;
 const SAUCE_PRICE = 10;
@@ -15,7 +16,7 @@ const App: React.FC = () => {
   const [loadProgress, setLoadProgress] = useState(0);
   const [loaderText] = useState("دستوووووور! 🧞‍♂️");
   const [showDastoor, setShowDastoor] = useState(false);
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [cartAnimate, setCartAnimate] = useState(false);
 
   const [activeModal, setActiveModal] = useState<'sandwiches' | 'trays' | 'sweets' | null>(null);
   const [isGlobalSummaryOpen, setIsGlobalSummaryOpen] = useState(false);
@@ -44,7 +45,7 @@ const App: React.FC = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       setLoadProgress(prev => {
-        const next = prev + (Math.random() * 18);
+        const next = prev + (Math.random() * 20);
         if (next >= 100) {
           clearInterval(timer);
           setTimeout(() => setLoading(false), 500);
@@ -52,26 +53,25 @@ const App: React.FC = () => {
         }
         return next;
       });
-    }, 150);
+    }, 120);
 
     const dastoorTimer = setTimeout(() => {
       setShowDastoor(true);
-    }, 1000);
-
-    const promptHandler = (e: any) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-    };
-    window.addEventListener('beforeinstallprompt', promptHandler);
+    }, 800);
 
     return () => {
       clearInterval(timer);
       clearTimeout(dastoorTimer);
-      window.removeEventListener('beforeinstallprompt', promptHandler);
     };
   }, []);
 
+  const triggerCartAnimation = () => {
+    setCartAnimate(true);
+    setTimeout(() => setCartAnimate(false), 400);
+  };
+
   const updateGlobalQuantity = (name: string, category: string, delta: number) => {
+    if (delta > 0) triggerCartAnimation();
     const update = (prev: any) => ({
       ...prev,
       quantities: { ...prev.quantities, [name]: Math.max(0, (prev.quantities[name] || 0) + delta) }
@@ -137,9 +137,8 @@ const App: React.FC = () => {
           summary.push({ name: item.name, quantity: q, price, variant, category: 'sweets' });
       }
     });
-    const totalSauce = sandwichState.sauceQuantity;
-    if (totalSauce > 0) {
-      summary.push({ name: 'صوص أعجوبة السحري', quantity: totalSauce, price: SAUCE_PRICE, category: 'extra' });
+    if (sandwichState.sauceQuantity > 0) {
+      summary.push({ name: 'صوص أعجوبة السحري', quantity: sandwichState.sauceQuantity, price: SAUCE_PRICE, category: 'extra' });
     }
     return summary;
   }, [sandwichState, trayState, sweetState]);
@@ -154,7 +153,7 @@ const App: React.FC = () => {
     setTimeout(() => {
         setShowSuccess(true);
         setIsSubmitting(false);
-    }, 1500);
+    }, 1800);
   };
 
   const totalItemCount = useMemo(() => {
@@ -169,39 +168,42 @@ const App: React.FC = () => {
         {loading && (
           <motion.div 
             key="loader"
-            exit={{ opacity: 0 }}
+            exit={{ opacity: 0, scale: 1.1 }}
             className="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center"
           >
             <motion.div className="relative flex flex-col items-center">
                 <motion.img 
-                  animate={{ scale: [1, 1.05, 1], opacity: [0.8, 1, 0.8] }}
-                  transition={{ duration: 3, repeat: Infinity }}
+                  animate={{ 
+                    scale: [1, 1.1, 1], 
+                    rotate: [0, -5, 5, 0]
+                  }}
+                  transition={{ duration: 2, repeat: Infinity }}
                   src={LOGO_URL} 
                   alt="Loading Logo" 
-                  className="h-32 md:h-48 object-contain"
+                  className="h-36 md:h-56 object-contain mb-8"
                 />
-                <div className="mt-12 flex flex-col items-center w-full">
-                    <div className="w-48 h-1 bg-white/10 rounded-full overflow-hidden mb-3">
+                <div className="mt-4 flex flex-col items-center w-full">
+                    <div className="w-64 h-2 bg-white/10 rounded-full overflow-hidden mb-6 border border-white/5">
                         <motion.div 
-                          className="h-full bg-[#FAB520]" 
+                          className="h-full bg-gradient-to-r from-[#FAB520] to-[#ffda85]" 
                           style={{ width: `${loadProgress}%` }}
                         />
                     </div>
                     <AnimatePresence>
                       {showDastoor && (
-                        <div className="flex gap-1">
+                        <div className="flex gap-2">
                           {loaderText.split('').map((char, i) => (
                             <motion.span 
                               key={i}
-                              initial={{ opacity: 0, width: 0 }}
-                              animate={{ opacity: 1, width: 'auto' }}
+                              initial={{ opacity: 0, scale: 0, y: 20 }}
+                              animate={{ opacity: 1, scale: 1, y: 0 }}
                               transition={{ 
                                 delay: i * 0.08, 
                                 type: 'spring',
-                                damping: 12,
+                                damping: 10,
                                 stiffness: 200
                               }}
-                              className="text-[#FAB520] font-black text-2xl md:text-4xl font-['Lalezar'] drop-shadow-[0_0_15px_rgba(250,181,32,0.4)]"
+                              className="text-[#FAB520] font-black text-3xl md:text-6xl font-['Lalezar'] drop-shadow-[0_0_20px_rgba(250,181,32,0.6)]"
                             >
                               {char}
                             </motion.span>
@@ -221,112 +223,149 @@ const App: React.FC = () => {
             <main className="max-w-7xl mx-auto px-4 pt-4 relative z-10 pb-32">
               <Hero />
               
-              <section className="mt-12">
-                <motion.h2 
-                  whileInView={{ scale: [0.95, 1.05, 1] }}
-                  className="text-3xl md:text-5xl font-normal text-center mb-12 text-[#FAB520] drop-shadow-[0_0_20px_rgba(250,181,32,0.5)] font-['Lalezar']"
+              <section className="mt-16">
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  className="text-center mb-16"
                 >
-                  عايز تاكل إيه يا عم؟ 🤤
-                </motion.h2>
+                  <h2 className="text-4xl md:text-7xl font-normal mb-4 text-[#FAB520] font-['Lalezar'] drop-shadow-xl">
+                    عايز تاكل إيه يا عم؟ 🤤
+                  </h2>
+                  <p className="text-gray-400 font-bold text-lg md:text-xl">اختار القسم ودلع كرشك في ثواني!</p>
+                </motion.div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   {[
-                    { id: 'sandwiches', title: 'ركن السندوتشات', icon: Sandwich, color: 'bg-[#FAB520]', text: 'text-black' },
-                    { id: 'trays', title: 'صواني وطواجن', icon: Utensils, color: 'bg-white/5 border-4 border-[#FAB520]', text: 'text-[#FAB520]' },
-                    { id: 'sweets', title: 'حلويات يا عم', icon: IceCream, color: 'bg-white/10', text: 'text-white' }
+                    { id: 'sandwiches', title: 'ركن السندوتشات', icon: Sandwich, color: 'bg-[#FAB520]', text: 'text-black', shadow: 'shadow-[#FAB520]/20' },
+                    { id: 'trays', title: 'صواني وطواجن', icon: Utensils, color: 'bg-white/5 border-4 border-[#FAB520]', text: 'text-[#FAB520]', shadow: 'shadow-white/5' },
+                    { id: 'sweets', title: 'حلويات يا عم', icon: IceCream, color: 'bg-white/10 border-4 border-white/5', text: 'text-white', shadow: 'shadow-white/10' }
                   ].map((cat, i) => (
                     <motion.div 
                       key={cat.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.1 }}
-                      whileHover={{ scale: 1.05, rotate: [0, -1, 1, 0] }} 
+                      initial={{ opacity: 0, x: i % 2 === 0 ? -50 : 50 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.1, type: 'spring' }}
+                      whileHover={{ scale: 1.05, rotate: i % 2 === 0 ? -2 : 2 }} 
+                      whileTap={{ scale: 0.95 }}
                       onClick={() => setActiveModal(cat.id as any)} 
-                      className={`cursor-pointer ${cat.color} p-6 md:p-8 rounded-[2.5rem] flex flex-col items-center justify-center text-center gap-4 group relative shadow-2xl overflow-hidden`}
+                      className={`cursor-pointer ${cat.color} p-10 rounded-[3rem] flex flex-col items-center justify-center text-center gap-6 group relative shadow-2xl transition-all overflow-hidden ${cat.shadow}`}
                     >
-                      <cat.icon className={`w-16 h-16 md:w-20 md:h-20 ${cat.text} group-hover:rotate-12 transition-transform duration-500`} />
-                      <h3 className={`text-3xl font-normal font-['Lalezar'] ${cat.text}`}>{cat.title}</h3>
-                      <div className={`${cat.id === 'sandwiches' ? 'bg-black text-[#FAB520]' : 'bg-[#FAB520] text-black'} px-6 py-2 rounded-xl font-bold text-base`}>دخول المتجر</div>
+                      <motion.div
+                        animate={{ y: [0, -10, 0] }}
+                        transition={{ duration: 3, repeat: Infinity, delay: i * 0.5 }}
+                      >
+                        <cat.icon className={`w-24 h-24 ${cat.text} group-hover:scale-110 transition-transform`} />
+                      </motion.div>
+                      <h3 className={`text-4xl font-normal font-['Lalezar'] ${cat.text}`}>{cat.title}</h3>
+                      <div className={`${cat.id === 'sandwiches' ? 'bg-black text-[#FAB520]' : 'bg-[#FAB520] text-black'} px-10 py-3 rounded-2xl font-black text-lg shadow-lg`}>دخول المتجر</div>
+                      
+                      {/* Decorative sparkle */}
+                      <Sparkles className="absolute top-4 right-4 text-white/10 w-12 h-12 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </motion.div>
                   ))}
                 </div>
               </section>
             </main>
 
-            {/* Cart Button */}
-            <div className="fixed bottom-6 left-6 md:bottom-10 md:left-10 flex flex-col items-start gap-4 z-[100]">
+            {/* Global Animated Cart Button */}
+            <div className="fixed bottom-8 left-8 md:bottom-12 md:left-12 flex flex-col items-start gap-4 z-[100]">
               <motion.button 
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
+                whileHover={{ scale: 1.15, rotate: 5 }}
+                whileTap={{ scale: 0.85 }}
                 onClick={() => setIsGlobalSummaryOpen(true)} 
-                className="bg-[#FAB520] text-black p-4 md:p-5 rounded-full shadow-[0_15px_40px_rgba(250,181,32,0.6)] flex items-center gap-3 border-4 border-black"
+                className={`bg-[#FAB520] text-black p-5 md:p-7 rounded-full shadow-[0_20px_50px_rgba(250,181,32,0.6)] flex items-center gap-4 border-4 border-black transition-all ${cartAnimate ? 'cart-boing' : ''}`}
               >
                 <div className="relative">
-                  <ShoppingBasket className="w-6 h-6 md:w-8 md:h-8" />
+                  <ShoppingBasket className="w-8 h-8 md:w-10 md:h-10" />
                   <AnimatePresence>
                     {totalItemCount > 0 && (
                       <motion.span 
                         key={totalItemCount}
-                        initial={{ scale: 0 }} 
-                        animate={{ scale: [0, 1.4, 1] }} 
+                        initial={{ scale: 0, rotate: -45 }} 
+                        animate={{ scale: 1, rotate: 0 }} 
                         exit={{ scale: 0 }}
-                        className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] md:text-xs font-bold w-5 h-5 md:w-7 h-7 rounded-full flex items-center justify-center border-2 border-white"
+                        className="absolute -top-3 -right-3 bg-red-600 text-white text-xs md:text-sm font-black w-7 h-7 md:w-9 md:h-9 rounded-full flex items-center justify-center border-4 border-white shadow-xl"
                       >
                         {totalItemCount}
                       </motion.span>
                     )}
                   </AnimatePresence>
                 </div>
-                <span className="text-lg font-bold hidden sm:inline">السلة يا عم</span>
+                <span className="text-2xl font-['Lalezar'] hidden sm:inline">السلة يا عم</span>
               </motion.button>
             </div>
 
             <AnimatePresence>
               {isGlobalSummaryOpen && (
                 <div className="fixed inset-0 z-[1000] flex justify-end items-stretch overflow-hidden">
-                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsGlobalSummaryOpen(false)} className="absolute inset-0 bg-black/90 backdrop-blur-xl" />
-                  <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 30, stiffness: 300 }} className="relative w-full md:w-[450px] h-full bg-[#0c0c0c] flex flex-col shadow-2xl">
-                    <div className="p-5 md:p-6 flex justify-between items-center border-b border-white/5 bg-black/40 shrink-0">
-                      <div className="flex items-center gap-3">
-                        <ShoppingBasket className="text-[#FAB520] w-5 h-5" />
-                        <h2 className="text-2xl font-normal font-['Lalezar']">طلباتك يا عم</h2>
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsGlobalSummaryOpen(false)} className="absolute inset-0 bg-black/90 backdrop-blur-2xl" />
+                  <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 30, stiffness: 250 }} className="relative w-full md:w-[500px] h-full bg-[#0c0c0c] flex flex-col shadow-2xl border-l-4 border-[#FAB520]">
+                    <div className="p-6 md:p-10 flex justify-between items-center border-b border-white/5 bg-black/40 shrink-0">
+                      <div className="flex items-center gap-4">
+                        <ShoppingBasket className="text-[#FAB520] w-8 h-8" />
+                        <h2 className="text-3xl font-normal font-['Lalezar']">طلباتك يا عم</h2>
                       </div>
-                      <button onClick={() => setIsGlobalSummaryOpen(false)} className="p-2 bg-white/5 rounded-full hover:bg-red-500/20"><X className="w-5 h-5" /></button>
+                      <button onClick={() => setIsGlobalSummaryOpen(false)} className="p-3 bg-white/5 rounded-full hover:bg-red-500/20 transition-colors"><X className="w-6 h-6" /></button>
                     </div>
-                    <div className="flex-1 overflow-y-auto px-5 py-6 space-y-5 scrollbar-hide">
-                      {fullOrderSummary.map((item, idx) => (
-                        <motion.div layout initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} key={`${item.name}-${idx}`} className="p-4 bg-white/5 rounded-[1.5rem] border border-white/5 shadow-inner transition-colors hover:bg-white/10">
-                          <div className="flex justify-between items-start mb-2">
-                            <div>
-                                <h4 className="font-bold text-lg mb-1">{item.name}</h4>
-                                <div className="flex gap-2 flex-wrap">
-                                    {item.variant && <span className="text-[10px] font-bold text-[#FAB520] bg-[#FAB520]/10 px-2 py-0.5 rounded-full">{item.variant === 'nuts' ? 'بالمكسرات' : 'سادة'}</span>}
-                                    {item.bread && <span className="text-[10px] font-bold text-gray-500 bg-white/5 px-2 py-0.5 rounded-full">خبز {item.bread === 'baladi' ? 'بلدي' : 'فينو فرنسي'}</span>}
-                                </div>
-                            </div>
-                            <button onClick={() => removeGlobalItem(item.name, item.category)} className="text-gray-600 hover:text-red-500 transition-colors"><Trash2 className="w-5 h-5" /></button>
-                          </div>
-                          <div className="flex justify-between items-center bg-black/40 p-2.5 rounded-xl border border-white/5">
-                            <span className="text-xl font-bold text-[#FAB520]">{item.quantity * item.price} ج.م</span>
-                            <div className="flex items-center gap-3">
-                              <button onClick={() => updateGlobalQuantity(item.name, item.category, -1)} className="text-[#FAB520] bg-white/5 p-1.5 rounded-lg active:scale-125 transition-transform"><Minus className="w-4 h-4" /></button>
-                              <span className="font-bold text-lg w-6 text-center text-white">{item.quantity}</span>
-                              <button onClick={() => updateGlobalQuantity(item.name, item.category, 1)} className="text-[#FAB520] bg-white/5 p-1.5 rounded-lg active:scale-125 transition-transform"><Plus className="w-4 h-4" /></button>
-                            </div>
-                          </div>
-                        </motion.div>
-                      ))}
-                    </div>
-                    {fullOrderSummary.length > 0 && (
-                      <div className="p-5 md:p-6 border-t border-[#FAB520]/20 bg-black/80 space-y-4 pb-10">
-                        <div className="flex justify-between items-end mb-1 px-1">
-                            <span className="text-3xl font-bold text-[#FAB520]">{globalTotal} ج.م</span>
+                    
+                    <div className="flex-1 overflow-y-auto px-6 py-8 space-y-6 scrollbar-hide">
+                      {fullOrderSummary.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center h-full opacity-30 text-center space-y-4">
+                          <ShoppingBasket className="w-24 h-24" />
+                          <p className="text-2xl font-bold">لسه مفيش أكل يا عم!</p>
                         </div>
-                        <form onSubmit={handleFinalSubmit} className="space-y-3">
-                          <input required placeholder="اسمك" className="w-full bg-white/5 border border-white/10 p-4 rounded-xl outline-none focus:border-[#FAB520] font-bold text-sm" value={userInfo.name} onChange={e => setUserInfo({...userInfo, name: e.target.value})} />
-                          <input required type="tel" placeholder="تليفونك" className="w-full bg-white/5 border border-white/10 p-4 rounded-xl outline-none focus:border-[#FAB520] font-bold text-sm" value={userInfo.phone} onChange={e => setUserInfo({...userInfo, phone: e.target.value})} />
-                          <input required placeholder="العنوان فين بالضبط؟" className="w-full bg-white/5 border border-white/10 p-4 rounded-xl outline-none focus:border-[#FAB520] font-bold text-sm" value={userInfo.address} onChange={e => setUserInfo({...userInfo, address: e.target.value})} />
-                          <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} disabled={isSubmitting} className="w-full py-4 bg-[#FAB520] text-black font-bold text-xl rounded-2xl shadow-xl flex items-center justify-center gap-3 disabled:opacity-50 mt-2">{isSubmitting ? <Loader2 className="animate-spin w-6 h-6" /> : <Send className="w-6 h-6" />}{isSubmitting ? 'جاري الطيران...' : 'اطلب الآن يا عم!'}</motion.button>
+                      ) : (
+                        fullOrderSummary.map((item, idx) => (
+                          <motion.div 
+                            layout 
+                            initial={{ opacity: 0, x: 30 }} 
+                            animate={{ opacity: 1, x: 0 }} 
+                            key={`${item.name}-${idx}`} 
+                            className="p-6 bg-white/5 rounded-[2rem] border-2 border-white/5 transition-all hover:bg-white/10 hover:border-[#FAB520]/20"
+                          >
+                            <div className="flex justify-between items-start mb-4">
+                              <div>
+                                  <h4 className="font-black text-xl mb-2">{item.name}</h4>
+                                  <div className="flex gap-3 flex-wrap">
+                                      {item.variant && <span className="text-xs font-black text-[#FAB520] bg-[#FAB520]/10 px-3 py-1 rounded-full border border-[#FAB520]/20">{item.variant === 'nuts' ? 'بالمكسرات' : 'سادة'}</span>}
+                                      {item.bread && <span className="text-xs font-black text-gray-400 bg-white/5 px-3 py-1 rounded-full border border-white/5">خبز {item.bread === 'baladi' ? 'بلدي' : 'فينو فرنسي'}</span>}
+                                  </div>
+                              </div>
+                              <motion.button whileTap={{ scale: 0.8 }} onClick={() => removeGlobalItem(item.name, item.category)} className="text-gray-600 hover:text-red-500 p-2"><Trash2 className="w-6 h-6" /></motion.button>
+                            </div>
+                            <div className="flex justify-between items-center bg-black/50 p-4 rounded-2xl border border-white/10">
+                              <span className="text-2xl font-black text-[#FAB520]">{item.quantity * item.price} ج.م</span>
+                              <div className="flex items-center gap-4">
+                                <motion.button whileTap={{ scale: 1.2 }} onClick={() => updateGlobalQuantity(item.name, item.category, -1)} className="text-[#FAB520] bg-white/5 p-2 rounded-xl"><Minus className="w-5 h-5" /></motion.button>
+                                <span className="font-black text-xl w-8 text-center">{item.quantity}</span>
+                                <motion.button whileTap={{ scale: 1.2 }} onClick={() => updateGlobalQuantity(item.name, item.category, 1)} className="text-[#FAB520] bg-white/5 p-2 rounded-xl"><Plus className="w-5 h-5" /></motion.button>
+                              </div>
+                            </div>
+                          </motion.div>
+                        ))
+                      )}
+                    </div>
+
+                    {fullOrderSummary.length > 0 && (
+                      <div className="p-8 md:p-10 border-t border-[#FAB520]/30 bg-black/90 space-y-5 pb-12">
+                        <div className="flex justify-between items-center mb-2">
+                            <span className="text-gray-400 font-bold">الحساب الكلي:</span>
+                            <span className="text-4xl font-black text-[#FAB520] drop-shadow-lg">{globalTotal} ج.م</span>
+                        </div>
+                        <form onSubmit={handleFinalSubmit} className="space-y-4">
+                          <input required placeholder="اسمك" className="w-full bg-white/5 border-2 border-white/10 p-5 rounded-2xl outline-none focus:border-[#FAB520] font-bold text-lg transition-all" value={userInfo.name} onChange={e => setUserInfo({...userInfo, name: e.target.value})} />
+                          <input required type="tel" placeholder="رقم تليفونك" className="w-full bg-white/5 border-2 border-white/10 p-5 rounded-2xl outline-none focus:border-[#FAB520] font-bold text-lg transition-all" value={userInfo.phone} onChange={e => setUserInfo({...userInfo, phone: e.target.value})} />
+                          <input required placeholder="العنوان بالضبط يا عم؟" className="w-full bg-white/5 border-2 border-white/10 p-5 rounded-2xl outline-none focus:border-[#FAB520] font-bold text-lg transition-all" value={userInfo.address} onChange={e => setUserInfo({...userInfo, address: e.target.value})} />
+                          <motion.button 
+                            whileHover={{ scale: 1.02 }} 
+                            whileTap={{ scale: 0.98 }} 
+                            disabled={isSubmitting} 
+                            className="w-full py-6 bg-[#FAB520] text-black font-black text-2xl rounded-3xl shadow-[0_15px_40px_rgba(250,181,32,0.4)] flex items-center justify-center gap-4 disabled:opacity-50 mt-4 font-['Lalezar']"
+                          >
+                            {isSubmitting ? <Loader2 className="animate-spin w-8 h-8" /> : <Send className="w-8 h-8" />}
+                            {isSubmitting ? 'جاري الطيران...' : 'اطلب دلوقتي يا عم!'}
+                          </motion.button>
                         </form>
                       </div>
                     )}
@@ -335,17 +374,41 @@ const App: React.FC = () => {
               )}
             </AnimatePresence>
 
-            <SpecialModal isOpen={activeModal === 'sandwiches'} onClose={() => setActiveModal(null)} title="ركن السندوتشات" image="https://sayedsamkary.com/unnamed.jpg" type="sandwiches" globalTotal={globalTotal} subtotal={subtotal} deliveryFee={DELIVERY_FEE} persistentState={sandwichState} onUpdateState={(ns) => setSandwichState(ns)} onFinalSubmit={handleFinalSubmit} initialItems={SANDWICH_ITEMS} fullOrderSummary={fullOrderSummary} updateGlobalQuantity={updateGlobalQuantity} removeGlobalItem={removeGlobalItem} />
-            <SpecialModal isOpen={activeModal === 'trays'} onClose={() => setActiveModal(null)} title="صواني وطواجن" image="https://sayedsamkary.com/%D8%B5%D9%8A%D9%86%D9%8A%D8%A9%20%D9%83%D9%88%D8%B3%D8%A9%20%D8%A8%D8%A7%D9%84%D8%A8%D8%B4%D8%A7%D9%85%D9%84.jpg" type="trays" globalTotal={globalTotal} subtotal={subtotal} deliveryFee={DELIVERY_FEE} persistentState={trayState} onUpdateState={(ns) => setTrayState(ns)} onFinalSubmit={handleFinalSubmit} initialItems={TRAY_ITEMS} fullOrderSummary={fullOrderSummary} updateGlobalQuantity={updateGlobalQuantity} removeGlobalItem={removeGlobalItem} />
-            <SpecialModal isOpen={activeModal === 'sweets'} onClose={() => setActiveModal(null)} title="حلويات يا عم" image="https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=800&q=80" type="sweets" globalTotal={globalTotal} subtotal={subtotal} deliveryFee={DELIVERY_FEE} persistentState={sweetState} onUpdateState={(ns) => setSweetState(ns)} onFinalSubmit={handleFinalSubmit} initialItems={SWEET_ITEMS} fullOrderSummary={fullOrderSummary} updateGlobalQuantity={updateGlobalQuantity} removeGlobalItem={removeGlobalItem} />
+            <SpecialModal isOpen={activeModal === 'sandwiches'} onClose={() => setActiveModal(null)} title="ركن السندوتشات" image="https://ya3m.com/pic/ya3m-kebda.png" type="sandwiches" globalTotal={globalTotal} subtotal={subtotal} deliveryFee={DELIVERY_FEE} persistentState={sandwichState} onUpdateState={(ns) => setSandwichState(ns)} onFinalSubmit={handleFinalSubmit} initialItems={SANDWICH_ITEMS} fullOrderSummary={fullOrderSummary} updateGlobalQuantity={updateGlobalQuantity} removeGlobalItem={removeGlobalItem} />
+            <SpecialModal isOpen={activeModal === 'trays'} onClose={() => setActiveModal(null)} title="صواني وطواجن" image="https://ya3m.com/pic/baashamil.png" type="trays" globalTotal={globalTotal} subtotal={subtotal} deliveryFee={DELIVERY_FEE} persistentState={trayState} onUpdateState={(ns) => setTrayState(ns)} onFinalSubmit={handleFinalSubmit} initialItems={TRAY_ITEMS} fullOrderSummary={fullOrderSummary} updateGlobalQuantity={updateGlobalQuantity} removeGlobalItem={removeGlobalItem} />
+            <SpecialModal isOpen={activeModal === 'sweets'} onClose={() => setActiveModal(null)} title="حلويات يا عم" image="https://ya3m.com/pic/roz.png" type="sweets" globalTotal={globalTotal} subtotal={subtotal} deliveryFee={DELIVERY_FEE} persistentState={sweetState} onUpdateState={(ns) => setSweetState(ns)} onFinalSubmit={handleFinalSubmit} initialItems={SWEET_ITEMS} fullOrderSummary={fullOrderSummary} updateGlobalQuantity={updateGlobalQuantity} removeGlobalItem={removeGlobalItem} />
 
             <AnimatePresence>
               {showSuccess && (
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[5000] bg-black flex flex-col items-center justify-center p-8 text-center">
-                  <motion.div animate={{ scale: [0, 1.2, 1], rotate: [0, 360] }} className="bg-[#FAB520] p-10 rounded-full mb-8 shadow-[0_0_100px_rgba(250,181,32,0.6)]"><Send className="w-16 h-16 text-black" /></motion.div>
-                  <h2 className="text-5xl font-['Lalezar'] text-[#FAB520] mb-4">طلبك طار عندنا!</h2>
-                  <p className="text-xl text-gray-400 font-bold mb-8">هيكون عندك خلال 25 دقيقة بالضبط 🛵💨</p>
-                  <motion.button whileHover={{ scale: 1.1 }} onClick={() => setShowSuccess(false)} className="mt-12 text-gray-500 font-bold hover:text-white">رجوع للرئيسية</motion.button>
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[5000] bg-black flex flex-col items-center justify-center p-8 text-center overflow-hidden">
+                  <motion.div 
+                    animate={{ 
+                      scale: [0, 1.4, 1], 
+                      rotate: [0, 720],
+                    }} 
+                    transition={{ duration: 1, type: 'spring' }}
+                    className="bg-[#FAB520] p-16 rounded-full mb-10 shadow-[0_0_120px_rgba(250,181,32,0.7)] text-black relative"
+                  >
+                    <Send className="w-24 h-24" />
+                    <motion.div 
+                      animate={{ scale: [1, 2], opacity: [0.5, 0] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                      className="absolute inset-0 bg-white rounded-full"
+                    />
+                  </motion.div>
+                  <h2 className="text-6xl md:text-8xl font-normal font-['Lalezar'] text-[#FAB520] mb-6 drop-shadow-2xl">طلبك طار عندنا!</h2>
+                  <p className="text-2xl text-gray-400 font-black mb-12">هيكون عندك خلال 25 دقيقة بالضبط.. استعد! 🛵💨</p>
+                  <motion.button 
+                    whileHover={{ scale: 1.2, color: '#FAB520' }} 
+                    onClick={() => setShowSuccess(false)} 
+                    className="mt-12 text-gray-600 font-black text-xl hover:text-white transition-colors"
+                  >
+                    رجوع للرئيسية يا عم
+                  </motion.button>
+                  
+                  {/* Decorative celebration elements */}
+                  <Star className="absolute top-20 left-[10%] text-[#FAB520] w-12 h-12 animate-pulse" />
+                  <Star className="absolute bottom-40 right-[15%] text-[#FAB520] w-16 h-16 animate-pulse" />
                 </motion.div>
               )}
             </AnimatePresence>
