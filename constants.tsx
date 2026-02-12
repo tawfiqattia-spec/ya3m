@@ -24,21 +24,6 @@ export const SANDWICH_ITEMS = [
     image: 'https://ya3m.com/simin.png' 
   },
   { 
-    name: 'حلبسة (حمص الشام)', 
-    price: 15, 
-    image: 'https://ya3m.com/%D8%AD%D9%84%D8%A8%D8%B3%D8%A9.jpg' 
-  },
-  { 
-    name: 'أرز بلبن سادة', 
-    price: 30, 
-    image: 'https://ya3m.com/%D8%A7%D8%B1%D8%B2%D8%A8%D8%A7%D9%84%D8%A8%D9%86%D8%A8%D8%A7%D9%84%D9%85%D9%83%D8%B3%D8%B1%D8%A7%D8%AA.png' 
-  },
-  { 
-    name: 'أرز بلبن بالمكسرات', 
-    price: 40, 
-    image: 'https://ya3m.com/%D8%A7%D8%B1%D8%B2%D8%A8%D8%A7%D9%84%D8%A8%D9%86%D8%A8%D8%A7%D9%84%D9%85%D9%83%D8%B3%D8%B1%D8%A7%D8%AA.png' 
-  },
-  { 
     name: 'سندوتش فراخ استربس', 
     price: 85, 
     image: 'https://sayedsamkary.com/unnamed4.jpg' 
@@ -57,6 +42,16 @@ export const SANDWICH_ITEMS = [
     name: 'كرات بطاطس بالجبنة لفرد واحد', 
     price: 35, 
     image: 'https://sayedsamkary.com/%D9%83%D8%B1%D8%A7%D8%AA%D8%A8%D8%B7%D8%A7%D8%B7%D8%B3%D8%A8%D8%A7%D9%84%D8%AC%D8%A8%D9%86%D8%A9.png' 
+  },
+  { 
+    name: 'أرز بلبن سادة', 
+    price: 30, 
+    image: 'https://ya3m.com/%D8%A7%D8%B1%D8%B2%D8%A8%D8%A7%D9%84%D8%A8%D9%86%D8%A8%D8%A7%D9%84%D9%85%D9%83%D8%B3%D8%B1%D8%A7%D8%AA.png' 
+  },
+  { 
+    name: 'أرز بلبن بالمكسرات', 
+    price: 40, 
+    image: 'https://ya3m.com/%D8%A7%D8%B1%D8%B2%D8%A8%D8%A7%D9%84%D8%A8%D9%86%D8%A8%D8%A7%D9%84%D9%85%D9%83%D8%B3%D8%B1%D8%A7%D8%AA.png' 
   },
 ];
 

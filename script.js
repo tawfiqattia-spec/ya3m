@@ -22,21 +22,6 @@ const SANDWICH_ITEMS = [
     image: 'https://ya3m.com/simin.png' 
   },
   { 
-    name: 'حلبسة (حمص الشام)', 
-    price: 15, 
-    image: 'https://ya3m.com/%D8%AD%D9%84%D8%A8%D8%B3%D8%A9.jpg' 
-  },
-  { 
-    name: 'أرز بلبن سادة', 
-    price: 30, 
-    image: 'https://ya3m.com/%D8%A7%D8%B1%D8%B2%D8%A8%D8%A7%D9%84%D8%A8%D9%86%D8%A8%D8%A7%D9%84%D9%85%D9%83%D8%B3%D8%B1%D8%A7%D8%AA.png' 
-  },
-  { 
-    name: 'أرز بلبن بالمكسرات', 
-    price: 40, 
-    image: 'https://ya3m.com/%D8%A7%D8%B1%D8%B2%D8%A8%D8%A7%D9%84%D8%A8%D9%86%D8%A8%D8%A7%D9%84%D9%85%D9%83%D8%B3%D8%B1%D8%A7%D8%AA.png' 
-  },
-  { 
     name: 'سندوتش فراخ استربس', 
     price: 85, 
     image: 'https://sayedsamkary.com/unnamed4.jpg' 
@@ -47,7 +32,7 @@ const SANDWICH_ITEMS = [
     image: 'https://sayedsamkary.com/%D8%B5%D9%8A%D9%86%D9%8A%D8%A9%20%D8%B4%D9%87%D9%8A%D8%A9.png' 
   },
   { 
-    name: 'مكرونة بالBشامل لفرد واحد', 
+    name: 'مكرونة بالبشاميل لفرد واحد', 
     price: 75, 
     image: 'https://sayedsamkary.com/%D9%85%D9%83%D8%B1%D9%88%D9%86%D8%A9%20%D8%A8%D8%A7%D9%84%D8%A8%D8%B4%D8%A7%D9%85%D9%8A%D9%84.png' 
   },
@@ -55,6 +40,16 @@ const SANDWICH_ITEMS = [
     name: 'كرات بطاطس بالجبنة لفرد واحد', 
     price: 35, 
     image: 'https://sayedsamkary.com/%D9%83%D8%B1%D8%A7%D8%AA%D8%A8%D8%B7%D8%A7%D8%B7%D8%B3%D8%A8%D8%A7%D9%84%D8%AC%D8%A8%D9%86%D8%A9.png' 
+  },
+  { 
+    name: 'أرز بلبن سادة', 
+    price: 30, 
+    image: 'https://ya3m.com/%D8%A7%D8%B1%D8%B2%D8%A8%D8%A7%D9%84%D8%A8%D9%86%D8%A8%D8%A7%D9%84%D9%85%D9%83%D8%B3%D8%B1%D8%A7%D8%AA.png' 
+  },
+  { 
+    name: 'أرز بلبن بالمكسرات', 
+    price: 40, 
+    image: 'https://ya3m.com/%D8%A7%D8%B1%D8%B2%D8%A8%D8%A7%D9%84%D8%A8%D9%86%D8%A8%D8%A7%D9%84%D9%85%D9%83%D8%B3%D8%B1%D8%A7%D8%AA.png' 
   },
 ];
 
@@ -113,19 +108,19 @@ function renderSandwiches() {
     const qty = cart[item.name]?.quantity || 0;
     const bread = cart[item.name]?.bread || 'baladi';
     
+    // Items that don't need bread choice
     const noOptionsItems = [
         'حواوشي يا عم', 
         'سندوتش فراخ استربس', 
         'صينية شهية لفرد واحد', 
         'صينية سمين مشكل بلدي لفرد واحد',
-        'مكرونة بالBشامل لفرد واحد', 
+        'مكرونة بالبشاميل لفرد واحد', 
         'كرات بطاطس بالجبنة لفرد واحد',
         'أرز بلبن سادة',
         'أرز بلبن بالمكسرات'
     ];
     
-    const showBread = !noOptionsItems.includes(item.name) && item.name !== 'حلبسة (حمص الشام)';
-    const showHalabesaOptions = item.name === 'حلبسة (حمص الشام)';
+    const showBread = !noOptionsItems.includes(item.name);
 
     return `
       <div class="p-4 md:p-5 rounded-[2.5rem] border-2 transition-all duration-300 ${qty > 0 ? 'bg-white/5 border-[#FAB520] shadow-2xl scale-[1.01]' : 'bg-white/5 border-transparent'}">
@@ -142,7 +137,6 @@ function renderSandwiches() {
             ${item.name === 'صينية سمين مشكل بلدي لفرد واحد' ? '<p class="text-gray-400 text-xs mt-1">فشة وطحال وحلويات.. السمين الأصلي!</p>' : ''}
             ${item.name === 'أرز بلبن سادة' ? '<p class="text-gray-400 text-xs mt-1">رز بلبن بلدي كريمي وخفيف</p>' : ''}
             ${item.name === 'أرز بلبن بالمكسرات' ? '<p class="text-gray-400 text-xs mt-1">رز بلبن غرقان مكسرات مشكلة</p>' : ''}
-            ${item.name === 'حلبسة (حمص الشام)' ? '<p class="text-gray-400 text-xs mt-1">مشروب الشتاء الراعي الرسمي للدفا</p>' : ''}
           </div>
           
           <!-- Controls -->
@@ -167,7 +161,7 @@ function renderSandwiches() {
 
 function updateQty(name, delta, price) {
   if (!cart[name]) {
-    cart[name] = { quantity: 0, price: price, category: 'sandwiches', bread: name === 'حلبسة (حمص الشام)' ? 'normal' : 'baladi' };
+    cart[name] = { quantity: 0, price: price, category: 'sandwiches', bread: 'baladi' };
   }
   cart[name].quantity = Math.max(0, cart[name].quantity + delta);
   if (cart[name].quantity === 0) {
@@ -180,6 +174,35 @@ function updateQty(name, delta, price) {
   renderSandwiches(); 
   updateCartBadge();
   updateMainSummary();
+}
+
+function setBread(name, type) {
+  if (cart[name]) {
+    cart[name].bread = type;
+    renderSandwiches();
+  }
+}
+
+function updateSauceQty(delta) {
+  sauceQuantity = Math.max(0, sauceQuantity + delta);
+  const sauceQtyEl = document.getElementById('sauce-qty');
+  const sauceBtn = document.getElementById('sauce-btn');
+  
+  if (sauceQtyEl) {
+    sauceQtyEl.innerText = sauceQuantity;
+    sauceQtyEl.style.color = sauceQuantity > 0 ? '#FAB520' : 'white';
+  }
+  
+  if (sauceQuantity > 0) {
+    sauceBtn.classList.add('bg-[#FAB520]', 'border-black', 'text-black');
+    sauceBtn.classList.remove('bg-white/5', 'border-dashed', 'border-[#FAB520]/20');
+  } else {
+    sauceBtn.classList.remove('bg-[#FAB520]', 'border-black', 'text-black');
+    sauceBtn.classList.add('bg-white/5', 'border-dashed', 'border-[#FAB520]/20');
+  }
+  
+  updateMainSummary();
+  updateCartBadge();
 }
 
 function updateCartBadge() {
@@ -244,11 +267,17 @@ function renderCartSummary() {
           <div class="p-4 bg-white/5 rounded-2xl border border-white/5 flex justify-between items-center">
             <div>
               <h4 class="font-bold text-base leading-tight">${name} (عدد ${item.quantity})</h4>
-              ${!['حواوشي يا عم', 'سندوتش فراخ استربس', 'صينية شهية لفرد واحد', 'صينية سمين مشكل بلدي لفرد واحد', 'مكرونة بالBشامل لفرد واحد', 'كرات بطاطس بالجبنة لفرد واحد', 'أرز بلبن سادة', 'أرز بلبن بالمكسرات', 'حلبسة (حمص الشام)'].includes(name) ? `<span class="text-[9px] font-bold text-[#FAB520] bg-[#FAB520]/10 px-2 py-0.5 rounded-full mt-1 inline-block">خبز ${item.bread === 'baladi' ? 'بلدي' : 'فينو فرنسي'}</span>` : ''}
+              ${!['حواوشي يا عم', 'سندوتش فراخ استربس', 'صينية شهية لفرد واحد', 'صينية سمين مشكل بلدي لفرد واحد', 'مكرونة بالبشاميل لفرد واحد', 'كرات بطاطس بالجبنة لفرد واحد', 'أرز بلبن سادة', 'أرز بلبن بالمكسرات'].includes(name) ? `<span class="text-[9px] font-bold text-[#FAB520] bg-[#FAB520]/10 px-2 py-0.5 rounded-full mt-1 inline-block">خبز ${item.bread === 'baladi' ? 'بلدي' : 'فينو فرنسي'}</span>` : ''}
             </div>
             <span class="font-bold text-[#FAB520] text-sm">${item.quantity * item.price} ج.م</span>
           </div>
         `).join('')}
+        ${sauceQuantity > 0 ? `
+          <div class="p-3.5 bg-[#FAB520]/10 rounded-xl border border-[#FAB520]/20 flex justify-between items-center text-[#FAB520] text-sm">
+            <span class="font-bold">صوص أعجوبة السحري (عدد ${sauceQuantity})</span>
+            <span class="font-bold">${sauceQuantity * SAUCE_PRICE} ج.م</span>
+          </div>
+        ` : ''}
         <div class="p-3.5 bg-white/5 rounded-xl flex justify-between items-center text-gray-400 text-xs">
             <span>مصاريف التوصيل</span>
             <span>${DELIVERY_FEE} ج.م</span>

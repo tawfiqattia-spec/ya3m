@@ -92,10 +92,9 @@ const SpecialModal: React.FC<ModalProps> = ({
             <div className="space-y-4">
               {initialItems.map((item, i) => {
                 const qty = persistentState.quantities[item.name] || 0;
-                const choice = persistentState.breadChoices?.[item.name] || (item.name === 'حلبسة (حمص الشام)' ? 'normal' : 'baladi');
+                const choice = persistentState.breadChoices?.[item.name] || 'baladi';
                 
-                const showBread = type === 'sandwiches' && !['حواوشي يا عم', 'سندوتش فراخ استربس', 'صينية سمين مشكل بلدي لفرد واحد', 'صينية شهية لفرد واحد', 'مكرونة بالبشامل لفرد واحد', 'كرات بطاطس بالجبنة لفرد واحد', 'أرز بلبن سادة', 'أرز بلبن بالمكسرات', 'حلبسة (حمص الشام)'].includes(item.name);
-                const showDrinkOption = item.name === 'حلبسة (حمص الشام)';
+                const showBread = type === 'sandwiches' && !['حواوشي يا عم', 'سندوتش فراخ استربس', 'صينية سمين مشكل بلدي لفرد واحد', 'صينية شهية لفرد واحد', 'مكرونة بالبشامل لفرد واحد', 'كرات بطاطس بالجبنة لفرد واحد', 'أرز بلبن سادة', 'أرز بلبن بالمكسرات'].includes(item.name);
 
                 return (
                   <motion.div 
@@ -156,8 +155,9 @@ const SpecialModal: React.FC<ModalProps> = ({
             </div>
           </motion.div>
         </div>
-      </AnimatePresence>
-    );
+      </div>
+    </AnimatePresence>
+  );
 };
 
 export default SpecialModal;
