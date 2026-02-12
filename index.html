@@ -29,12 +29,12 @@
 <script type="importmap">
 {
   "imports": {
-    "react": "https://esm.sh/react@^19.2.4",
     "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
+    "framer-motion": "https://esm.sh/framer-motion@^12.34.0",
     "react/": "https://esm.sh/react@^19.2.4/",
-    "@google/genai": "https://esm.sh/@google/genai@^1.38.0",
-    "framer-motion": "https://esm.sh/framer-motion@^12.29.2",
-    "lucide-react": "https://esm.sh/lucide-react@^0.563.0"
+    "react": "https://esm.sh/react@^19.2.4",
+    "@google/genai": "https://esm.sh/@google/genai@^1.41.0"
   }
 }
 </script>
@@ -46,10 +46,13 @@
         <div class="relative flex flex-col items-center">
             <img src="https://ya3m.com/pic/logo-ya3m.png" alt="Loading Logo" class="h-32 md:h-48 object-contain animate-pulse-slow">
             <div class="mt-12 flex flex-col items-center w-full">
-                <div class="w-48 h-1 bg-white/10 rounded-full overflow-hidden mb-3">
+                <div class="w-64 h-1.5 bg-white/10 rounded-full overflow-hidden mb-6 border border-white/5">
                     <div id="loader-bar" class="h-full bg-[#FAB520] transition-all duration-300 ease-out" style="width: 0%"></div>
                 </div>
-                <p id="preloader-text" class="animate-dastoor text-[#FAB520] font-black text-2xl md:text-5xl font-['Lalezar'] drop-shadow-[0_0_15px_rgba(250,181,32,0.6)]" style="display: none;">دستوووووور! 🧞‍♂️</p>
+                <!-- Typing Text: Dastoor -->
+                <div id="dastoor-container" class="h-16 flex items-center justify-center overflow-hidden">
+                   <p id="preloader-text" class="text-[#FAB520] font-black text-3xl md:text-5xl font-['Lalezar'] drop-shadow-[0_0_15px_rgba(250,181,32,0.6)] hidden">دستوووووور! 🧞‍♂️</p>
+                </div>
             </div>
         </div>
         <div class="absolute bottom-10 text-white/20 font-bold text-sm tracking-widest uppercase">Ya3m.com Delivery</div>
@@ -64,35 +67,134 @@
         <div class="floating-item absolute text-4xl opacity-10 select-none" style="top: 50%; right: 20%;">🍟</div>
     </div>
 
-    <main id="main-content" class="max-w-4xl mx-auto px-4 pt-4 relative z-10 pb-32 opacity-0 transition-opacity duration-1000">
-        <div id="root"></div>
+    <!-- Main Content -->
+    <main id="main-content" class="max-w-6xl mx-auto px-4 pt-4 relative z-10 pb-32 opacity-0 transition-opacity duration-1000">
+        
+        <!-- Hero Section -->
+        <section class="relative flex flex-col items-center justify-center text-center py-12 md:py-24">
+            <img src="https://ya3m.com/pic/logo-ya3m.png" alt="Ya3m Logo" class="h-40 md:h-60 object-contain mb-8 cursor-pointer drop-shadow-[0_0_30px_rgba(250,181,32,0.4)] hover:scale-105 transition-transform" onclick="scrollToMenu()">
+            <h1 class="text-6xl md:text-8xl font-normal mb-8 leading-[1] font-['Lalezar']">
+                أسرع دليفري في <br/> 
+                <span class="text-[#FAB520] drop-shadow-[0_10px_20px_rgba(250,181,32,0.4)]">مصر يا عم!</span>
+            </h1>
+            <div class="bg-white/5 backdrop-blur-md border-2 border-[#FAB520]/20 px-10 py-6 rounded-[3rem] inline-block shadow-2xl mb-8">
+                <p class="text-2xl md:text-3xl text-gray-200 font-bold mb-3">كبدة • سجق • حواوشي • محشي</p>
+                <div class="flex items-center justify-center gap-3 text-[#FAB520] font-black">
+                    <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                    <span>أكل بيتي بيتحضرلك طازة مخصوص</span>
+                    <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 text-black bg-[#FAB520] px-8 py-4 rounded-full font-black text-lg md:text-xl shadow-[0_20px_40px_rgba(250,181,32,0.5)] border-4 border-black animate-bounce">
+                <i data-lucide="truck" class="w-7 h-7"></i>
+                <span>التوصيل بـ 20 جنيه بس.. يا بلاش!</span>
+            </div>
+        </section>
+
+        <!-- Menu Section -->
+        <section id="ordering-section" class="mt-20">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl md:text-7xl font-['Lalezar'] text-[#FAB520] mb-4">عايز تاكل إيه يا عم؟ 🤤</h2>
+                <p class="text-gray-400 font-black text-xl">أقوى منيو في مصر بين إيديك!</p>
+            </div>
+
+            <!-- Category Filter (Optional logic) -->
+            <div class="flex justify-center gap-4 mb-12 flex-wrap">
+                <button class="bg-[#FAB520] text-black px-8 py-3 rounded-2xl font-black text-lg shadow-lg">الكل</button>
+                <button class="bg-white/5 text-white px-8 py-3 rounded-2xl font-black text-lg border border-white/10 hover:bg-white/10 transition-colors">صواني</button>
+                <button class="bg-white/5 text-white px-8 py-3 rounded-2xl font-black text-lg border border-white/10 hover:bg-white/10 transition-colors">حلويات</button>
+            </div>
+
+            <!-- Sandwich List Container -->
+            <div id="sandwich-list" class="grid grid-cols-1 md:grid-cols-2 gap-8 px-2 md:px-0">
+                <!-- Items will be injected by script.js -->
+            </div>
+        </section>
+
+        <!-- Sauce Section -->
+        <section class="mt-16 bg-[#FAB520]/5 border-2 border-[#FAB520]/20 p-8 rounded-[3rem] flex flex-col md:flex-row items-center justify-between gap-8">
+            <div class="flex items-center gap-6">
+                <div class="w-24 h-24 bg-[#FAB520] rounded-3xl flex items-center justify-center text-black shadow-lg">
+                    <i data-lucide="sparkles" class="w-12 h-12"></i>
+                </div>
+                <div>
+                    <h3 class="text-3xl font-['Lalezar'] text-[#FAB520]">صوص أعجوبة السحري ✨</h3>
+                    <p class="text-gray-400 font-bold">السر اللي بيخلي الأكل يروح في حتة تانية (10 ج)</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-6 bg-black p-4 rounded-2xl border-2 border-[#FAB520]/20">
+                <button onclick="updateSauceQty(-1)" class="text-[#FAB520] hover:scale-125 transition-transform"><i data-lucide="minus" class="w-8 h-8"></i></button>
+                <span id="sauce-qty" class="text-3xl font-black w-10 text-center">0</span>
+                <button onclick="updateSauceQty(1)" class="text-[#FAB520] hover:scale-125 transition-transform"><i data-lucide="plus" class="w-8 h-8"></i></button>
+            </div>
+        </section>
+
     </main>
 
-    <!-- Global Cart Drawer (Placeholder for Script fallback if needed) -->
-    <div id="cart-drawer-overlay" class="fixed inset-0 z-[1000] hidden">
-        <div class="absolute inset-0 bg-black/90 backdrop-blur-xl" onclick="toggleCart()"></div>
-        <div class="relative w-full md:w-[450px] h-full bg-[#0c0c0c] flex flex-col shadow-2xl float-left transition-transform duration-500 translate-x-full" id="cart-drawer">
-            <div class="p-5 md:p-8 flex justify-between items-center border-b border-white/5 bg-black/40 shrink-0">
-                <div class="flex items-center gap-3">
-                    <div class="p-2 bg-[#FAB520]/20 rounded-xl text-[#FAB520]"><i data-lucide="shopping-basket" class="w-5 h-5"></i></div>
-                    <h2 class="text-2xl font-normal font-['Lalezar']">بياناتك يا عم</h2>
+    <!-- Global Cart Summary Bar -->
+    <div id="main-order-summary" class="fixed bottom-0 left-0 right-0 z-[100] bg-black/80 backdrop-blur-2xl border-t-4 border-[#FAB520] p-6 hidden translate-y-full transition-transform duration-500">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="bg-[#FAB520] text-black p-4 rounded-2xl relative shadow-lg">
+                    <i data-lucide="shopping-basket" class="w-8 h-8"></i>
+                    <span id="cart-badge-summary" class="absolute -top-3 -right-3 bg-red-600 text-white text-xs font-black w-7 h-7 rounded-full flex items-center justify-center border-2 border-white">0</span>
                 </div>
-                <button onclick="toggleCart()" class="p-2 bg-white/5 rounded-full hover:bg-red-500/20"><i data-lucide="x" class="w-5 h-5"></i></button>
+                <div class="hidden sm:block">
+                    <p class="text-gray-400 text-sm font-bold">الحساب الإجمالي</p>
+                    <p id="main-total-price" class="text-[#FAB520] text-3xl font-black">0 ج.م</p>
+                </div>
             </div>
-            <div class="flex-1 overflow-y-auto px-5 py-6 space-y-5 scrollbar-hide" id="cart-items-container"></div>
+            <button onclick="toggleCart()" class="bg-[#FAB520] text-black px-12 py-5 rounded-2xl font-black text-xl font-['Lalezar'] shadow-xl hover:scale-105 active:scale-95 transition-all border-4 border-black">
+                تأكيد الطلب يا عم! 🛵
+            </button>
         </div>
     </div>
 
-    <!-- Success Screen (Placeholder for Script fallback) -->
+    <!-- Cart Drawer -->
+    <div id="cart-drawer-overlay" class="fixed inset-0 z-[1000] hidden">
+        <div class="absolute inset-0 bg-black/95 backdrop-blur-xl" onclick="toggleCart()"></div>
+        <div class="relative w-full md:w-[500px] h-full bg-[#0c0c0c] flex flex-col shadow-2xl float-left transition-transform duration-500 translate-x-full border-r-8 border-[#FAB520]" id="cart-drawer">
+            <div class="p-8 flex justify-between items-center border-b border-white/5 bg-black/40 shrink-0">
+                <div class="flex items-center gap-4">
+                    <i data-lucide="shopping-basket" class="text-[#FAB520] w-8 h-8"></i>
+                    <h2 class="text-3xl font-['Lalezar']">طلباتك يا عم</h2>
+                </div>
+                <button onclick="toggleCart()" class="p-3 bg-white/5 rounded-full hover:bg-red-500/20 transition-colors"><i data-lucide="x" class="w-7 h-7"></i></button>
+            </div>
+            
+            <div id="cart-items-container" class="flex-1 overflow-y-auto px-6 py-8 space-y-6 scrollbar-hide">
+                <!-- Cart items will be here -->
+            </div>
+
+            <div id="cart-form-container" class="p-8 border-t-4 border-[#FAB520]/20 bg-black/60 hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <span class="text-gray-400 font-bold text-lg">الحساب النهائي:</span>
+                    <span id="drawer-total" class="text-4xl font-black text-[#FAB520]">0 ج.م</span>
+                </div>
+                <form id="order-form" class="space-y-4">
+                    <input required name="name" placeholder="اسمك الكريم" class="w-full bg-white/5 border-2 border-white/10 p-5 rounded-2xl outline-none focus:border-[#FAB520] font-bold text-lg">
+                    <input required name="phone" type="tel" placeholder="رقم تليفونك" class="w-full bg-white/5 border-2 border-white/10 p-5 rounded-2xl outline-none focus:border-[#FAB520] font-bold text-lg">
+                    <input required name="address" placeholder="عنوانك بالتفصيل" class="w-full bg-white/5 border-2 border-white/10 p-5 rounded-2xl outline-none focus:border-[#FAB520] font-bold text-lg">
+                    <button type="submit" id="submit-btn" class="w-full py-6 bg-[#FAB520] text-black font-black text-2xl rounded-2xl shadow-xl flex items-center justify-center gap-4 font-['Lalezar'] border-4 border-black hover:scale-[1.02] transition-transform">
+                        <span>اطلب دلوقتي!</span>
+                        <i data-lucide="send" class="w-7 h-7"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Screen -->
     <div id="success-screen" class="fixed inset-0 z-[5000] bg-black hidden flex-col items-center justify-center p-8 text-center">
-        <div class="bg-[#FAB520] p-12 rounded-full mb-8 shadow-[0_0_100px_rgba(250,181,32,0.6)] text-black">
+        <div class="bg-[#FAB520] p-16 rounded-full mb-10 shadow-[0_0_150px_rgba(250,181,32,0.8)] text-black animate-bounce">
             <i data-lucide="send" class="w-24 h-24"></i>
         </div>
-        <h2 class="text-5xl font-normal font-['Lalezar'] text-[#FAB520] mb-4">طلبك طار عندنا!</h2>
-        <p class="text-xl text-gray-400 font-bold mb-8">هيكون عندك خلال 25 دقيقة بالضبط 🛵💨</p>
+        <h2 class="text-7xl font-['Lalezar'] text-[#FAB520] mb-6">طلبك طار عندنا!</h2>
+        <p class="text-2xl text-gray-400 font-bold mb-12">هيكون عندك خلال 25 دقيقة بالضبط.. استعد! 🛵💨</p>
+        <button onclick="location.reload()" class="text-gray-600 font-bold text-xl hover:text-white transition-all underline underline-offset-8">رجوع للرئيسية</button>
     </div>
 
-    <script type="module" src="index.tsx"></script>
+    <!-- Scripts -->
     <script src="script.js"></script>
 </body>
 </html>

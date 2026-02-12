@@ -5,61 +5,73 @@ const SANDWICH_ITEMS = [
     name: 'برجر يا عم', 
     price: 65, 
     image: 'https://ya3m.com/pic/burg.png' 
+    // No description as requested
   },
   { 
     name: 'صينية سمين مشكل بلدي لفرد واحد', 
     price: 95, 
-    image: 'https://ya3m.com/pic/simin.png' 
+    image: 'https://ya3m.com/pic/simin.png',
+    desc: 'فشة وطحال وحلويات.. السمين الأصلي!'
   },
   { 
     name: 'كبدة إسكندراني', 
     price: 35, 
-    image: 'https://ya3m.com/pic/ya3m-kebda.png' 
+    image: 'https://ya3m.com/pic/ya3m-kebda.png',
+    desc: 'كبدة بلدي بالخلطة الإسكندراني الرهيبة'
   },
   { 
     name: 'سجق', 
     price: 35, 
-    image: 'https://ya3m.com/pic/sogok.png' 
+    image: 'https://ya3m.com/pic/sogok.png',
+    desc: 'سجق شرقي ببهارات ياعم الخاصة'
   },
   { 
     name: 'حواوشي يا عم', 
     price: 45, 
-    image: 'https://ya3m.com/pic/hawwshy.png' 
+    image: 'https://ya3m.com/pic/hawwshy.png',
+    desc: 'لحمة بلدي في عيش مقرمش ملهلب'
   },
   { 
     name: 'صينية شهية لفرد واحد', 
     price: 95, 
-    image: 'https://ya3m.com/pic/shahia.png' 
+    image: 'https://ya3m.com/pic/shahia.png',
+    desc: 'كبدة وسجق وكفتة.. الطلب الأكثر شعبية ✨'
   },
   { 
     name: 'طبق مكرونة نجريسكو لفرد واحد', 
     price: 75, 
-    image: 'https://ya3m.com/pic/neg.png' 
+    image: 'https://ya3m.com/pic/neg.png',
+    desc: 'مكرونة بالوايت صوص وقطع الدجاج'
   },
   { 
     name: 'طبق محشي لفرد واحد', 
     price: 75, 
-    image: 'https://ya3m.com/pic/mahs.png' 
+    image: 'https://ya3m.com/pic/mahs.png',
+    desc: 'بذنجان وفلفل وكوسة.. خلطة بيتي تجنن!'
   },
   { 
     name: 'طبق فراخ استربس كريسبي', 
     price: 140, 
-    image: 'https://ya3m.com/pic/kres.png' 
+    image: 'https://ya3m.com/pic/kres.png',
+    desc: 'أصابع دجاج مقرمشة مع البطاطس'
   },
   { 
     name: 'مكرونة بالبشاميل لفرد واحد', 
     price: 75, 
-    image: 'https://ya3m.com/pic/baashamil.png' 
+    image: 'https://ya3m.com/pic/baashamil.png',
+    desc: 'مكرونة غرقانة في البشاميل واللحمة'
   },
   { 
     name: 'كرات بطاطس بالجبنة لفرد واحد', 
     price: 35, 
-    image: 'https://ya3m.com/pic/botito.png' 
+    image: 'https://ya3m.com/pic/botito.png',
+    desc: 'بطاطس مهروسة محشية جبنة بتمط'
   },
   { 
     name: 'أرز بلبن يا عم', 
     price: 30, 
-    image: 'https://ya3m.com/pic/roz.png' 
+    image: 'https://ya3m.com/pic/roz.png',
+    desc: 'حلّي بقك بأحلى رز بلبن كريمي'
   },
 ];
 
@@ -92,15 +104,13 @@ function startPreloader() {
   const mainContent = document.getElementById('main-content');
   let progress = 0;
 
-  // Initially hide the text
-  if (preloaderText) preloaderText.style.display = 'none';
-
   const interval = setInterval(() => {
     progress += Math.random() * 15;
     
-    // Show text near the end
-    if (progress > 80 && preloaderText && preloaderText.style.display === 'none') {
-        preloaderText.style.display = 'block';
+    // Typing Animation: Show text near the end (85%)
+    if (progress > 85 && preloaderText && preloaderText.classList.contains('hidden')) {
+        preloaderText.classList.remove('hidden');
+        preloaderText.classList.add('animate-dastoor');
     }
 
     if (progress >= 100) {
@@ -113,10 +123,10 @@ function startPreloader() {
           mainContent.classList.remove('opacity-0');
           mainContent.classList.add('opacity-100');
         }, 500);
-      }, 600);
+      }, 800);
     }
     loaderBar.style.width = `${progress}%`;
-  }, 100);
+  }, 120);
 }
 
 // Render Sandwiches directly on home page
@@ -127,7 +137,6 @@ function renderSandwiches() {
   container.innerHTML = SANDWICH_ITEMS.map(item => {
     const qty = cart[item.name]?.quantity || 0;
     const bread = cart[item.name]?.bread || 'baladi';
-    const variant = cart[item.name]?.variant || 'plain';
     
     // Items that don't need bread choice
     const noOptionsItems = [
@@ -144,48 +153,34 @@ function renderSandwiches() {
     ];
     
     const showBread = !noOptionsItems.includes(item.name);
-    const isRicePudding = item.name === 'أرز بلبن يا عم';
-    const displayPrice = isRicePudding && variant === 'nuts' ? 40 : item.price;
 
     return `
-      <div class="p-4 md:p-5 rounded-[2.5rem] border-2 transition-all duration-500 ${qty > 0 ? 'bg-white/5 border-[#FAB520] shadow-2xl scale-[1.01]' : 'bg-white/5 border-transparent'} hover:translate-y-[-4px]">
-        <div class="flex flex-col sm:flex-row items-center gap-5">
+      <div class="p-6 rounded-[2.5rem] border-2 transition-all duration-500 ${qty > 0 ? 'bg-white/5 border-[#FAB520] shadow-2xl scale-[1.02]' : 'bg-white/5 border-transparent'} hover:translate-y-[-5px]">
+        <div class="flex flex-col sm:flex-row items-center gap-6">
           <!-- Product Image -->
-          <div class="w-full sm:w-32 h-32 shrink-0 rounded-[2rem] overflow-hidden border-2 border-white/5 shadow-lg group">
+          <div class="w-full sm:w-36 h-36 shrink-0 rounded-[2rem] overflow-hidden border-2 border-white/5 shadow-lg group">
              <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
           </div>
 
           <!-- Product Details -->
           <div class="flex-1 text-center sm:text-right">
-            <h3 class="text-xl md:text-2xl font-['Lalezar'] mb-1">${item.name}</h3>
-            <p class="text-[#FAB520] font-bold text-lg">${displayPrice} ج.م</p>
-            ${item.name === 'صينية سمين مشكل بلدي لفرد واحد' ? '<p class="text-gray-400 text-xs mt-1">فشة وطحال وحلويات.. السمين الأصلي!</p>' : ''}
-            ${isRicePudding ? '<p class="text-gray-400 text-xs mt-1">رز بلبن كريمي وطعم خيالي</p>' : ''}
-            ${item.name === 'طبق فراخ استربس كريسبي' ? '<p class="text-gray-400 text-xs mt-1">أصابع دجاج مقرمشة مع البهارات</p>' : ''}
-            ${item.name === 'صينية شهية لفرد واحد' ? '<p class="text-gray-400 text-xs mt-1">كبدة وسجق وكفتة والطلب الأكثر شعبية ✨</p>' : ''}
-            ${item.name === 'طبق مكرونة نجريسكو لفرد واحد' ? '<p class="text-gray-400 text-xs mt-1">مكرونة إيطالية بلمسة مصرية</p>' : ''}
-            ${item.name === 'طبق محشي لفرد واحد' ? '<p class="text-gray-400 text-xs mt-1">باذنجان وفلفل وكوسة.. الطعم الأصلي!</p>' : ''}
+            <h3 class="text-2xl md:text-3xl font-['Lalezar'] mb-1">${item.name}</h3>
+            <p class="text-[#FAB520] font-black text-xl mb-2">${item.price} ج.م</p>
+            ${item.desc ? `<p class="text-gray-400 text-sm font-bold">${item.desc}</p>` : ''}
           </div>
           
           <!-- Controls -->
-          <div class="flex items-center gap-4 bg-black p-2 rounded-2xl border border-white/10">
-            <button onclick="updateQty('${item.name}', -1, ${item.price})" class="text-[#FAB520] p-1.5 active:scale-125 transition-transform"><i data-lucide="minus" class="w-5 h-5"></i></button>
-            <span class="text-xl font-bold w-8 text-center text-white" id="qty-${item.name}">${qty}</span>
-            <button onclick="updateQty('${item.name}', 1, ${item.price})" class="text-[#FAB520] p-1.5 active:scale-125 transition-transform"><i data-lucide="plus" class="w-5 h-5"></i></button>
+          <div class="flex items-center gap-5 bg-black p-3 rounded-2xl border border-white/10 shadow-inner">
+            <button onclick="updateQty('${item.name}', -1, ${item.price})" class="text-[#FAB520] p-1.5 active:scale-125 transition-transform"><i data-lucide="minus" class="w-6 h-6"></i></button>
+            <span class="text-2xl font-black w-8 text-center text-white" id="qty-${item.name}">${qty}</span>
+            <button onclick="updateQty('${item.name}', 1, ${item.price})" class="text-[#FAB520] p-1.5 active:scale-125 transition-transform"><i data-lucide="plus" class="w-6 h-6"></i></button>
           </div>
         </div>
 
-        ${showBread ? `
-          <div class="mt-4 pt-4 border-t border-white/5 grid grid-cols-2 gap-3 transition-all duration-500 ${qty > 0 ? 'opacity-100 max-h-20' : 'opacity-0 max-h-0 pointer-events-none overflow-hidden'}" id="bread-${item.name}">
-            <button onclick="setBread('${item.name}', 'baladi')" class="py-2.5 rounded-xl font-bold text-sm transition-all ${bread === 'baladi' ? 'bg-[#FAB520] text-black shadow-lg scale-[1.02]' : 'bg-white/5 text-gray-500 hover:bg-white/10'}" data-bread="baladi">عيش بلدي</button>
-            <button onclick="setBread('${item.name}', 'western')" class="py-2.5 rounded-xl font-bold text-sm transition-all ${bread === 'western' ? 'bg-[#FAB520] text-black shadow-lg scale-[1.02]' : 'bg-white/5 text-gray-500 hover:bg-white/10'}" data-bread="western">عيش فينو فرنسي</button>
-          </div>
-        ` : ''}
-
-        ${isRicePudding ? `
-          <div class="mt-4 pt-4 border-t border-white/5 grid grid-cols-2 gap-3 transition-all duration-500 ${qty > 0 ? 'opacity-100 max-h-20' : 'opacity-0 max-h-0 pointer-events-none overflow-hidden'}" id="variant-${item.name}">
-            <button onclick="setVariant('${item.name}', 'plain')" class="py-2.5 rounded-xl font-bold text-sm transition-all ${variant === 'plain' ? 'bg-[#FAB520] text-black shadow-lg scale-[1.02]' : 'bg-white/5 text-gray-500 hover:bg-white/10'}">سادة (30 ج)</button>
-            <button onclick="setVariant('${item.name}', 'nuts')" class="py-2.5 rounded-xl font-bold text-sm transition-all ${variant === 'nuts' ? 'bg-[#FAB520] text-black shadow-lg scale-[1.02]' : 'bg-white/5 text-gray-500 hover:bg-white/10'}">بالمكسرات (40 ج)</button>
+        ${showBread && qty > 0 ? `
+          <div class="mt-6 pt-6 border-t border-white/10 grid grid-cols-2 gap-4 animate-fade-in">
+            <button onclick="setBread('${item.name}', 'baladi')" class="py-3 rounded-xl font-black text-sm transition-all ${bread === 'baladi' ? 'bg-[#FAB520] text-black shadow-lg scale-[1.02]' : 'bg-white/5 text-gray-500 hover:bg-white/10'}">عيش بلدي</button>
+            <button onclick="setBread('${item.name}', 'western')" class="py-3 rounded-xl font-black text-sm transition-all ${bread === 'western' ? 'bg-[#FAB520] text-black shadow-lg scale-[1.02]' : 'bg-white/5 text-gray-500 hover:bg-white/10'}">عيش فينو فرنسي</button>
           </div>
         ` : ''}
       </div>
@@ -196,7 +191,7 @@ function renderSandwiches() {
 
 function updateQty(name, delta, price) {
   if (!cart[name]) {
-    cart[name] = { quantity: 0, price: price, category: 'sandwiches', bread: 'baladi', variant: 'plain' };
+    cart[name] = { quantity: 0, price: price, bread: 'baladi' };
   }
   cart[name].quantity = Math.max(0, cart[name].quantity + delta);
   if (cart[name].quantity === 0) {
@@ -207,8 +202,13 @@ function updateQty(name, delta, price) {
   if (qtyEl) qtyEl.innerText = cart[name]?.quantity || 0;
   
   renderSandwiches(); 
-  updateCartBadge();
   updateMainSummary();
+}
+
+function updateSauceQty(delta) {
+    sauceQuantity = Math.max(0, sauceQuantity + delta);
+    document.getElementById('sauce-qty').innerText = sauceQuantity;
+    updateMainSummary();
 }
 
 function setBread(name, type) {
@@ -218,140 +218,109 @@ function setBread(name, type) {
   }
 }
 
-function setVariant(name, v) {
-  if (cart[name]) {
-    cart[name].variant = v;
-    cart[name].price = v === 'nuts' ? 40 : 30;
-    renderSandwiches();
-    updateMainSummary();
-  }
-}
-
-function updateSauceQty(delta) {
-  sauceQuantity = Math.max(0, sauceQuantity + delta);
-  const sauceQtyEl = document.getElementById('sauce-qty');
-  const sauceBtn = document.getElementById('sauce-btn');
-  
-  if (sauceQtyEl) {
-    sauceQtyEl.innerText = sauceQuantity;
-    sauceQtyEl.style.color = sauceQuantity > 0 ? '#FAB520' : 'white';
-  }
-  
-  if (sauceQuantity > 0) {
-    sauceBtn.classList.add('bg-[#FAB520]', 'border-black', 'text-black');
-    sauceBtn.classList.remove('bg-white/5', 'border-dashed', 'border-[#FAB520]/20');
-  } else {
-    sauceBtn.classList.remove('bg-[#FAB520]', 'border-black', 'text-black');
-    sauceBtn.classList.add('bg-white/5', 'border-dashed', 'border-[#FAB520]/20');
-  }
-  
-  updateMainSummary();
-  updateCartBadge();
-}
-
-function updateCartBadge() {
-  const badge = document.getElementById('cart-badge');
-  const count = Object.values(cart).reduce((sum, item) => sum + item.quantity, 0) + sauceQuantity;
-  if(badge) {
-    badge.innerText = count;
-    badge.style.display = count > 0 ? 'flex' : 'none';
-    badge.animate([
-        { transform: 'scale(1)' },
-        { transform: 'scale(1.3)' },
-        { transform: 'scale(1)' }
-    ], { duration: 300 });
-  }
-}
-
 function updateMainSummary() {
   const summaryBox = document.getElementById('main-order-summary');
   const totalEl = document.getElementById('main-total-price');
+  const badgeEl = document.getElementById('cart-badge-summary');
   
   let subtotal = Object.values(cart).reduce((sum, item) => sum + (item.price * item.quantity), 0);
   subtotal += (sauceQuantity * SAUCE_PRICE);
   
+  const totalItems = Object.values(cart).reduce((sum, item) => sum + item.quantity, 0) + sauceQuantity;
+  
   if (subtotal > 0) {
     summaryBox.classList.remove('hidden');
+    setTimeout(() => summaryBox.classList.remove('translate-y-full'), 10);
     totalEl.innerText = `${subtotal + DELIVERY_FEE} ج.م`;
+    badgeEl.innerText = totalItems;
   } else {
-    summaryBox.classList.add('hidden');
+    summaryBox.classList.add('translate-y-full');
+    setTimeout(() => summaryBox.classList.add('hidden'), 500);
   }
 }
 
 function toggleCart() {
   const overlay = document.getElementById('cart-drawer-overlay');
   const drawer = document.getElementById('cart-drawer');
-  if (overlay.style.display === 'block') {
-    drawer.classList.remove('open');
-    setTimeout(() => overlay.style.display = 'none', 500);
-  } else {
-    overlay.style.display = 'block';
+  if (overlay.classList.contains('hidden')) {
+    overlay.classList.remove('hidden');
     renderCartSummary();
-    setTimeout(() => drawer.classList.add('open'), 10);
+    setTimeout(() => drawer.classList.remove('translate-x-full'), 10);
+  } else {
+    drawer.classList.add('translate-x-full');
+    setTimeout(() => overlay.classList.add('hidden'), 500);
   }
 }
 
 function renderCartSummary() {
   const container = document.getElementById('cart-items-container');
-  if(!container) return;
+  const formContainer = document.getElementById('cart-form-container');
+  const drawerTotal = document.getElementById('drawer-total');
   
   const cartArray = Object.entries(cart);
-  
+  let subtotal = 0;
+
   if (cartArray.length === 0 && sauceQuantity === 0) {
     container.innerHTML = `
       <div class="flex flex-col items-center justify-center h-full opacity-20 space-y-4">
-        <i data-lucide="shopping-basket" class="w-16 h-16"></i>
-        <p class="text-base font-bold text-center">لسه مفيش أكل!</p>
+        <i data-lucide="shopping-basket" class="w-20 h-20"></i>
+        <p class="text-2xl font-black text-center">لسه مفيش أكل!</p>
       </div>
     `;
+    formContainer.classList.add('hidden');
   } else {
-    container.innerHTML = `
-      <div class="space-y-4">
-        ${cartArray.map(([name, item]) => `
-          <div class="p-4 bg-white/5 rounded-2xl border border-white/5 flex justify-between items-center transition-all hover:bg-white/10">
-            <div>
-              <h4 class="font-bold text-base leading-tight">${name} (عدد ${item.quantity})</h4>
-              <div class="flex gap-2 mt-1">
-                ${name === 'أرز بلبن يا عم' ? `<span class="text-[9px] font-bold text-[#FAB520] bg-[#FAB520]/10 px-2 py-0.5 rounded-full inline-block">${item.variant === 'nuts' ? 'بالمكسرات' : 'سادة'}</span>` : ''}
-                ${!['برجر يا عم', 'حواوشي يا عم', 'طبق فراخ استربس كريسبي', 'صينية شهية لفرد واحد', 'صينية سمين مشكل بلدي لفرد واحد', 'مكرونة بالبشاميل لفرد واحد', 'طبق مكرونة نجريسكو لفرد واحد', 'طبق محشي لفرد واحد', 'كرات بطاطس بالجبنة لفرد واحد', 'أرز بلبن يا عم'].includes(name) ? `<span class="text-[9px] font-bold text-[#FAB520] bg-[#FAB520]/10 px-2 py-0.5 rounded-full inline-block">خبز ${item.bread === 'baladi' ? 'بلدي' : 'فينو فرنسي'}</span>` : ''}
-              </div>
+    formContainer.classList.remove('hidden');
+    container.innerHTML = cartArray.map(([name, item]) => {
+      subtotal += (item.price * item.quantity);
+      return `
+        <div class="p-6 bg-white/5 rounded-[2rem] border border-white/10 flex justify-between items-center">
+          <div>
+            <h4 class="font-black text-xl leading-tight">${name} (x${item.quantity})</h4>
+            <div class="flex gap-2 mt-2">
+               ${!['برجر يا عم', 'حواوشي يا عم', 'طبق فراخ استربس كريسبي', 'طبق محشي لفرد واحد'].includes(name) ? `<span class="text-[10px] font-black text-[#FAB520] bg-[#FAB520]/10 px-3 py-1 rounded-full">خبز ${item.bread === 'baladi' ? 'بلدي' : 'فرنسي'}</span>` : ''}
             </div>
-            <span class="font-bold text-[#FAB520] text-sm">${item.quantity * item.price} ج.م</span>
           </div>
-        `).join('')}
-        ${sauceQuantity > 0 ? `
-          <div class="p-3.5 bg-[#FAB520]/10 rounded-xl border border-[#FAB520]/20 flex justify-between items-center text-[#FAB520] text-sm">
-            <span class="font-bold">صوص أعجوبة السحري (عدد ${sauceQuantity})</span>
-            <span class="font-bold">${sauceQuantity * SAUCE_PRICE} ج.م</span>
-          </div>
-        ` : ''}
-        <div class="p-3.5 bg-white/5 rounded-xl flex justify-between items-center text-gray-400 text-xs">
-            <span>مصاريف التوصيل</span>
-            <span>${DELIVERY_FEE} ج.م</span>
+          <span class="font-black text-[#FAB520] text-xl">${item.quantity * item.price} ج.م</span>
         </div>
-      </div>
-    `;
+      `;
+    }).join('');
+
+    if (sauceQuantity > 0) {
+        subtotal += (sauceQuantity * SAUCE_PRICE);
+        container.innerHTML += `
+            <div class="p-6 bg-[#FAB520]/10 rounded-[2rem] border border-[#FAB520]/30 flex justify-between items-center text-[#FAB520]">
+                <h4 class="font-black text-xl">صوص أعجوبة السحري (x${sauceQuantity})</h4>
+                <span class="font-black text-xl">${sauceQuantity * SAUCE_PRICE} ج.م</span>
+            </div>
+        `;
+    }
+
+    drawerTotal.innerText = `${subtotal + DELIVERY_FEE} ج.م`;
   }
   initIcons();
 }
 
+// Order Form Submission
 const orderForm = document.getElementById('order-form');
 if(orderForm) {
-  orderForm.addEventListener('submit', async (e) => {
+  orderForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const btn = document.getElementById('submit-btn');
     btn.disabled = true;
-    btn.innerHTML = `<i data-lucide="loader-2" class="w-6 h-6 loading-spin"></i><span>جاري الطيران...</span>`;
+    btn.innerHTML = `<i data-lucide="loader" class="w-8 h-8 animate-spin"></i><span>جاري إرسال الطلب...</span>`;
     initIcons();
   
     setTimeout(() => {
-        document.getElementById('success-screen').style.display = 'flex';
+        document.getElementById('success-screen').classList.remove('hidden');
+        document.getElementById('success-screen').classList.add('flex');
         initIcons();
     }, 1500);
   });
 }
 
+// Global initialization
 window.onload = () => {
   startPreloader();
   renderSandwiches();
+  initIcons();
 };
