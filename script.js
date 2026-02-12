@@ -155,32 +155,32 @@ function renderSandwiches() {
     const showBread = !noOptionsItems.includes(item.name);
 
     return `
-      <div class="p-6 rounded-[2.5rem] border-2 transition-all duration-500 ${qty > 0 ? 'bg-white/5 border-[#FAB520] shadow-2xl scale-[1.02]' : 'bg-white/5 border-transparent'} hover:translate-y-[-5px]">
-        <div class="flex flex-col sm:flex-row items-center gap-6">
+      <div class="p-4 md:p-6 rounded-[2rem] md:rounded-[2.5rem] border-2 transition-all duration-500 ${qty > 0 ? 'bg-white/5 border-[#FAB520] shadow-2xl scale-[1.01]' : 'bg-white/5 border-transparent'} hover:translate-y-[-5px]">
+        <div class="flex flex-row items-center gap-4 md:gap-6">
           <!-- Product Image -->
-          <div class="w-full sm:w-36 h-36 shrink-0 rounded-[2rem] overflow-hidden border-2 border-white/5 shadow-lg group">
+          <div class="w-24 h-24 md:w-36 md:h-36 shrink-0 rounded-2xl md:rounded-[2rem] overflow-hidden border-2 border-white/5 shadow-lg group">
              <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
           </div>
 
           <!-- Product Details -->
-          <div class="flex-1 text-center sm:text-right">
-            <h3 class="text-2xl md:text-3xl font-['Lalezar'] mb-1">${item.name}</h3>
-            <p class="text-[#FAB520] font-black text-xl mb-2">${item.price} ج.م</p>
-            ${item.desc ? `<p class="text-gray-400 text-sm font-bold">${item.desc}</p>` : ''}
+          <div class="flex-1 text-right">
+            <h3 class="text-lg md:text-3xl font-['Lalezar'] mb-0.5 leading-tight">${item.name}</h3>
+            <p class="text-[#FAB520] font-black text-base md:text-xl mb-1">${item.price} ج.م</p>
+            ${item.desc ? `<p class="text-gray-400 text-[10px] md:text-sm font-bold leading-tight line-clamp-2">${item.desc}</p>` : ''}
           </div>
           
           <!-- Controls -->
-          <div class="flex items-center gap-5 bg-black p-3 rounded-2xl border border-white/10 shadow-inner">
-            <button onclick="updateQty('${item.name}', -1, ${item.price})" class="text-[#FAB520] p-1.5 active:scale-125 transition-transform"><i data-lucide="minus" class="w-6 h-6"></i></button>
-            <span class="text-2xl font-black w-8 text-center text-white" id="qty-${item.name}">${qty}</span>
-            <button onclick="updateQty('${item.name}', 1, ${item.price})" class="text-[#FAB520] p-1.5 active:scale-125 transition-transform"><i data-lucide="plus" class="w-6 h-6"></i></button>
+          <div class="flex flex-col md:flex-row items-center gap-2 md:gap-5 bg-black p-2 md:p-3 rounded-xl md:rounded-2xl border border-white/10 shadow-inner shrink-0">
+            <button onclick="updateQty('${item.name}', 1, ${item.price})" class="text-[#FAB520] p-1 active:scale-125 transition-transform order-1 md:order-3"><i data-lucide="plus" class="w-5 h-5 md:w-6 md:h-6"></i></button>
+            <span class="text-lg md:text-2xl font-black w-6 md:w-8 text-center text-white order-2" id="qty-${item.name}">${qty}</span>
+            <button onclick="updateQty('${item.name}', -1, ${item.price})" class="text-[#FAB520] p-1 active:scale-125 transition-transform order-3 md:order-1"><i data-lucide="minus" class="w-5 h-5 md:w-6 md:h-6"></i></button>
           </div>
         </div>
 
         ${showBread && qty > 0 ? `
-          <div class="mt-6 pt-6 border-t border-white/10 grid grid-cols-2 gap-4 animate-fade-in">
-            <button onclick="setBread('${item.name}', 'baladi')" class="py-3 rounded-xl font-black text-sm transition-all ${bread === 'baladi' ? 'bg-[#FAB520] text-black shadow-lg scale-[1.02]' : 'bg-white/5 text-gray-500 hover:bg-white/10'}">عيش بلدي</button>
-            <button onclick="setBread('${item.name}', 'western')" class="py-3 rounded-xl font-black text-sm transition-all ${bread === 'western' ? 'bg-[#FAB520] text-black shadow-lg scale-[1.02]' : 'bg-white/5 text-gray-500 hover:bg-white/10'}">عيش فينو فرنسي</button>
+          <div class="mt-4 pt-4 border-t border-white/10 grid grid-cols-2 gap-3 animate-fade-in">
+            <button onclick="setBread('${item.name}', 'baladi')" class="py-2.5 rounded-lg md:rounded-xl font-black text-[10px] md:text-sm transition-all ${bread === 'baladi' ? 'bg-[#FAB520] text-black shadow-lg scale-[1.02]' : 'bg-white/5 text-gray-500 hover:bg-white/10'}">عيش بلدي</button>
+            <button onclick="setBread('${item.name}', 'western')" class="py-2.5 rounded-lg md:rounded-xl font-black text-[10px] md:text-sm transition-all ${bread === 'western' ? 'bg-[#FAB520] text-black shadow-lg scale-[1.02]' : 'bg-white/5 text-gray-500 hover:bg-white/10'}">فينو فرنسي</button>
           </div>
         ` : ''}
       </div>
@@ -263,8 +263,8 @@ function renderCartSummary() {
   if (cartArray.length === 0 && sauceQuantity === 0) {
     container.innerHTML = `
       <div class="flex flex-col items-center justify-center h-full opacity-20 space-y-4">
-        <i data-lucide="shopping-basket" class="w-20 h-20"></i>
-        <p class="text-2xl font-black text-center">لسه مفيش أكل!</p>
+        <i data-lucide="shopping-basket" class="w-16 h-16 md:w-20 md:h-20"></i>
+        <p class="text-xl md:text-2xl font-black text-center">لسه مفيش أكل!</p>
       </div>
     `;
     formContainer.classList.add('hidden');
@@ -273,14 +273,14 @@ function renderCartSummary() {
     container.innerHTML = cartArray.map(([name, item]) => {
       subtotal += (item.price * item.quantity);
       return `
-        <div class="p-6 bg-white/5 rounded-[2rem] border border-white/10 flex justify-between items-center">
+        <div class="p-4 md:p-6 bg-white/5 rounded-2xl md:rounded-[2rem] border border-white/10 flex justify-between items-center">
           <div>
-            <h4 class="font-black text-xl leading-tight">${name} (x${item.quantity})</h4>
-            <div class="flex gap-2 mt-2">
-               ${!['برجر يا عم', 'حواوشي يا عم', 'طبق فراخ استربس كريسبي', 'طبق محشي لفرد واحد'].includes(name) ? `<span class="text-[10px] font-black text-[#FAB520] bg-[#FAB520]/10 px-3 py-1 rounded-full">خبز ${item.bread === 'baladi' ? 'بلدي' : 'فرنسي'}</span>` : ''}
+            <h4 class="font-black text-lg md:text-xl leading-tight">${name} (x${item.quantity})</h4>
+            <div class="flex gap-2 mt-1 md:mt-2">
+               ${!['برجر يا عم', 'حواوشي يا عم', 'طبق فراخ استربس كريسبي', 'طبق محشي لفرد واحد'].includes(name) ? `<span class="text-[9px] md:text-[10px] font-black text-[#FAB520] bg-[#FAB520]/10 px-2 py-0.5 md:px-3 md:py-1 rounded-full">خبز ${item.bread === 'baladi' ? 'بلدي' : 'فرنسي'}</span>` : ''}
             </div>
           </div>
-          <span class="font-black text-[#FAB520] text-xl">${item.quantity * item.price} ج.م</span>
+          <span class="font-black text-[#FAB520] text-lg md:text-xl">${item.quantity * item.price} ج.م</span>
         </div>
       `;
     }).join('');
@@ -288,9 +288,9 @@ function renderCartSummary() {
     if (sauceQuantity > 0) {
         subtotal += (sauceQuantity * SAUCE_PRICE);
         container.innerHTML += `
-            <div class="p-6 bg-[#FAB520]/10 rounded-[2rem] border border-[#FAB520]/30 flex justify-between items-center text-[#FAB520]">
-                <h4 class="font-black text-xl">صوص أعجوبة السحري (x${sauceQuantity})</h4>
-                <span class="font-black text-xl">${sauceQuantity * SAUCE_PRICE} ج.م</span>
+            <div class="p-4 md:p-6 bg-[#FAB520]/10 rounded-2xl md:rounded-[2rem] border border-[#FAB520]/30 flex justify-between items-center text-[#FAB520]">
+                <h4 class="font-black text-lg md:text-xl">صوص أعجوبة السحري (x${sauceQuantity})</h4>
+                <span class="font-black text-lg md:text-xl">${sauceQuantity * SAUCE_PRICE} ج.م</span>
             </div>
         `;
     }
@@ -307,7 +307,7 @@ if(orderForm) {
     e.preventDefault();
     const btn = document.getElementById('submit-btn');
     btn.disabled = true;
-    btn.innerHTML = `<i data-lucide="loader" class="w-8 h-8 animate-spin"></i><span>جاري إرسال الطلب...</span>`;
+    btn.innerHTML = `<i data-lucide="loader" class="w-6 h-6 md:w-8 md:h-8 animate-spin"></i><span>جاري الإرسال...</span>`;
     initIcons();
   
     setTimeout(() => {
