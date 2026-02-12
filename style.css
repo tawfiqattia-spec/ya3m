@@ -34,6 +34,30 @@ h1, h2, h3, .heading-font {
     animation: pulseSlow 3s ease-in-out infinite;
 }
 
+/* Typing Animation for Dastoor */
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: #FAB520; }
+}
+
+.animate-dastoor {
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    border-left: 3px solid #FAB520; /* Caret for RTL */
+    width: 0;
+    animation: 
+        typing 1.5s steps(20, end) forwards,
+        blink-caret .75s step-end infinite;
+    animation-delay: 0.5s;
+    direction: rtl;
+}
+
 /* Entertainment Background Animations */
 @keyframes scooterMove {
     0% { transform: translateX(-150px) rotate(0deg); opacity: 0; }

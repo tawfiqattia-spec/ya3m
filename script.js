@@ -143,12 +143,11 @@ function renderSandwiches() {
           <div class="flex-1 text-center sm:text-right">
             <h3 class="text-xl md:text-2xl font-['Lalezar'] mb-1">${item.name}</h3>
             <p class="text-[#FAB520] font-bold text-lg">${displayPrice} ج.م</p>
-            ${item.name === 'برجر يا عم' ? '<p class="text-gray-400 text-xs mt-1">برجر بلدي مشوي على الفحم</p>' : ''}
             ${item.name === 'صينية سمين مشكل بلدي لفرد واحد' ? '<p class="text-gray-400 text-xs mt-1">فشة وطحال وحلويات.. السمين الأصلي!</p>' : ''}
             ${isRicePudding ? '<p class="text-gray-400 text-xs mt-1">رز بلبن كريمي وطعم خيالي</p>' : ''}
             ${item.name === 'طبق فراخ استربس كريسبي' ? '<p class="text-gray-400 text-xs mt-1">أصابع دجاج مقرمشة مع البهارات</p>' : ''}
-            ${item.name === 'صينية شهية لفرد واحد' ? '<p class="text-gray-400 text-xs mt-1">مكونة من كبدة وسجق وكفتة - الطلب الأكثر شعبية ✨</p>' : ''}
-            ${item.name === 'طبق مكرونة نجريسكو لفرد واحد' ? '<p class="text-gray-400 text-xs mt-1">مكرونة نجريسكو غنية بالصوص الأبيض والفراخ</p>' : ''}
+            ${item.name === 'صينية شهية لفرد واحد' ? '<p class="text-gray-400 text-xs mt-1">كبدة وسجق وكفتة والطلب الأكثر شعبية ✨</p>' : ''}
+            ${item.name === 'طبق مكرونة نجريسكو لفرد واحد' ? '<p class="text-gray-400 text-xs mt-1">مكرونة إيطالية بلمسة مصرية</p>' : ''}
           </div>
           
           <!-- Controls -->
