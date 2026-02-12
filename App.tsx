@@ -44,7 +44,7 @@ const App: React.FC = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       setLoadProgress(prev => {
-        const next = prev + (Math.random() * 25);
+        const next = prev + (Math.random() * 20);
         if (next >= 100) {
           clearInterval(timer);
           setTimeout(() => setLoading(false), 500);
@@ -52,17 +52,17 @@ const App: React.FC = () => {
         }
         return next;
       });
-    }, 100);
+    }, 150);
 
-    const dastoorTimer = setTimeout(() => {
-      setShowDastoor(true);
-    }, 600);
-
-    return () => {
-      clearInterval(timer);
-      clearTimeout(dastoorTimer);
-    };
+    return () => clearInterval(timer);
   }, []);
+
+  // Show Dastoor text only when loading is nearly finished
+  useEffect(() => {
+    if (loadProgress > 80 && !showDastoor) {
+      setShowDastoor(true);
+    }
+  }, [loadProgress, showDastoor]);
 
   const triggerCartAnimation = () => {
     setCartAnimate(true);
@@ -193,7 +193,7 @@ const App: React.FC = () => {
                         <motion.p
                           initial={{ width: 0 }}
                           animate={{ width: "auto" }}
-                          transition={{ duration: 1.5, ease: "linear" }}
+                          transition={{ duration: 0.8, ease: "linear" }}
                           className="animate-dastoor text-[#FAB520] font-black text-4xl md:text-7xl font-['Lalezar'] drop-shadow-[0_0_20px_rgba(250,181,32,0.6)] overflow-hidden whitespace-nowrap"
                         >
                           {loaderText}
@@ -328,6 +328,7 @@ const App: React.FC = () => {
                               <div className="flex items-center gap-6">
                                 <motion.button whileTap={{ scale: 1.3 }} onClick={() => updateGlobalQuantity(item.name, item.category, -1)} className="text-[#FAB520] bg-white/5 p-3 rounded-2xl"><Minus className="w-7 h-7" /></motion.button>
                                 <span className="font-black text-2xl w-10 text-center">{item.quantity}</span>
+                                {/* Fixed: 'category' changed to 'item.category' to fix undefined variable error on line 331 */}
                                 <motion.button whileTap={{ scale: 1.3 }} onClick={() => updateGlobalQuantity(item.name, item.category, 1)} className="text-[#FAB520] bg-white/5 p-3 rounded-2xl"><Plus className="w-7 h-7" /></motion.button>
                               </div>
                             </div>

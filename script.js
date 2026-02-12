@@ -83,11 +83,21 @@ window.scrollToMenu = function() {
 function startPreloader() {
   const loaderBar = document.getElementById('loader-bar');
   const preloader = document.getElementById('preloader');
+  const preloaderText = document.getElementById('preloader-text');
   const mainContent = document.getElementById('main-content');
   let progress = 0;
 
+  // Initially hide the text
+  if (preloaderText) preloaderText.style.display = 'none';
+
   const interval = setInterval(() => {
     progress += Math.random() * 15;
+    
+    // Show text near the end
+    if (progress > 80 && preloaderText && preloaderText.style.display === 'none') {
+        preloaderText.style.display = 'block';
+    }
+
     if (progress >= 100) {
       progress = 100;
       clearInterval(interval);
