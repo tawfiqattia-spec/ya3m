@@ -1,0 +1,23 @@
+
+{
+  "name": "يا عم - أسرع دليفري",
+  "short_name": "يا عم",
+  "description": "أسرع توصيل سندوتشات وأكل بيتي في مصر",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#FAB520",
+  "icons": [
+    {
+      "src": "https://sayedsamkary.com/%D9%8A%D8%A7%D8%B9%D9%85.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://sayedsamkary.com/%D9%8A%D8%A7%D8%B9%D9%85.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
