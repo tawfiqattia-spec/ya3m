@@ -47,7 +47,8 @@ const App: React.FC = () => {
         const next = prev + (Math.random() * 20);
         if (next >= 100) {
           clearInterval(timer);
-          setTimeout(() => setLoading(false), 500);
+          // Wait for Dastoor fade then close
+          setTimeout(() => setLoading(false), 1200);
           return 100;
         }
         return next;
@@ -61,6 +62,8 @@ const App: React.FC = () => {
   useEffect(() => {
     if (loadProgress > 80 && !showDastoor) {
       setShowDastoor(true);
+      // Wait a bit then hide for exit animation
+      setTimeout(() => setShowDastoor(false), 1500);
     }
   }, [loadProgress, showDastoor]);
 
@@ -167,7 +170,13 @@ const App: React.FC = () => {
         {loading && (
           <motion.div 
             key="loader"
-            exit={{ opacity: 0, scale: 1.2 }}
+            exit={{ 
+              opacity: 0, 
+              scale: 0, 
+              rotate: 15, 
+              filter: "blur(20px)",
+              transition: { duration: 0.7, ease: [0.6, -0.28, 0.735, 0.045] } 
+            }}
             className="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center"
           >
             <motion.div className="relative flex flex-col items-center">
@@ -193,6 +202,7 @@ const App: React.FC = () => {
                         <motion.p
                           initial={{ width: 0 }}
                           animate={{ width: "auto" }}
+                          exit={{ opacity: 0, x: 100, transition: { duration: 0.8 } }}
                           transition={{ duration: 0.8, ease: "linear" }}
                           className="animate-dastoor text-[#FAB520] font-black text-4xl md:text-7xl font-['Lalezar'] drop-shadow-[0_0_20px_rgba(250,181,32,0.6)] overflow-hidden whitespace-nowrap"
                         >
@@ -328,7 +338,6 @@ const App: React.FC = () => {
                               <div className="flex items-center gap-6">
                                 <motion.button whileTap={{ scale: 1.3 }} onClick={() => updateGlobalQuantity(item.name, item.category, -1)} className="text-[#FAB520] bg-white/5 p-3 rounded-2xl"><Minus className="w-7 h-7" /></motion.button>
                                 <span className="font-black text-2xl w-10 text-center">{item.quantity}</span>
-                                {/* Fixed: 'category' changed to 'item.category' to fix undefined variable error on line 331 */}
                                 <motion.button whileTap={{ scale: 1.3 }} onClick={() => updateGlobalQuantity(item.name, item.category, 1)} className="text-[#FAB520] bg-white/5 p-3 rounded-2xl"><Plus className="w-7 h-7" /></motion.button>
                               </div>
                             </div>
@@ -387,11 +396,24 @@ const App: React.FC = () => {
                     />
                   </motion.div>
                   <h2 className="text-7xl md:text-9xl font-normal font-['Lalezar'] text-[#FAB520] mb-8 drop-shadow-[0_0_30px_rgba(250,181,32,0.5)]">طلبك طار عندنا!</h2>
-                  <p className="text-3xl text-gray-400 font-black mb-16">هيكون عندك خلال 25 دقيقة بالثانية.. استعد! 🛵💨</p>
+                  <p className="text-3xl text-gray-400 font-black mb-8">هيكون عندك خلال ساعة بالثانية.. استعد! 🛵💨</p>
+                  
+                  {/* WhatsApp Contact Button */}
+                  <motion.a 
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    href="https://wa.me/201119949143" 
+                    target="_blank" 
+                    className="bg-green-600 text-white px-12 py-5 rounded-[2rem] font-black text-2xl flex items-center gap-4 mb-10 hover:bg-green-700 transition-colors shadow-[0_15px_30px_rgba(22,163,74,0.4)]"
+                  >
+                    <MessageCircle className="w-10 h-10" />
+                    <span>تواصل معانا واتساب</span>
+                  </motion.a>
+
                   <motion.button 
                     whileHover={{ scale: 1.3, color: '#FAB520' }} 
                     onClick={() => setShowSuccess(false)} 
-                    className="mt-16 text-gray-600 font-black text-2xl hover:text-white transition-all underline underline-offset-8"
+                    className="mt-6 text-gray-600 font-black text-2xl hover:text-white transition-all underline underline-offset-8"
                   >
                     رجوع للرئيسية يا عم
                   </motion.button>

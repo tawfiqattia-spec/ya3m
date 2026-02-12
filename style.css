@@ -45,6 +45,13 @@ h1, h2, h3, .heading-font {
     to { opacity: 0; transform: translateX(100px); }
 }
 
+/* Cartoonish Preloader Exit */
+@keyframes cartoonExit {
+    0% { transform: scale(1) rotate(0deg); opacity: 1; filter: blur(0); }
+    20% { transform: scale(1.1) rotate(-2deg); opacity: 1; }
+    100% { transform: scale(0) rotate(15deg); opacity: 0; filter: blur(20px); }
+}
+
 .animate-dastoor {
     overflow: hidden;
     white-space: nowrap;
@@ -56,6 +63,10 @@ h1, h2, h3, .heading-font {
 
 .fade-out-right {
     animation: fadeOutRight 0.8s ease-in forwards !important;
+}
+
+.animate-cartoon-exit {
+    animation: cartoonExit 0.7s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards;
 }
 
 /* Entertainment Background Animations */

@@ -152,7 +152,7 @@
                     <i data-lucide="shopping-basket" class="text-[#FAB520] w-6 h-6 md:w-8 md:h-8"></i>
                     <h2 class="text-2xl md:text-3xl font-['Lalezar']">طلباتك يا عم</h2>
                 </div>
-                <button onclick="toggleCart()" class="p-2 md:p-3 bg-white/5 rounded-full hover:bg-red-500/20 transition-colors"><i data-lucide="x" class="w-6 h-6 md:w-7 md:h-7"></i></button>
+                <button onclick="toggleCart()" class="p-3 bg-white/5 rounded-full hover:bg-red-500/20 transition-colors"><i data-lucide="x" class="w-7 h-7"></i></button>
             </div>
             
             <div id="cart-items-container" class="flex-1 overflow-y-auto px-4 md:px-6 py-6 md:py-8 space-y-4 md:space-y-6 scrollbar-hide">
@@ -179,11 +179,18 @@
 
     <!-- Success Screen -->
     <div id="success-screen" class="fixed inset-0 z-[5000] bg-black hidden flex-col items-center justify-center p-8 text-center">
-        <div class="bg-[#FAB520] p-12 md:p-16 rounded-full mb-8 md:p-10 shadow-[0_0_150px_rgba(250,181,32,0.8)] text-black animate-bounce">
+        <div class="bg-[#FAB520] p-12 md:p-16 rounded-full mb-8 shadow-[0_0_150px_rgba(250,181,32,0.8)] text-black animate-bounce">
             <i data-lucide="send" class="w-16 h-16 md:w-24 md:h-24"></i>
         </div>
         <h2 class="text-5xl md:text-7xl font-['Lalezar'] text-[#FAB520] mb-4 md:mb-6">طلبك طار عندنا!</h2>
-        <p class="text-xl md:text-2xl text-gray-400 font-bold mb-10 md:mb-12">هيكون عندك خلال 25 دقيقة بالضبط.. استعد! 🛵💨</p>
+        <p class="text-xl md:text-2xl text-gray-400 font-bold mb-10">هيكون عندك خلال ساعة بالثانية.. استعد! 🛵💨</p>
+        
+        <!-- WhatsApp Contact -->
+        <a href="https://wa.me/201119949143" target="_blank" class="bg-green-600 text-white px-8 py-4 rounded-2xl font-bold flex items-center gap-3 mb-6 hover:bg-green-700 transition-colors shadow-lg">
+            <i data-lucide="message-circle" class="w-6 h-6"></i>
+            <span>تواصل معانا واتساب</span>
+        </a>
+
         <button onclick="location.reload()" class="text-gray-600 font-bold text-lg md:text-xl hover:text-white transition-all underline underline-offset-8">رجوع للرئيسية</button>
     </div>
 

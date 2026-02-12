@@ -122,14 +122,15 @@ function startPreloader() {
           preloaderText.classList.add('fade-out-right');
         }
         
+        // Cartoonish exit for the whole screen
         setTimeout(() => {
-          preloader.classList.add('opacity-0');
+          preloader.classList.add('animate-cartoon-exit');
           setTimeout(() => {
             preloader.style.display = 'none';
             mainContent.classList.remove('opacity-0');
             mainContent.classList.add('opacity-100');
-          }, 500);
-        }, 600);
+          }, 700);
+        }, 400); // Start preloader exit shortly after Dastoor starts fading
       }, 800);
     }
     loaderBar.style.width = `${progress}%`;
@@ -154,7 +155,6 @@ function renderSandwiches() {
         'صينية شهية لفرد واحد', 
         'صينية سمين مشكل بلدي لفرد واحد',
         'مكرونة بالبشاميل لفرد واحد', 
-        'طبق مكرونة نجريسكو لفرد واحد',
         'طبق محشي لفرد واحد',
         'كرات بطاطس بالجبنة لفرد واحد',
         'أرز بلبن يا عم'
@@ -338,7 +338,7 @@ if(orderForm) {
     e.preventDefault();
     const btn = document.getElementById('submit-btn');
     btn.disabled = true;
-    btn.innerHTML = `<i data-lucide="loader" class="w-6 h-6 md:w-8 md:h-8 animate-spin"></i><span>جاري الإرسال...</span>`;
+    btn.innerHTML = `<i data-lucide="loader" class="w-6 h-6 md:w-8 md:h-8 animate-spin"></i><span>جاري إرسال الطلب...</span>`;
     initIcons();
   
     setTimeout(() => {
