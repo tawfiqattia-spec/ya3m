@@ -37,6 +37,11 @@ const SANDWICH_ITEMS = [
     image: 'https://ya3m.com/pic/neg.png' 
   },
   { 
+    name: 'طبق محشي لفرد واحد', 
+    price: 75, 
+    image: 'https://ya3m.com/pic/mahs.png' 
+  },
+  { 
     name: 'طبق فراخ استربس كريسبي', 
     price: 140, 
     image: 'https://ya3m.com/pic/kres.png' 
@@ -133,6 +138,7 @@ function renderSandwiches() {
         'صينية سمين مشكل بلدي لفرد واحد',
         'مكرونة بالبشاميل لفرد واحد', 
         'طبق مكرونة نجريسكو لفرد واحد',
+        'طبق محشي لفرد واحد',
         'كرات بطاطس بالجبنة لفرد واحد',
         'أرز بلبن يا عم'
     ];
@@ -158,6 +164,7 @@ function renderSandwiches() {
             ${item.name === 'طبق فراخ استربس كريسبي' ? '<p class="text-gray-400 text-xs mt-1">أصابع دجاج مقرمشة مع البهارات</p>' : ''}
             ${item.name === 'صينية شهية لفرد واحد' ? '<p class="text-gray-400 text-xs mt-1">كبدة وسجق وكفتة والطلب الأكثر شعبية ✨</p>' : ''}
             ${item.name === 'طبق مكرونة نجريسكو لفرد واحد' ? '<p class="text-gray-400 text-xs mt-1">مكرونة إيطالية بلمسة مصرية</p>' : ''}
+            ${item.name === 'طبق محشي لفرد واحد' ? '<p class="text-gray-400 text-xs mt-1">باذنجان وفلفل وكوسة.. الطعم الأصلي!</p>' : ''}
           </div>
           
           <!-- Controls -->
@@ -306,7 +313,7 @@ function renderCartSummary() {
               <h4 class="font-bold text-base leading-tight">${name} (عدد ${item.quantity})</h4>
               <div class="flex gap-2 mt-1">
                 ${name === 'أرز بلبن يا عم' ? `<span class="text-[9px] font-bold text-[#FAB520] bg-[#FAB520]/10 px-2 py-0.5 rounded-full inline-block">${item.variant === 'nuts' ? 'بالمكسرات' : 'سادة'}</span>` : ''}
-                ${!['برجر يا عم', 'حواوشي يا عم', 'طبق فراخ استربس كريسبي', 'صينية شهية لفرد واحد', 'صينية سمين مشكل بلدي لفرد واحد', 'مكرونة بالبشاميل لفرد واحد', 'طبق مكرونة نجريسكو لفرد واحد', 'كرات بطاطس بالجبنة لفرد واحد', 'أرز بلبن يا عم'].includes(name) ? `<span class="text-[9px] font-bold text-[#FAB520] bg-[#FAB520]/10 px-2 py-0.5 rounded-full inline-block">خبز ${item.bread === 'baladi' ? 'بلدي' : 'فينو فرنسي'}</span>` : ''}
+                ${!['برجر يا عم', 'حواوشي يا عم', 'طبق فراخ استربس كريسبي', 'صينية شهية لفرد واحد', 'صينية سمين مشكل بلدي لفرد واحد', 'مكرونة بالبشاميل لفرد واحد', 'طبق مكرونة نجريسكو لفرد واحد', 'طبق محشي لفرد واحد', 'كرات بطاطس بالجبنة لفرد واحد', 'أرز بلبن يا عم'].includes(name) ? `<span class="text-[9px] font-bold text-[#FAB520] bg-[#FAB520]/10 px-2 py-0.5 rounded-full inline-block">خبز ${item.bread === 'baladi' ? 'بلدي' : 'فينو فرنسي'}</span>` : ''}
               </div>
             </div>
             <span class="font-bold text-[#FAB520] text-sm">${item.quantity * item.price} ج.م</span>

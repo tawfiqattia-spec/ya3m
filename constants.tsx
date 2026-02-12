@@ -39,6 +39,11 @@ export const SANDWICH_ITEMS = [
     image: 'https://ya3m.com/pic/neg.png' 
   },
   { 
+    name: 'طبق محشي لفرد واحد', 
+    price: 75, 
+    image: 'https://ya3m.com/pic/mahs.png' 
+  },
+  { 
     name: 'طبق فراخ استربس كريسبي', 
     price: 140, 
     image: 'https://ya3m.com/pic/kres.png' 
