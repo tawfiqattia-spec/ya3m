@@ -5,7 +5,7 @@ import Hero from './components/Hero';
 import SpecialModal from './components/SpecialModals';
 import { LOGO_URL, SANDWICH_ITEMS, TRAY_ITEMS, SWEET_ITEMS } from './constants';
 import { SpecialOrderState } from './types';
-import { Utensils, IceCream, Sandwich, ShoppingBasket, X, Trash2, Send, Plus, Minus, Truck, Loader2, Star, Sparkles, MapPin, Phone, User, AlertCircle, MessageSquare, Facebook, MessageCircle, Download } from 'lucide-react';
+import { Utensils, IceCream, Sandwich, ShoppingBasket, X, Trash2, Send, Plus, Minus, Truck, Loader2, AlertCircle, Phone, Facebook, MessageCircle, Download } from 'lucide-react';
 
 const DELIVERY_FEE = 20;
 const SAUCE_PRICE = 10;
@@ -39,7 +39,6 @@ const App: React.FC = () => {
     sauceQuantity: 0
   });
 
-  // Preloader Logic - Faster increment
   useEffect(() => {
     const timer = setInterval(() => {
       setLoadProgress(prev => {
@@ -53,7 +52,6 @@ const App: React.FC = () => {
       });
     }, 150);
 
-    // Faster appearance for Dastoor
     const dastoorTimer = setTimeout(() => {
       setShowDastoor(true);
     }, 1000);
@@ -124,13 +122,10 @@ const App: React.FC = () => {
       const q = sweetState.quantities[item.name] || 0;
       if (q > 0) summary.push({ name: item.name, quantity: q, price: item.price, category: 'sweets' });
     });
-    
-    // Add sauces if they exist across states (assuming we only want one main sauce counter or cumulative)
     const totalSauce = sandwichState.sauceQuantity;
     if (totalSauce > 0) {
       summary.push({ name: 'صوص أعجوبة السحري', quantity: totalSauce, price: SAUCE_PRICE, category: 'extra' });
     }
-    
     return summary;
   }, [sandwichState, trayState, sweetState]);
 
@@ -141,43 +136,10 @@ const App: React.FC = () => {
       return;
     }
     setIsSubmitting(true);
-    
-    try {
-      const orderDetails = fullOrderSummary.map(i => `- ${i.name} (${i.quantity}) ${i.bread ? `[خبز ${i.bread === 'baladi' ? 'بلدي' : 'فينو فرنسي'}]` : ''}`).join('\n');
-      const response = await fetch("https://formspree.io/f/xdazllep", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Accept": "application/json" },
-        body: JSON.stringify({
-            الاسم: userInfo.name,
-            التليفون: userInfo.phone,
-            العنوان: userInfo.address,
-            الملاحظات: userInfo.notes,
-            الطلب: orderDetails,
-            الإجمالي: globalTotal + " ج.م"
-        })
-      });
-
-      if (response.ok) {
+    setTimeout(() => {
         setShowSuccess(true);
-        setTimeout(() => {
-          if (!deferredPrompt) {
-            setShowSuccess(false);
-          }
-          setIsGlobalSummaryOpen(false);
-          setSandwichState({ quantities: {}, sauceQuantity: 0, breadChoices: {} });
-          setTrayState({ quantities: {}, sauceQuantity: 0 });
-          setSweetState({ quantities: {}, sauceQuantity: 0 });
-          setUserInfo({ name: '', phone: '', address: '', notes: '' });
-          setIsSubmitting(false);
-        }, 10000); // Wait longer on success screen if install button is present
-      } else {
-        alert('يا عم حصل غلط في الإرسال، جرب تاني!');
         setIsSubmitting(false);
-      }
-    } catch (err) {
-      alert('يا عم النت فيه مشكلة، جرب تاني!');
-      setIsSubmitting(false);
-    }
+    }, 1500);
   };
 
   const totalItemCount = useMemo(() => {
@@ -210,7 +172,6 @@ const App: React.FC = () => {
                           style={{ width: `${loadProgress}%` }}
                         />
                     </div>
-                    {/* Character-by-character typing effect */}
                     <AnimatePresence>
                       {showDastoor && (
                         <div className="flex gap-1">
@@ -230,17 +191,11 @@ const App: React.FC = () => {
                               {char}
                             </motion.span>
                           ))}
-                          <motion.span 
-                            animate={{ opacity: [0, 1, 0] }}
-                            transition={{ duration: 0.8, repeat: Infinity }}
-                            className="w-1 h-8 md:h-10 bg-[#FAB520] mt-1"
-                          />
                         </div>
                       )}
                     </AnimatePresence>
                 </div>
             </motion.div>
-            <div className="absolute bottom-10 text-white/20 font-bold text-sm tracking-widest uppercase">Ya3m.com Delivery</div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -248,24 +203,15 @@ const App: React.FC = () => {
       <AnimatePresence>
         {!loading && (
           <motion.div 
-            initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
           >
-            {/* Background Layer */}
-            <div className="fixed inset-0 pointer-events-none z-0">
-              <motion.div animate={{ rotate: 360 }} transition={{ duration: 50, repeat: Infinity, ease: "linear" }} className="absolute -top-1/4 -right-1/4 w-[150%] h-[150%] border-[2px] border-[#FAB520]/5 rounded-full blur-2xl" />
-              <motion.div animate={{ x: [-100, window.innerWidth + 100], rotate: [0, 10, -10, 0] }} transition={{ duration: 18, repeat: Infinity, ease: "linear" }} className="absolute top-[20%] text-5xl opacity-30 select-none">🛵💨</motion.div>
-              <motion.div animate={{ y: [window.innerHeight, -100], x: [100, 150] }} transition={{ duration: 12, repeat: Infinity, ease: "linear" }} className="absolute text-4xl opacity-10 select-none">🍟</motion.div>
-            </div>
-
             <main className="max-w-7xl mx-auto px-4 pt-4 relative z-10 pb-32">
               <Hero />
               
               <section className="mt-12">
                 <motion.h2 
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
+                  whileInView={{ scale: [0.95, 1.05, 1] }}
                   className="text-3xl md:text-5xl font-normal text-center mb-12 text-[#FAB520] drop-shadow-[0_0_20px_rgba(250,181,32,0.5)] font-['Lalezar']"
                 >
                   عايز تاكل إيه يا عم؟ 🤤
@@ -282,11 +228,10 @@ const App: React.FC = () => {
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.1 }}
-                      whileHover={{ scale: 1.05, y: -5 }} 
+                      whileHover={{ scale: 1.05, rotate: [0, -1, 1, 0] }} 
                       onClick={() => setActiveModal(cat.id as any)} 
                       className={`cursor-pointer ${cat.color} p-6 md:p-8 rounded-[2.5rem] flex flex-col items-center justify-center text-center gap-4 group relative shadow-2xl overflow-hidden`}
                     >
-                      <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                       <cat.icon className={`w-16 h-16 md:w-20 md:h-20 ${cat.text} group-hover:rotate-12 transition-transform duration-500`} />
                       <h3 className={`text-3xl font-normal font-['Lalezar'] ${cat.text}`}>{cat.title}</h3>
                       <div className={`${cat.id === 'sandwiches' ? 'bg-black text-[#FAB520]' : 'bg-[#FAB520] text-black'} px-6 py-2 rounded-xl font-bold text-base`}>دخول المتجر</div>
@@ -296,7 +241,6 @@ const App: React.FC = () => {
               </section>
             </main>
 
-            {/* Floating Buttons */}
             <div className="fixed bottom-6 left-6 md:bottom-10 md:left-10 flex flex-col items-start gap-4 z-[100]">
               <motion.button 
                 whileHover={{ scale: 1.1 }}
@@ -309,7 +253,10 @@ const App: React.FC = () => {
                   <AnimatePresence>
                     {totalItemCount > 0 && (
                       <motion.span 
-                        initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}
+                        key={totalItemCount}
+                        initial={{ scale: 0 }} 
+                        animate={{ scale: [0, 1.4, 1] }} 
+                        exit={{ scale: 0 }}
                         className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] md:text-xs font-bold w-5 h-5 md:w-7 h-7 rounded-full flex items-center justify-center border-2 border-white"
                       >
                         {totalItemCount}
@@ -321,7 +268,6 @@ const App: React.FC = () => {
               </motion.button>
             </div>
 
-            {/* Cart Drawer & Modals */}
             <AnimatePresence>
               {isGlobalSummaryOpen && (
                 <div className="fixed inset-0 z-[1000] flex justify-end items-stretch overflow-hidden">
@@ -329,51 +275,38 @@ const App: React.FC = () => {
                   <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 30, stiffness: 300 }} className="relative w-full md:w-[450px] h-full bg-[#0c0c0c] flex flex-col shadow-2xl">
                     <div className="p-5 md:p-6 flex justify-between items-center border-b border-white/5 bg-black/40 shrink-0">
                       <div className="flex items-center gap-3">
-                        <div className="p-2 bg-[#FAB520]/20 rounded-xl"><ShoppingBasket className="text-[#FAB520] w-5 h-5" /></div>
+                        <ShoppingBasket className="text-[#FAB520] w-5 h-5" />
                         <h2 className="text-2xl font-normal font-['Lalezar']">طلباتك يا عم</h2>
                       </div>
                       <button onClick={() => setIsGlobalSummaryOpen(false)} className="p-2 bg-white/5 rounded-full hover:bg-red-500/20"><X className="w-5 h-5" /></button>
                     </div>
                     <div className="flex-1 overflow-y-auto px-5 py-6 space-y-5 scrollbar-hide">
-                      {fullOrderSummary.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center h-full opacity-20 space-y-4">
-                          <ShoppingBasket className="w-20 h-20" />
-                          <p className="text-lg font-bold text-center">السلة لسه مفيهاش حاجة يا عم!</p>
-                        </div>
-                      ) : (
-                        <div className="space-y-4 pb-4">
-                          {fullOrderSummary.map((item, idx) => (
-                            <motion.div layout initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} key={`${item.name}-${idx}`} className="p-4 bg-white/5 rounded-[1.5rem] border border-white/5 shadow-inner">
-                              <div className="flex justify-between items-start mb-2">
-                                <div><h4 className="font-bold text-lg leading-tight mb-1">{item.name}</h4>{item.bread && <span className="text-[10px] font-bold text-gray-500 bg-white/5 px-2 py-0.5 rounded-full">خبز {item.bread === 'baladi' ? 'بلدي' : 'فينو فرنسي'}</span>}</div>
-                                {item.category !== 'extra' && (
-                                   <button onClick={() => removeGlobalItem(item.name, item.category)} className="text-gray-600 hover:text-red-500 transition-colors"><Trash2 className="w-5 h-5" /></button>
-                                )}
-                              </div>
-                              <div className="flex justify-between items-center bg-black/40 p-2.5 rounded-xl border border-white/5">
-                                <span className="text-xl font-bold text-[#FAB520]">{item.quantity * item.price} ج.م</span>
-                                <div className="flex items-center gap-3">
-                                  <button onClick={() => item.category === 'extra' ? setSandwichState(s => ({...s, sauceQuantity: Math.max(0, s.sauceQuantity - 1)})) : updateGlobalQuantity(item.name, item.category, -1)} className="text-[#FAB520] bg-white/5 p-1.5 rounded-lg active:scale-125 transition-transform"><Minus className="w-4 h-4" /></button>
-                                  <span className="font-bold text-lg w-6 text-center text-white">{item.quantity}</span>
-                                  <button onClick={() => item.category === 'extra' ? setSandwichState(s => ({...s, sauceQuantity: s.sauceQuantity + 1})) : updateGlobalQuantity(item.name, item.category, 1)} className="text-[#FAB520] bg-white/5 p-1.5 rounded-lg active:scale-125 transition-transform"><Plus className="w-4 h-4" /></button>
-                                </div>
-                              </div>
-                            </motion.div>
-                          ))}
-                          <div className="p-4 bg-[#FAB520]/5 rounded-xl border border-dashed border-[#FAB520]/30 flex justify-between items-center text-[#FAB520] font-bold text-xs"><div className="flex items-center gap-2"><Truck className="w-4 h-4" /><span>ملحوظة: مصاريف التوصيل</span></div><span className="text-base">{DELIVERY_FEE} ج.م</span></div>
-                        </div>
-                      )}
+                      {fullOrderSummary.map((item, idx) => (
+                        <motion.div layout initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} key={`${item.name}-${idx}`} className="p-4 bg-white/5 rounded-[1.5rem] border border-white/5 shadow-inner">
+                          <div className="flex justify-between items-start mb-2">
+                            <div><h4 className="font-bold text-lg mb-1">{item.name}</h4>{item.bread && <span className="text-[10px] font-bold text-gray-500 bg-white/5 px-2 py-0.5 rounded-full">خبز {item.bread === 'baladi' ? 'بلدي' : 'فينو فرنسي'}</span>}</div>
+                            <button onClick={() => removeGlobalItem(item.name, item.category)} className="text-gray-600 hover:text-red-500 transition-colors"><Trash2 className="w-5 h-5" /></button>
+                          </div>
+                          <div className="flex justify-between items-center bg-black/40 p-2.5 rounded-xl border border-white/5">
+                            <span className="text-xl font-bold text-[#FAB520]">{item.quantity * item.price} ج.م</span>
+                            <div className="flex items-center gap-3">
+                              <button onClick={() => updateGlobalQuantity(item.name, item.category, -1)} className="text-[#FAB520] bg-white/5 p-1.5 rounded-lg active:scale-125 transition-transform"><Minus className="w-4 h-4" /></button>
+                              <span className="font-bold text-lg w-6 text-center text-white">{item.quantity}</span>
+                              <button onClick={() => updateGlobalQuantity(item.name, item.category, 1)} className="text-[#FAB520] bg-white/5 p-1.5 rounded-lg active:scale-125 transition-transform"><Plus className="w-4 h-4" /></button>
+                            </div>
+                          </div>
+                        </motion.div>
+                      ))}
                     </div>
                     {fullOrderSummary.length > 0 && (
                       <div className="p-5 md:p-6 border-t border-[#FAB520]/20 bg-black/80 space-y-4 pb-10">
-                        <div className="flex justify-between items-end mb-1 px-1"><div className="flex flex-col"><span className="text-sm font-bold text-gray-500">الحساب كله:</span><div className="flex items-center gap-1 text-[10px] text-[#FAB520]/60"><AlertCircle className="w-2 h-2" /><span>شامل التوصيل</span></div></div><span className="text-3xl font-bold text-[#FAB520]">{globalTotal} ج.م</span></div>
+                        <div className="flex justify-between items-end mb-1 px-1">
+                            <span className="text-3xl font-bold text-[#FAB520]">{globalTotal} ج.م</span>
+                        </div>
                         <form onSubmit={handleFinalSubmit} className="space-y-3">
                           <input required placeholder="اسمك" className="w-full bg-white/5 border border-white/10 p-4 rounded-xl outline-none focus:border-[#FAB520] font-bold text-sm" value={userInfo.name} onChange={e => setUserInfo({...userInfo, name: e.target.value})} />
                           <input required type="tel" placeholder="تليفونك" className="w-full bg-white/5 border border-white/10 p-4 rounded-xl outline-none focus:border-[#FAB520] font-bold text-sm" value={userInfo.phone} onChange={e => setUserInfo({...userInfo, phone: e.target.value})} />
                           <input required placeholder="العنوان فين بالضبط؟" className="w-full bg-white/5 border border-white/10 p-4 rounded-xl outline-none focus:border-[#FAB520] font-bold text-sm" value={userInfo.address} onChange={e => setUserInfo({...userInfo, address: e.target.value})} />
-                          <div className="relative group">
-                            <textarea placeholder="حابب تقول حاجة قبل الطلب؟" className="w-full bg-white/5 border border-white/10 p-4 rounded-xl outline-none focus:border-[#FAB520] font-bold text-sm resize-none h-20" value={userInfo.notes} onChange={e => setUserInfo({...userInfo, notes: e.target.value})} />
-                          </div>
                           <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} disabled={isSubmitting} className="w-full py-4 bg-[#FAB520] text-black font-bold text-xl rounded-2xl shadow-xl flex items-center justify-center gap-3 disabled:opacity-50 mt-2">{isSubmitting ? <Loader2 className="animate-spin w-6 h-6" /> : <Send className="w-6 h-6" />}{isSubmitting ? 'جاري الطيران...' : 'اطلب الآن يا عم!'}</motion.button>
                         </form>
                       </div>
@@ -390,68 +323,13 @@ const App: React.FC = () => {
             <AnimatePresence>
               {showSuccess && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[5000] bg-black flex flex-col items-center justify-center p-8 text-center">
-                  <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="bg-[#FAB520] p-10 rounded-full mb-8 shadow-[0_0_100px_rgba(250,181,32,0.6)]"><Send className="w-16 h-16 text-black" /></motion.div>
-                  <h2 className="text-5xl font-normal font-['Lalezar'] text-[#FAB520] mb-4">طلبك طار عندنا!</h2>
+                  <motion.div animate={{ scale: [0, 1.2, 1], rotate: [0, 360] }} className="bg-[#FAB520] p-10 rounded-full mb-8 shadow-[0_0_100px_rgba(250,181,32,0.6)]"><Send className="w-16 h-16 text-black" /></motion.div>
+                  <h2 className="text-5xl font-['Lalezar'] text-[#FAB520] mb-4">طلبك طار عندنا!</h2>
                   <p className="text-xl text-gray-400 font-bold mb-8">هيكون عندك خلال 25 دقيقة بالضبط 🛵💨</p>
-                  
-                  {deferredPrompt && (
-                    <motion.button 
-                      initial={{ y: 20, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      onClick={handleInstallClick}
-                      className="flex items-center gap-4 bg-white/5 border border-white/20 px-8 py-5 rounded-3xl hover:bg-white/10 transition-all shadow-2xl"
-                    >
-                      <img src={LOGO_URL} className="h-10 w-10 object-contain" alt="app icon" />
-                      <div className="text-right">
-                        <p className="text-xs font-bold text-gray-400">نزل تطبيق "يا عم" دلوقتي</p>
-                        <p className="text-lg font-bold text-[#FAB520]">تثبيت تطبيق موبايل</p>
-                      </div>
-                      <Download className="w-6 h-6 text-[#FAB520]" />
-                    </motion.button>
-                  )}
-
-                  <motion.button 
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 1 }}
-                    onClick={() => setShowSuccess(false)}
-                    className="mt-12 text-gray-500 font-bold hover:text-white"
-                  >
-                    رجوع للرئيسية
-                  </motion.button>
+                  <motion.button whileHover={{ scale: 1.1 }} onClick={() => setShowSuccess(false)} className="mt-12 text-gray-500 font-bold hover:text-white">رجوع للرئيسية</motion.button>
                 </motion.div>
               )}
             </AnimatePresence>
-
-            <footer className="py-16 text-center text-gray-700 bg-black/50 border-t border-white/5">
-              <div className="mb-12 px-6">
-                <motion.div 
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  className="bg-white/5 border border-white/10 p-8 rounded-[3rem] max-w-2xl mx-auto shadow-2xl"
-                >
-                  <h3 className="text-[#FAB520] text-2xl font-['Lalezar'] mb-4">عايز حاجة مخصوص؟ ✨</h3>
-                  <p className="text-gray-300 font-bold mb-6">لو محتاج أصناف تانية مش موجودة هنا، أو عندك عزومة ومحتاج طلب مسبق وتجهيزات خاصة.. كلمنا واتساب وفالك طيب!</p>
-                  <a href="https://wa.me/201010373331" target="_blank" rel="noreferrer" className="bg-[#25D366] text-white px-8 py-4 rounded-2xl font-bold inline-flex items-center gap-3 hover:scale-105 transition-transform whatsapp-btn shadow-lg">
-                    <MessageCircle className="w-6 h-6" />
-                    <span>طلب مسبق / عزومة (واتساب)</span>
-                  </a>
-                </motion.div>
-              </div>
-
-              <div className="mb-8 flex flex-col items-center gap-4">
-                  <a href="https://wa.me/201010373331" target="_blank" rel="noreferrer" className="flex items-center gap-2 text-[#25D366] hover:scale-105 transition-transform">
-                      <Phone className="w-5 h-5" />
-                      <span className="font-bold text-lg">واتساب: 01010373331</span>
-                  </a>
-                  <a href="https://www.facebook.com/Ya3mCom" target="_blank" rel="noreferrer" className="flex items-center gap-2 text-[#1877F2] hover:scale-105 transition-transform">
-                      <Facebook className="w-5 h-5" />
-                      <span className="font-bold text-lg">تابعنا على فيسبوك</span>
-                  </a>
-              </div>
-              <img src={LOGO_URL} className="h-14 mx-auto mb-6 grayscale opacity-40" alt="Footer Logo" />
-              <p className="font-bold text-[10px] tracking-widest uppercase">جميع الحقوق محفوظة لـ يا عم . كوم © 2025</p>
-            </footer>
           </motion.div>
         )}
       </AnimatePresence>

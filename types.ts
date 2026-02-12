@@ -25,4 +25,4 @@ export interface SpecialOrderState {
   breadChoices?: Record<string, 'baladi' | 'western'>;
 }
 
-export type Category = 'الكل' | 'بيتزا' | 'برجر' | 'مشويات' | 'حلويات' | 'سندوتشات';
+export type Category = 'الكل' | 'بيتزا' | 'مشويات' | 'حلويات' | 'سندوتشات';

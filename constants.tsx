@@ -6,7 +6,7 @@ export const SANDWICH_ITEMS = [
   { 
     name: 'كبدة إسكندراني', 
     price: 35, 
-    image: 'https://sayedsamkary.com/%D9%83%D8%A8%D8%AF%D8%A9%D9%8A%D8%A7%D8%B9%D9%85.png' 
+    image: 'https://sayedsamkary.com/%D9%83%D8%A8%D8%AF%D8%A9%D9%8I%D8%A7%D8%B9%D9%85.png' 
   },
   { 
     name: 'سجق', 
@@ -19,14 +19,24 @@ export const SANDWICH_ITEMS = [
     image: 'https://sayedsamkary.com/hawwshy.png' 
   },
   { 
-    name: 'يا عم برجر', 
-    price: 99, 
-    image: 'https://ya3m.com/%D8%A8%D8%B1%D8%AC%D8%B1%D9%8A%D8%A7%D8%B9%D9%85.png' 
+    name: 'صينية سمين مشكل بلدي لفرد واحد', 
+    price: 95, 
+    image: 'https://ya3m.com/simin.png' 
   },
   { 
     name: 'حلبسة (حمص الشام)', 
     price: 15, 
     image: 'https://ya3m.com/%D8%AD%D9%84%D8%A8%D8%B3%D8%A9.jpg' 
+  },
+  { 
+    name: 'أرز بلبن سادة', 
+    price: 30, 
+    image: 'https://ya3m.com/%D8%A7%D8%B1%D8%B2%D8%A8%D8%A7%D9%84%D8%A8%D9%86%D8%A8%D8%A7%D9%84%D9%85%D9%83%D8%B3%D8%B1%D8%A7%D8%AA.png' 
+  },
+  { 
+    name: 'أرز بلبن بالمكسرات', 
+    price: 40, 
+    image: 'https://ya3m.com/%D8%A7%D8%B1%D8%B2%D8%A8%D8%A7%D9%84%D8%A8%D9%86%D8%A8%D8%A7%D9%84%D9%85%D9%83%D8%B3%D8%B1%D8%A7%D8%AA.png' 
   },
   { 
     name: 'سندوتش فراخ استربس', 
@@ -57,11 +67,16 @@ export const TRAY_ITEMS = [
 
 export const SWEET_ITEMS = [
   { 
-    name: 'ارز بلبن بالمكسرات', 
-    price: 25, 
+    name: 'أرز بلبن سادة', 
+    price: 30, 
     image: 'https://ya3m.com/%D8%A7%D8%B1%D8%B2%D8%A8%D8%A7%D9%84%D8%A8%D9%86%D8%A8%D8%A7%D9%84%D9%85%D9%83%D8%B3%D8%B1%D8%A7%D8%AA.png' 
   },
-  { name: 'رز بلبن قنبلة', price: 40 },
+  { 
+    name: 'أرز بلبن بالمكسرات', 
+    price: 40, 
+    image: 'https://ya3m.com/%D8%A7%D8%B1%D8%B2%D8%A8%D8%A7%D9%84%D8%A8%D9%86%D8%A8%D8%A7%D9%84%D9%85%D9%83%D8%B3%D8%B1%D8%A7%D8%AA.png' 
+  },
+  { name: 'رز بلبن قنبلة', price: 50 },
   { name: 'أم علي بالمكسرات', price: 55 },
   { name: 'صينية كنافة بلدي بالموز', price: 250 },
   { name: 'طبق قطايف (يكفي 4 أفراد)', price: 250 },
