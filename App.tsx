@@ -190,24 +190,14 @@ const App: React.FC = () => {
                     </div>
                     <AnimatePresence>
                       {showDastoor && (
-                        <div className="flex gap-2">
-                          {loaderText.split('').map((char, i) => (
-                            <motion.span 
-                              key={i}
-                              initial={{ opacity: 0, scale: 0, y: 30 }}
-                              animate={{ opacity: 1, scale: 1, y: 0 }}
-                              transition={{ 
-                                delay: i * 0.08, 
-                                type: 'spring',
-                                damping: 10,
-                                stiffness: 200
-                              }}
-                              className="text-[#FAB520] font-black text-4xl md:text-7xl font-['Lalezar'] drop-shadow-[0_0_20px_rgba(250,181,32,0.6)]"
-                            >
-                              {char}
-                            </motion.span>
-                          ))}
-                        </div>
+                        <motion.p
+                          initial={{ width: 0 }}
+                          animate={{ width: "auto" }}
+                          transition={{ duration: 1.5, ease: "linear" }}
+                          className="animate-dastoor text-[#FAB520] font-black text-4xl md:text-7xl font-['Lalezar'] drop-shadow-[0_0_20px_rgba(250,181,32,0.6)] overflow-hidden whitespace-nowrap"
+                        >
+                          {loaderText}
+                        </motion.p>
                       )}
                     </AnimatePresence>
                 </div>
@@ -222,7 +212,7 @@ const App: React.FC = () => {
             <main className="max-w-7xl mx-auto px-4 pt-4 relative z-10 pb-32">
               <Hero />
               
-              <section className="mt-20">
+              <section className="mt-20" id="ordering-section">
                 <motion.div
                   initial={{ opacity: 0, y: 50 }}
                   whileInView={{ opacity: 1, y: 0 }}
