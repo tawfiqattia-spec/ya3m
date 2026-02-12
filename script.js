@@ -2,54 +2,54 @@
 // Data Constants
 const SANDWICH_ITEMS = [
   { 
-    name: 'كبدة إسكندراني', 
-    price: 35, 
-    image: 'https://sayedsamkary.com/%D9%83%D8%A8%D8%AF%D8%A9%D9%8I%D8%A7%D8%B9%D9%85.png' 
-  },
-  { 
-    name: 'سجق', 
-    price: 35, 
-    image: 'https://sayedsamkary.com/%D8%B3%D8%AC%D9%82.png' 
-  },
-  { 
-    name: 'حواوشي يا عم', 
-    price: 45, 
-    image: 'https://sayedsamkary.com/hawwshy.png' 
+    name: 'برجر يا عم', 
+    price: 65, 
+    image: 'https://ya3m.com/pic/burger.png' 
   },
   { 
     name: 'صينية سمين مشكل بلدي لفرد واحد', 
     price: 95, 
-    image: 'https://ya3m.com/simin.png' 
+    image: 'https://ya3m.com/pic/simin.png' 
+  },
+  { 
+    name: 'كبدة إسكندراني', 
+    price: 35, 
+    image: 'https://ya3m.com/pic/ya3m-kebda.png' 
+  },
+  { 
+    name: 'سجق', 
+    price: 35, 
+    image: 'https://ya3m.com/pic/sjq.png' 
+  },
+  { 
+    name: 'حواوشي يا عم', 
+    price: 45, 
+    image: 'https://ya3m.com/pic/hawwshy.png' 
   },
   { 
     name: 'سندوتش فراخ استربس', 
     price: 85, 
-    image: 'https://sayedsamkary.com/unnamed4.jpg' 
+    image: 'https://ya3m.com/pic/strips.png' 
   },
   { 
     name: 'صينية شهية لفرد واحد', 
     price: 95, 
-    image: 'https://sayedsamkary.com/%D8%B5%D9%8A%D9%86%D9%8A%D8%A9%20%D8%B4%D9%87%D9%8A%D8%A9.png' 
+    image: 'https://ya3m.com/pic/shahia.png' 
   },
   { 
     name: 'مكرونة بالبشاميل لفرد واحد', 
     price: 75, 
-    image: 'https://sayedsamkary.com/%D9%85%D9%83%D8%B1%D9%88%D9%86%D8%A9%20%D8%A8%D8%A7%D9%84%D8%A8%D8%B4%D8%A7%D9%85%D9%8A%D9%84.png' 
+    image: 'https://ya3m.com/pic/pasta.png' 
   },
   { 
     name: 'كرات بطاطس بالجبنة لفرد واحد', 
     price: 35, 
-    image: 'https://sayedsamkary.com/%D9%83%D8%B1%D8%A7%D8%AA%D8%A8%D8%B7%D8%A7%D8%B7%D8%B3%D8%A8%D8%A7%D9%84%D8%AC%D8%A8%D9%86%D8%A9.png' 
+    image: 'https://ya3m.com/pic/potato.png' 
   },
   { 
-    name: 'أرز بلبن سادة', 
+    name: 'أرز بلبن يا عم', 
     price: 30, 
-    image: 'https://ya3m.com/%D8%A7%D8%B1%D8%B2%D8%A8%D8%A7%D9%84%D8%A8%D9%86%D8%A8%D8%A7%D9%84%D9%85%D9%83%D8%B3%D8%B1%D8%A7%D8%AA.png' 
-  },
-  { 
-    name: 'أرز بلبن بالمكسرات', 
-    price: 40, 
-    image: 'https://ya3m.com/%D8%A7%D8%B1%D8%B2%D8%A8%D8%A7%D9%84%D8%A8%D9%86%D8%A8%D8%A7%D9%84%D9%85%D9%83%D8%B3%D8%B1%D8%A7%D8%AA.png' 
+    image: 'https://ya3m.com/pic/rice-pudding.png' 
   },
 ];
 
@@ -107,23 +107,26 @@ function renderSandwiches() {
   container.innerHTML = SANDWICH_ITEMS.map(item => {
     const qty = cart[item.name]?.quantity || 0;
     const bread = cart[item.name]?.bread || 'baladi';
+    const variant = cart[item.name]?.variant || 'plain';
     
     // Items that don't need bread choice
     const noOptionsItems = [
+        'برجر يا عم',
         'حواوشي يا عم', 
         'سندوتش فراخ استربس', 
         'صينية شهية لفرد واحد', 
         'صينية سمين مشكل بلدي لفرد واحد',
         'مكرونة بالبشاميل لفرد واحد', 
         'كرات بطاطس بالجبنة لفرد واحد',
-        'أرز بلبن سادة',
-        'أرز بلبن بالمكسرات'
+        'أرز بلبن يا عم'
     ];
     
     const showBread = !noOptionsItems.includes(item.name);
+    const isRicePudding = item.name === 'أرز بلبن يا عم';
+    const displayPrice = isRicePudding && variant === 'nuts' ? 40 : item.price;
 
     return `
-      <div class="p-4 md:p-5 rounded-[2.5rem] border-2 transition-all duration-300 ${qty > 0 ? 'bg-white/5 border-[#FAB520] shadow-2xl scale-[1.01]' : 'bg-white/5 border-transparent'}">
+      <div class="p-4 md:p-5 rounded-[2.5rem] border-2 transition-all duration-500 ${qty > 0 ? 'bg-white/5 border-[#FAB520] shadow-2xl scale-[1.01]' : 'bg-white/5 border-transparent'} hover:translate-y-[-4px]">
         <div class="flex flex-col sm:flex-row items-center gap-5">
           <!-- Product Image -->
           <div class="w-full sm:w-32 h-32 shrink-0 rounded-[2rem] overflow-hidden border-2 border-white/5 shadow-lg group">
@@ -133,10 +136,10 @@ function renderSandwiches() {
           <!-- Product Details -->
           <div class="flex-1 text-center sm:text-right">
             <h3 class="text-xl md:text-2xl font-['Lalezar'] mb-1">${item.name}</h3>
-            <p class="text-[#FAB520] font-bold text-lg">${item.price} ج.م</p>
+            <p class="text-[#FAB520] font-bold text-lg">${displayPrice} ج.م</p>
+            ${item.name === 'برجر يا عم' ? '<p class="text-gray-400 text-xs mt-1">برجر بلدي مشوي على الفحم</p>' : ''}
             ${item.name === 'صينية سمين مشكل بلدي لفرد واحد' ? '<p class="text-gray-400 text-xs mt-1">فشة وطحال وحلويات.. السمين الأصلي!</p>' : ''}
-            ${item.name === 'أرز بلبن سادة' ? '<p class="text-gray-400 text-xs mt-1">رز بلبن بلدي كريمي وخفيف</p>' : ''}
-            ${item.name === 'أرز بلبن بالمكسرات' ? '<p class="text-gray-400 text-xs mt-1">رز بلبن غرقان مكسرات مشكلة</p>' : ''}
+            ${isRicePudding ? '<p class="text-gray-400 text-xs mt-1">رز بلبن كريمي وطعم خيالي</p>' : ''}
           </div>
           
           <!-- Controls -->
@@ -153,6 +156,13 @@ function renderSandwiches() {
             <button onclick="setBread('${item.name}', 'western')" class="py-2.5 rounded-xl font-bold text-sm transition-all ${bread === 'western' ? 'bg-[#FAB520] text-black shadow-lg scale-[1.02]' : 'bg-white/5 text-gray-500 hover:bg-white/10'}" data-bread="western">عيش فينو فرنسي</button>
           </div>
         ` : ''}
+
+        ${isRicePudding ? `
+          <div class="mt-4 pt-4 border-t border-white/5 grid grid-cols-2 gap-3 transition-all duration-500 ${qty > 0 ? 'opacity-100 max-h-20' : 'opacity-0 max-h-0 pointer-events-none overflow-hidden'}" id="variant-${item.name}">
+            <button onclick="setVariant('${item.name}', 'plain')" class="py-2.5 rounded-xl font-bold text-sm transition-all ${variant === 'plain' ? 'bg-[#FAB520] text-black shadow-lg scale-[1.02]' : 'bg-white/5 text-gray-500 hover:bg-white/10'}">سادة (30 ج)</button>
+            <button onclick="setVariant('${item.name}', 'nuts')" class="py-2.5 rounded-xl font-bold text-sm transition-all ${variant === 'nuts' ? 'bg-[#FAB520] text-black shadow-lg scale-[1.02]' : 'bg-white/5 text-gray-500 hover:bg-white/10'}">بالمكسرات (40 ج)</button>
+          </div>
+        ` : ''}
       </div>
     `;
   }).join('');
@@ -161,7 +171,7 @@ function renderSandwiches() {
 
 function updateQty(name, delta, price) {
   if (!cart[name]) {
-    cart[name] = { quantity: 0, price: price, category: 'sandwiches', bread: 'baladi' };
+    cart[name] = { quantity: 0, price: price, category: 'sandwiches', bread: 'baladi', variant: 'plain' };
   }
   cart[name].quantity = Math.max(0, cart[name].quantity + delta);
   if (cart[name].quantity === 0) {
@@ -180,6 +190,15 @@ function setBread(name, type) {
   if (cart[name]) {
     cart[name].bread = type;
     renderSandwiches();
+  }
+}
+
+function setVariant(name, v) {
+  if (cart[name]) {
+    cart[name].variant = v;
+    cart[name].price = v === 'nuts' ? 40 : 30;
+    renderSandwiches();
+    updateMainSummary();
   }
 }
 
@@ -264,10 +283,13 @@ function renderCartSummary() {
     container.innerHTML = `
       <div class="space-y-4">
         ${cartArray.map(([name, item]) => `
-          <div class="p-4 bg-white/5 rounded-2xl border border-white/5 flex justify-between items-center">
+          <div class="p-4 bg-white/5 rounded-2xl border border-white/5 flex justify-between items-center transition-all hover:bg-white/10">
             <div>
               <h4 class="font-bold text-base leading-tight">${name} (عدد ${item.quantity})</h4>
-              ${!['حواوشي يا عم', 'سندوتش فراخ استربس', 'صينية شهية لفرد واحد', 'صينية سمين مشكل بلدي لفرد واحد', 'مكرونة بالبشاميل لفرد واحد', 'كرات بطاطس بالجبنة لفرد واحد', 'أرز بلبن سادة', 'أرز بلبن بالمكسرات'].includes(name) ? `<span class="text-[9px] font-bold text-[#FAB520] bg-[#FAB520]/10 px-2 py-0.5 rounded-full mt-1 inline-block">خبز ${item.bread === 'baladi' ? 'بلدي' : 'فينو فرنسي'}</span>` : ''}
+              <div class="flex gap-2 mt-1">
+                ${name === 'أرز بلبن يا عم' ? `<span class="text-[9px] font-bold text-[#FAB520] bg-[#FAB520]/10 px-2 py-0.5 rounded-full inline-block">${item.variant === 'nuts' ? 'بالمكسرات' : 'سادة'}</span>` : ''}
+                ${!['برجر يا عم', 'حواوشي يا عم', 'سندوتش فراخ استربس', 'صينية شهية لفرد واحد', 'صينية سمين مشكل بلدي لفرد واحد', 'مكرونة بالبشاميل لفرد واحد', 'كرات بطاطس بالجبنة لفرد واحد', 'أرز بلبن يا عم'].includes(name) ? `<span class="text-[9px] font-bold text-[#FAB520] bg-[#FAB520]/10 px-2 py-0.5 rounded-full inline-block">خبز ${item.bread === 'baladi' ? 'بلدي' : 'فينو فرنسي'}</span>` : ''}
+              </div>
             </div>
             <span class="font-bold text-[#FAB520] text-sm">${item.quantity * item.price} ج.م</span>
           </div>

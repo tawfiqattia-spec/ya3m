@@ -17,6 +17,7 @@ interface ModalProps {
     quantities: Record<string, number>; 
     sauceQuantity: number;
     breadChoices?: Record<string, string>;
+    ricePuddingVariants?: Record<string, 'plain' | 'nuts'>;
   };
   onUpdateState: (newState: any) => void;
   onFinalSubmit: (userInfo: any) => void;
@@ -56,10 +57,13 @@ const SpecialModal: React.FC<ModalProps> = ({
     });
   };
 
-  const handleSauceUpdate = (delta: number) => {
+  const handleVariantChoice = (name: string, v: 'plain' | 'nuts') => {
     onUpdateState({
       ...persistentState,
-      sauceQuantity: Math.max(0, (persistentState.sauceQuantity || 0) + delta)
+      ricePuddingVariants: {
+        ...(persistentState.ricePuddingVariants || {}),
+        [name]: v
+      }
     });
   };
 
@@ -93,8 +97,10 @@ const SpecialModal: React.FC<ModalProps> = ({
               {initialItems.map((item, i) => {
                 const qty = persistentState.quantities[item.name] || 0;
                 const choice = persistentState.breadChoices?.[item.name] || 'baladi';
+                const variant = persistentState.ricePuddingVariants?.[item.name] || 'plain';
                 
-                const showBread = type === 'sandwiches' && !['حواوشي يا عم', 'سندوتش فراخ استربس', 'صينية سمين مشكل بلدي لفرد واحد', 'صينية شهية لفرد واحد', 'مكرونة بالبشامل لفرد واحد', 'كرات بطاطس بالجبنة لفرد واحد', 'أرز بلبن سادة', 'أرز بلبن بالمكسرات'].includes(item.name);
+                const showBread = type === 'sandwiches' && !['برجر يا عم', 'حواوشي يا عم', 'سندوتش فراخ استربس', 'صينية سمين مشكل بلدي لفرد واحد', 'صينية شهية لفرد واحد', 'مكرونة بالبشامل لفرد واحد', 'كرات بطاطس بالجبنة لفرد واحد', 'أرز بلبن يا عم'].includes(item.name);
+                const isRicePudding = item.name === 'أرز بلبن يا عم';
 
                 return (
                   <motion.div 
@@ -114,9 +120,9 @@ const SpecialModal: React.FC<ModalProps> = ({
                         )}
                         <div className="flex-1">
                           <h3 className="text-lg md:text-xl font-bold mb-1">{item.name}</h3>
-                          <p className="text-[#FAB520] font-bold text-base">{item.price} ج.م</p>
-                          {item.name === 'أرز بلبن سادة' && <p className="text-gray-500 text-xs mt-1">رز بلبن بلدي كريمي وخفيف</p>}
-                          {item.name === 'أرز بلبن بالمكسرات' && <p className="text-gray-500 text-xs mt-1">رز بلبن غرقان مكسرات مشكلة</p>}
+                          <p className="text-[#FAB520] font-bold text-base">{isRicePudding && variant === 'nuts' ? 40 : item.price} ج.م</p>
+                          {item.name === 'برجر يا عم' && <p className="text-gray-500 text-xs mt-1">برجر بلدي مشوي على الفحم</p>}
+                          {isRicePudding && <p className="text-gray-500 text-xs mt-1">رز بلبن كريمي وطعم خيالي</p>}
                         </div>
                       </div>
                       
@@ -131,6 +137,13 @@ const SpecialModal: React.FC<ModalProps> = ({
                       <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="mt-4 pt-4 border-t border-white/5 grid grid-cols-2 gap-3">
                         <button onClick={() => handleOptionChoice(item.name, 'baladi')} className={`py-2.5 rounded-xl font-bold text-sm transition-all ${choice === 'baladi' ? 'bg-[#FAB520] text-black shadow-lg scale-[1.02]' : 'bg-white/5 text-gray-500'}`}>عيش بلدي</button>
                         <button onClick={() => handleOptionChoice(item.name, 'western')} className={`py-2.5 rounded-xl font-bold text-sm transition-all ${choice === 'western' ? 'bg-[#FAB520] text-black shadow-lg scale-[1.02]' : 'bg-white/5 text-gray-500'}`}>عيش فينو فرنسي</button>
+                      </motion.div>
+                    )}
+
+                    {qty > 0 && isRicePudding && (
+                      <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="mt-4 pt-4 border-t border-white/5 grid grid-cols-2 gap-3">
+                        <button onClick={() => handleVariantChoice(item.name, 'plain')} className={`py-2.5 rounded-xl font-bold text-sm transition-all ${variant === 'plain' ? 'bg-[#FAB520] text-black shadow-lg scale-[1.02]' : 'bg-white/5 text-gray-500'}`}>سادة (30 ج)</button>
+                        <button onClick={() => handleVariantChoice(item.name, 'nuts')} className={`py-2.5 rounded-xl font-bold text-sm transition-all ${variant === 'nuts' ? 'bg-[#FAB520] text-black shadow-lg scale-[1.02]' : 'bg-white/5 text-gray-500'}`}>بالمكسرات (40 ج)</button>
                       </motion.div>
                     )}
                   </motion.div>
@@ -153,8 +166,8 @@ const SpecialModal: React.FC<ModalProps> = ({
                 </div>
               </div>
             </div>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
       </div>
     </AnimatePresence>
   );

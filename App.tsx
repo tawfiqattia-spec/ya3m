@@ -23,10 +23,11 @@ const App: React.FC = () => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  const [sandwichState, setSandwichState] = useState<SpecialOrderState>({
+  const [sandwichState, setSandwichState] = useState<SpecialOrderState & { ricePuddingVariants?: Record<string, 'plain' | 'nuts'> }>({
     quantities: Object.fromEntries(SANDWICH_ITEMS.map(i => [i.name, 0])),
     sauceQuantity: 0,
-    breadChoices: {}
+    breadChoices: {},
+    ricePuddingVariants: {}
   });
   
   const [trayState, setTrayState] = useState<SpecialOrderState>({
@@ -34,9 +35,10 @@ const App: React.FC = () => {
     sauceQuantity: 0
   });
   
-  const [sweetState, setSweetState] = useState<SpecialOrderState>({
+  const [sweetState, setSweetState] = useState<SpecialOrderState & { ricePuddingVariants?: Record<string, 'plain' | 'nuts'> }>({
     quantities: Object.fromEntries(SWEET_ITEMS.map(i => [i.name, 0])),
-    sauceQuantity: 0
+    sauceQuantity: 0,
+    ricePuddingVariants: {}
   });
 
   useEffect(() => {
@@ -69,19 +71,8 @@ const App: React.FC = () => {
     };
   }, []);
 
-  const handleInstallClick = async () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === 'accepted') {
-        console.log('User accepted the install prompt');
-      }
-      setDeferredPrompt(null);
-    }
-  };
-
   const updateGlobalQuantity = (name: string, category: string, delta: number) => {
-    const update = (prev: SpecialOrderState) => ({
+    const update = (prev: any) => ({
       ...prev,
       quantities: { ...prev.quantities, [name]: Math.max(0, (prev.quantities[name] || 0) + delta) }
     });
@@ -91,15 +82,23 @@ const App: React.FC = () => {
   };
 
   const removeGlobalItem = (name: string, category: string) => {
-    const reset = (prev: SpecialOrderState) => ({ ...prev, quantities: { ...prev.quantities, [name]: 0 } });
+    const reset = (prev: any) => ({ ...prev, quantities: { ...prev.quantities, [name]: 0 } });
     if (category === 'sandwiches') setSandwichState(reset);
     else if (category === 'trays') setTrayState(reset);
     else if (category === 'sweets') setSweetState(reset);
   };
 
   const subtotal = useMemo(() => {
-    const calc = (state: SpecialOrderState, items: {name: string, price: number}[]) => {
-      let sum = items.reduce((acc, item) => acc + (item.price * (state.quantities[item.name] || 0)), 0);
+    const calc = (state: any, items: {name: string, price: number}[]) => {
+      let sum = items.reduce((acc, item) => {
+        const q = state.quantities[item.name] || 0;
+        let price = item.price;
+        if (item.name === 'أرز بلبن يا عم') {
+            const v = state.ricePuddingVariants?.[item.name] || 'plain';
+            price = v === 'nuts' ? 40 : 30;
+        }
+        return acc + (price * q);
+      }, 0);
       sum += (state.sauceQuantity * SAUCE_PRICE);
       return sum;
     };
@@ -112,7 +111,15 @@ const App: React.FC = () => {
     const summary: any[] = [];
     SANDWICH_ITEMS.forEach(item => {
       const q = sandwichState.quantities[item.name] || 0;
-      if (q > 0) summary.push({ name: item.name, quantity: q, price: item.price, bread: sandwichState.breadChoices?.[item.name], category: 'sandwiches' });
+      if (q > 0) {
+          let price = item.price;
+          let variant = undefined;
+          if (item.name === 'أرز بلبن يا عم') {
+              variant = sandwichState.ricePuddingVariants?.[item.name] || 'plain';
+              price = variant === 'nuts' ? 40 : 30;
+          }
+          summary.push({ name: item.name, quantity: q, price, bread: sandwichState.breadChoices?.[item.name], variant, category: 'sandwiches' });
+      }
     });
     TRAY_ITEMS.forEach(item => {
       const q = trayState.quantities[item.name] || 0;
@@ -120,7 +127,15 @@ const App: React.FC = () => {
     });
     SWEET_ITEMS.forEach(item => {
       const q = sweetState.quantities[item.name] || 0;
-      if (q > 0) summary.push({ name: item.name, quantity: q, price: item.price, category: 'sweets' });
+      if (q > 0) {
+          let price = item.price;
+          let variant = undefined;
+          if (item.name === 'أرز بلبن يا عم') {
+              variant = sweetState.ricePuddingVariants?.[item.name] || 'plain';
+              price = variant === 'nuts' ? 40 : 30;
+          }
+          summary.push({ name: item.name, quantity: q, price, variant, category: 'sweets' });
+      }
     });
     const totalSauce = sandwichState.sauceQuantity;
     if (totalSauce > 0) {
@@ -202,10 +217,7 @@ const App: React.FC = () => {
 
       <AnimatePresence>
         {!loading && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <main className="max-w-7xl mx-auto px-4 pt-4 relative z-10 pb-32">
               <Hero />
               
@@ -241,6 +253,7 @@ const App: React.FC = () => {
               </section>
             </main>
 
+            {/* Cart Button */}
             <div className="fixed bottom-6 left-6 md:bottom-10 md:left-10 flex flex-col items-start gap-4 z-[100]">
               <motion.button 
                 whileHover={{ scale: 1.1 }}
@@ -282,9 +295,15 @@ const App: React.FC = () => {
                     </div>
                     <div className="flex-1 overflow-y-auto px-5 py-6 space-y-5 scrollbar-hide">
                       {fullOrderSummary.map((item, idx) => (
-                        <motion.div layout initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} key={`${item.name}-${idx}`} className="p-4 bg-white/5 rounded-[1.5rem] border border-white/5 shadow-inner">
+                        <motion.div layout initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} key={`${item.name}-${idx}`} className="p-4 bg-white/5 rounded-[1.5rem] border border-white/5 shadow-inner transition-colors hover:bg-white/10">
                           <div className="flex justify-between items-start mb-2">
-                            <div><h4 className="font-bold text-lg mb-1">{item.name}</h4>{item.bread && <span className="text-[10px] font-bold text-gray-500 bg-white/5 px-2 py-0.5 rounded-full">خبز {item.bread === 'baladi' ? 'بلدي' : 'فينو فرنسي'}</span>}</div>
+                            <div>
+                                <h4 className="font-bold text-lg mb-1">{item.name}</h4>
+                                <div className="flex gap-2 flex-wrap">
+                                    {item.variant && <span className="text-[10px] font-bold text-[#FAB520] bg-[#FAB520]/10 px-2 py-0.5 rounded-full">{item.variant === 'nuts' ? 'بالمكسرات' : 'سادة'}</span>}
+                                    {item.bread && <span className="text-[10px] font-bold text-gray-500 bg-white/5 px-2 py-0.5 rounded-full">خبز {item.bread === 'baladi' ? 'بلدي' : 'فينو فرنسي'}</span>}
+                                </div>
+                            </div>
                             <button onClick={() => removeGlobalItem(item.name, item.category)} className="text-gray-600 hover:text-red-500 transition-colors"><Trash2 className="w-5 h-5" /></button>
                           </div>
                           <div className="flex justify-between items-center bg-black/40 p-2.5 rounded-xl border border-white/5">
