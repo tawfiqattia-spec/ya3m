@@ -89,11 +89,59 @@ function initIcons() {
   }
 }
 
-// Function to scroll to the ordering section
+// Global Exports for onclick access
 window.scrollToMenu = function() {
   const section = document.getElementById('ordering-section');
   if (section) {
     section.scrollIntoView({ behavior: 'smooth' });
+  }
+};
+
+window.updateQty = function(name, delta, price) {
+  if (!cart[name]) {
+    cart[name] = { quantity: 0, price: price, bread: 'baladi', variant: 'plain' };
+  }
+  cart[name].quantity = Math.max(0, cart[name].quantity + delta);
+  if (cart[name].quantity === 0) {
+    delete cart[name];
+  }
+  
+  renderSandwiches(); 
+  updateMainSummary();
+};
+
+window.updateSauceQty = function(delta) {
+    sauceQuantity = Math.max(0, sauceQuantity + delta);
+    document.getElementById('sauce-qty').innerText = sauceQuantity;
+    updateMainSummary();
+};
+
+window.setBread = function(name, type) {
+  if (cart[name]) {
+    cart[name].bread = type;
+    renderSandwiches();
+  }
+};
+
+window.setVariant = function(name, type) {
+  if (cart[name]) {
+    cart[name].variant = type;
+    cart[name].price = type === 'nuts' ? 40 : 30;
+    renderSandwiches();
+    updateMainSummary();
+  }
+};
+
+window.toggleCart = function() {
+  const overlay = document.getElementById('cart-drawer-overlay');
+  const drawer = document.getElementById('cart-drawer');
+  if (overlay.classList.contains('hidden')) {
+    overlay.classList.remove('hidden');
+    renderCartSummary();
+    setTimeout(() => drawer.classList.remove('translate-x-full'), 10);
+  } else {
+    drawer.classList.add('translate-x-full');
+    setTimeout(() => overlay.classList.add('hidden'), 500);
   }
 };
 
@@ -127,7 +175,6 @@ function startPreloader() {
   const interval = setInterval(() => {
     progress += Math.random() * 15;
     
-    // Typing Animation: Show text near the end (85%)
     if (progress > 85 && preloaderText && preloaderText.classList.contains('hidden')) {
         preloaderText.classList.remove('hidden');
         preloaderText.classList.add('animate-dastoor');
@@ -137,13 +184,11 @@ function startPreloader() {
       progress = 100;
       clearInterval(interval);
       
-      // End animation for "Dastoor" text
       setTimeout(() => {
         if (preloaderText) {
           preloaderText.classList.add('fade-out-right');
         }
         
-        // Cartoonish exit for the whole screen
         setTimeout(() => {
           preloader.classList.add('animate-cartoon-exit');
           setTimeout(() => {
@@ -151,7 +196,7 @@ function startPreloader() {
             mainContent.classList.remove('opacity-0');
             mainContent.classList.add('opacity-100');
           }, 700);
-        }, 400); // Start preloader exit shortly after Dastoor starts fading
+        }, 400);
       }, 800);
     }
     loaderBar.style.width = `${progress}%`;
@@ -168,7 +213,6 @@ function renderSandwiches() {
     const bread = cart[item.name]?.bread || 'baladi';
     const variant = cart[item.name]?.variant || 'plain';
     
-    // Items that don't need bread choice
     const noOptionsItems = [
         'برجر يا عم',
         'حواوشي يا عم', 
@@ -184,7 +228,6 @@ function renderSandwiches() {
     const showBread = !noOptionsItems.includes(item.name);
     const isRicePudding = item.name === 'أرز بلبن يا عم';
     
-    // Specific price display for rice pudding
     let displayPrice = item.price;
     if (isRicePudding && variant === 'nuts') displayPrice = 40;
     else if (isRicePudding) displayPrice = 30;
@@ -192,19 +235,16 @@ function renderSandwiches() {
     return `
       <div class="p-4 md:p-6 rounded-[2rem] md:rounded-[2.5rem] border-2 transition-all duration-500 ${qty > 0 ? 'bg-white/5 border-[#FAB520] shadow-2xl scale-[1.01]' : 'bg-white/5 border-transparent'} hover:translate-y-[-5px]">
         <div class="flex flex-row items-center gap-4 md:gap-6">
-          <!-- Product Image -->
           <div class="w-24 h-24 md:w-36 md:h-36 shrink-0 rounded-2xl md:rounded-[2rem] overflow-hidden border-2 border-white/5 shadow-lg group">
              <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
           </div>
 
-          <!-- Product Details -->
           <div class="flex-1 text-right">
             <h3 class="text-lg md:text-3xl font-['Lalezar'] mb-0.5 leading-tight">${item.name}</h3>
             <p class="text-[#FAB520] font-black text-base md:text-xl mb-1">${displayPrice} ج.م</p>
             ${item.desc ? `<p class="text-gray-400 text-[10px] md:text-sm font-bold leading-tight line-clamp-2">${item.desc}</p>` : ''}
           </div>
           
-          <!-- Controls -->
           <div class="flex flex-col md:flex-row items-center gap-2 md:gap-5 bg-black p-2 md:p-3 rounded-xl md:rounded-2xl border border-white/10 shadow-inner shrink-0">
             <button onclick="updateQty('${item.name}', 1, ${item.price})" class="text-[#FAB520] p-1 active:scale-125 transition-transform order-1 md:order-3"><i data-lucide="plus" class="w-5 h-5 md:w-6 md:h-6"></i></button>
             <span class="text-lg md:text-2xl font-black w-6 md:w-8 text-center text-white order-2" id="qty-${item.name}">${qty}</span>
@@ -231,44 +271,6 @@ function renderSandwiches() {
   initIcons();
 }
 
-function updateQty(name, delta, price) {
-  if (!cart[name]) {
-    cart[name] = { quantity: 0, price: price, bread: 'baladi', variant: 'plain' };
-  }
-  cart[name].quantity = Math.max(0, cart[name].quantity + delta);
-  if (cart[name].quantity === 0) {
-    delete cart[name];
-  }
-  
-  const qtyEl = document.getElementById(`qty-${name}`);
-  if (qtyEl) qtyEl.innerText = cart[name]?.quantity || 0;
-  
-  renderSandwiches(); 
-  updateMainSummary();
-}
-
-function updateSauceQty(delta) {
-    sauceQuantity = Math.max(0, sauceQuantity + delta);
-    document.getElementById('sauce-qty').innerText = sauceQuantity;
-    updateMainSummary();
-}
-
-function setBread(name, type) {
-  if (cart[name]) {
-    cart[name].bread = type;
-    renderSandwiches();
-  }
-}
-
-function setVariant(name, type) {
-  if (cart[name]) {
-    cart[name].variant = type;
-    cart[name].price = type === 'nuts' ? 40 : 30;
-    renderSandwiches();
-    updateMainSummary();
-  }
-}
-
 function updateMainSummary() {
   const summaryBox = document.getElementById('main-order-summary');
   const totalEl = document.getElementById('main-total-price');
@@ -287,19 +289,6 @@ function updateMainSummary() {
   } else {
     summaryBox.classList.add('translate-y-full');
     setTimeout(() => summaryBox.classList.add('hidden'), 500);
-  }
-}
-
-function toggleCart() {
-  const overlay = document.getElementById('cart-drawer-overlay');
-  const drawer = document.getElementById('cart-drawer');
-  if (overlay.classList.contains('hidden')) {
-    overlay.classList.remove('hidden');
-    renderCartSummary();
-    setTimeout(() => drawer.classList.remove('translate-x-full'), 10);
-  } else {
-    drawer.classList.add('translate-x-full');
-    setTimeout(() => overlay.classList.add('hidden'), 500);
   }
 }
 
