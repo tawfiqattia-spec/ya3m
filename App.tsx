@@ -5,10 +5,10 @@ import Hero from './components/Hero';
 import SpecialModal from './components/SpecialModals';
 import { LOGO_URL, SANDWICH_ITEMS, TRAY_ITEMS, SWEET_ITEMS } from './constants';
 import { SpecialOrderState } from './types';
-import { Utensils, IceCream, Sandwich, ShoppingBasket, X, Trash2, Send, Plus, Minus, Truck, Loader2, Star, Phone, Facebook, MessageCircle, Download, Sparkles, ClipboardList } from 'lucide-react';
+import { Utensils, IceCream, Sandwich, ShoppingBasket, X, Trash2, Send, Plus, Minus, Truck, Loader2, Star, Phone, Facebook, MessageCircle, Download, Sparkles, ClipboardList, Gift } from 'lucide-react';
 
 const DELIVERY_FEE = 20;
-const SAUCE_PRICE = 10;
+const SAUCE_PRICE = 20;
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mdaleedl";
 
 const App: React.FC = () => {
@@ -246,7 +246,7 @@ const App: React.FC = () => {
       <AnimatePresence>
         {!loading && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <main className="max-w-7xl mx-auto px-4 pt-4 relative z-10 pb-32">
+            <main className="max-w-7xl mx-auto px-4 pt-4 relative z-10 pb-20">
               <Hero />
               
               <section className="mt-4" id="ordering-section">
@@ -283,6 +283,73 @@ const App: React.FC = () => {
                   ))}
                 </div>
               </section>
+
+              {/* Special Custom Order Section */}
+              <motion.section 
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                className="mt-24 px-4"
+              >
+                <div className="bg-gradient-to-br from-[#FAB520]/20 to-black border-4 border-[#FAB520]/30 rounded-[3.5rem] p-8 md:p-16 text-center relative overflow-hidden group shadow-[0_0_50px_rgba(250,181,32,0.15)]">
+                    <div className="absolute -top-20 -right-20 w-64 h-64 bg-[#FAB520]/10 rounded-full blur-3xl group-hover:bg-[#FAB520]/20 transition-all duration-700" />
+                    <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-[#FAB520]/10 rounded-full blur-3xl group-hover:bg-[#FAB520]/20 transition-all duration-700" />
+                    
+                    <div className="relative z-10 flex flex-col items-center gap-8">
+                        <div className="bg-[#FAB520] p-6 rounded-full shadow-2xl rotate-12 group-hover:rotate-0 transition-transform duration-500">
+                            <Gift className="w-16 h-16 text-black" />
+                        </div>
+                        
+                        <div className="space-y-4 max-w-2xl">
+                            <h3 className="text-4xl md:text-6xl font-normal font-['Lalezar'] text-[#FAB520]">طلب مخصوص يا عم؟ 🪄</h3>
+                            <p className="text-xl md:text-3xl font-black leading-relaxed">
+                                محتاج صنف مش موجود في المنيو او حابب تجهز عشوة مخصوص او عندك عزومة؟ كلمنا نجهزهالك
+                            </p>
+                        </div>
+                        
+                        <motion.a 
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            href="https://wa.me/201119949143"
+                            target="_blank"
+                            className="bg-green-600 text-white px-10 md:px-16 py-5 md:py-6 rounded-[2.5rem] font-black text-2xl md:text-3xl flex items-center gap-6 shadow-[0_15px_30px_rgba(22,163,74,0.4)] border-4 border-black"
+                        >
+                            <MessageCircle className="w-10 h-10" />
+                            <span>تواصل واتساب للعزومات</span>
+                        </motion.a>
+                    </div>
+                </div>
+              </motion.section>
+
+              {/* Footer Social Section */}
+              <footer className="mt-20 py-10 border-t border-white/10 flex flex-col items-center gap-8">
+                  <div className="flex items-center gap-6">
+                      <motion.a 
+                        whileHover={{ scale: 1.2, color: '#1877F2' }}
+                        href="https://www.facebook.com/"
+                        target="_blank"
+                        className="p-4 bg-white/5 rounded-full text-gray-400 border border-white/5 transition-colors"
+                      >
+                          <Facebook className="w-8 h-8" />
+                      </motion.a>
+                      <motion.a 
+                        whileHover={{ scale: 1.2, color: '#25D366' }}
+                        href="https://wa.me/201119949143"
+                        target="_blank"
+                        className="p-4 bg-white/5 rounded-full text-gray-400 border border-white/5 transition-colors"
+                      >
+                          <MessageCircle className="w-8 h-8" />
+                      </motion.a>
+                      <motion.a 
+                        whileHover={{ scale: 1.2, color: '#FAB520' }}
+                        href="tel:201119949143"
+                        className="p-4 bg-white/5 rounded-full text-gray-400 border border-white/5 transition-colors"
+                      >
+                          <Phone className="w-8 h-8" />
+                      </motion.a>
+                  </div>
+                  <p className="text-gray-500 font-bold tracking-widest text-sm uppercase">© 2024 Ya3m.com • All Rights Reserved</p>
+              </footer>
             </main>
 
             {/* Global Animated Cart Button */}

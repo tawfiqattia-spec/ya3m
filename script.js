@@ -62,7 +62,7 @@ const SANDWICH_ITEMS = [
   },
   { 
     name: 'كرات بطاطس بالجبنة لفرد واحد', 
-    price: 35, 
+    price: 60, 
     image: 'https://ya3m.com/pic/botito.png',
     desc: 'بطاطس مهروسة محشية جبنة بتمط'
   },
@@ -78,7 +78,7 @@ const SANDWICH_ITEMS = [
 let cart = {}; 
 let sauceQuantity = 0;
 const DELIVERY_FEE = 20;
-const SAUCE_PRICE = 10;
+const SAUCE_PRICE = 20;
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mdaleedl";
 let deferredPrompt;
 

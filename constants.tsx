@@ -55,7 +55,7 @@ export const SANDWICH_ITEMS = [
   },
   { 
     name: 'كرات بطاطس بالجبنة لفرد واحد', 
-    price: 35, 
+    price: 60, 
     image: 'https://ya3m.com/pic/botito.png' 
   },
   { 
