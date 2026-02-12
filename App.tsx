@@ -5,7 +5,6 @@ import Hero from './components/Hero';
 import SpecialModal from './components/SpecialModals';
 import { LOGO_URL, SANDWICH_ITEMS, TRAY_ITEMS, SWEET_ITEMS } from './constants';
 import { SpecialOrderState } from './types';
-/* Added Sparkles to the import list from lucide-react to fix the undefined variable error */
 import { Utensils, IceCream, Sandwich, ShoppingBasket, X, Trash2, Send, Plus, Minus, Truck, Loader2, Star, Phone, Facebook, MessageCircle, Download, Sparkles } from 'lucide-react';
 
 const DELIVERY_FEE = 20;
@@ -45,7 +44,7 @@ const App: React.FC = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       setLoadProgress(prev => {
-        const next = prev + (Math.random() * 20);
+        const next = prev + (Math.random() * 25);
         if (next >= 100) {
           clearInterval(timer);
           setTimeout(() => setLoading(false), 500);
@@ -53,11 +52,11 @@ const App: React.FC = () => {
         }
         return next;
       });
-    }, 120);
+    }, 100);
 
     const dastoorTimer = setTimeout(() => {
       setShowDastoor(true);
-    }, 800);
+    }, 600);
 
     return () => {
       clearInterval(timer);
@@ -67,7 +66,7 @@ const App: React.FC = () => {
 
   const triggerCartAnimation = () => {
     setCartAnimate(true);
-    setTimeout(() => setCartAnimate(false), 400);
+    setTimeout(() => setCartAnimate(false), 500);
   };
 
   const updateGlobalQuantity = (name: string, category: string, delta: number) => {
@@ -153,7 +152,7 @@ const App: React.FC = () => {
     setTimeout(() => {
         setShowSuccess(true);
         setIsSubmitting(false);
-    }, 1800);
+    }, 2000);
   };
 
   const totalItemCount = useMemo(() => {
@@ -168,22 +167,22 @@ const App: React.FC = () => {
         {loading && (
           <motion.div 
             key="loader"
-            exit={{ opacity: 0, scale: 1.1 }}
+            exit={{ opacity: 0, scale: 1.2 }}
             className="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center"
           >
             <motion.div className="relative flex flex-col items-center">
                 <motion.img 
                   animate={{ 
-                    scale: [1, 1.1, 1], 
+                    scale: [1, 1.1, 1],
                     rotate: [0, -5, 5, 0]
                   }}
                   transition={{ duration: 2, repeat: Infinity }}
                   src={LOGO_URL} 
                   alt="Loading Logo" 
-                  className="h-36 md:h-56 object-contain mb-8"
+                  className="h-40 md:h-60 object-contain mb-10 drop-shadow-[0_0_30px_#FAB520]"
                 />
                 <div className="mt-4 flex flex-col items-center w-full">
-                    <div className="w-64 h-2 bg-white/10 rounded-full overflow-hidden mb-6 border border-white/5">
+                    <div className="w-72 h-3 bg-white/10 rounded-full overflow-hidden mb-8 border border-white/5">
                         <motion.div 
                           className="h-full bg-gradient-to-r from-[#FAB520] to-[#ffda85]" 
                           style={{ width: `${loadProgress}%` }}
@@ -195,7 +194,7 @@ const App: React.FC = () => {
                           {loaderText.split('').map((char, i) => (
                             <motion.span 
                               key={i}
-                              initial={{ opacity: 0, scale: 0, y: 20 }}
+                              initial={{ opacity: 0, scale: 0, y: 30 }}
                               animate={{ opacity: 1, scale: 1, y: 0 }}
                               transition={{ 
                                 delay: i * 0.08, 
@@ -203,7 +202,7 @@ const App: React.FC = () => {
                                 damping: 10,
                                 stiffness: 200
                               }}
-                              className="text-[#FAB520] font-black text-3xl md:text-6xl font-['Lalezar'] drop-shadow-[0_0_20px_rgba(250,181,32,0.6)]"
+                              className="text-[#FAB520] font-black text-4xl md:text-7xl font-['Lalezar'] drop-shadow-[0_0_20px_rgba(250,181,32,0.6)]"
                             >
                               {char}
                             </motion.span>
@@ -223,45 +222,45 @@ const App: React.FC = () => {
             <main className="max-w-7xl mx-auto px-4 pt-4 relative z-10 pb-32">
               <Hero />
               
-              <section className="mt-16">
+              <section className="mt-20">
                 <motion.div
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 50 }}
                   whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
                   className="text-center mb-16"
                 >
-                  <h2 className="text-4xl md:text-7xl font-normal mb-4 text-[#FAB520] font-['Lalezar'] drop-shadow-xl">
+                  <h2 className="text-5xl md:text-8xl font-normal mb-6 text-[#FAB520] font-['Lalezar'] tracking-tight">
                     عايز تاكل إيه يا عم؟ 🤤
                   </h2>
-                  <p className="text-gray-400 font-bold text-lg md:text-xl">اختار القسم ودلع كرشك في ثواني!</p>
+                  <p className="text-gray-400 font-black text-xl md:text-2xl">أقوى منيوهات في مصر بين إيديك!</p>
                 </motion.div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-10 px-4">
                   {[
                     { id: 'sandwiches', title: 'ركن السندوتشات', icon: Sandwich, color: 'bg-[#FAB520]', text: 'text-black', shadow: 'shadow-[#FAB520]/20' },
                     { id: 'trays', title: 'صواني وطواجن', icon: Utensils, color: 'bg-white/5 border-4 border-[#FAB520]', text: 'text-[#FAB520]', shadow: 'shadow-white/5' },
-                    { id: 'sweets', title: 'حلويات يا عم', icon: IceCream, color: 'bg-white/10 border-4 border-white/5', text: 'text-white', shadow: 'shadow-white/10' }
+                    { id: 'sweets', title: 'حلويات يا عم', icon: IceCream, color: 'bg-white/10 border-4 border-white/10', text: 'text-white', shadow: 'shadow-white/5' }
                   ].map((cat, i) => (
                     <motion.div 
                       key={cat.id}
-                      initial={{ opacity: 0, x: i % 2 === 0 ? -50 : 50 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      transition={{ delay: i * 0.1, type: 'spring' }}
-                      whileHover={{ scale: 1.05, rotate: i % 2 === 0 ? -2 : 2 }} 
+                      initial={{ opacity: 0, y: 50 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.2, type: 'spring' }}
+                      viewport={{ once: true }}
+                      whileHover={{ scale: 1.08, rotate: i % 2 === 0 ? -3 : 3 }} 
                       whileTap={{ scale: 0.95 }}
                       onClick={() => setActiveModal(cat.id as any)} 
-                      className={`cursor-pointer ${cat.color} p-10 rounded-[3rem] flex flex-col items-center justify-center text-center gap-6 group relative shadow-2xl transition-all overflow-hidden ${cat.shadow}`}
+                      className={`cursor-pointer ${cat.color} p-12 rounded-[4rem] flex flex-col items-center justify-center text-center gap-8 group relative shadow-2xl transition-all overflow-hidden ${cat.shadow} category-card`}
                     >
                       <motion.div
-                        animate={{ y: [0, -10, 0] }}
-                        transition={{ duration: 3, repeat: Infinity, delay: i * 0.5 }}
+                        animate={{ y: [0, -15, 0] }}
+                        transition={{ duration: 4, repeat: Infinity, delay: i * 0.5 }}
                       >
-                        <cat.icon className={`w-24 h-24 ${cat.text} group-hover:scale-110 transition-transform`} />
+                        <cat.icon className={`w-28 h-28 ${cat.text} group-hover:scale-125 transition-transform duration-500`} />
                       </motion.div>
-                      <h3 className={`text-4xl font-normal font-['Lalezar'] ${cat.text}`}>{cat.title}</h3>
-                      <div className={`${cat.id === 'sandwiches' ? 'bg-black text-[#FAB520]' : 'bg-[#FAB520] text-black'} px-10 py-3 rounded-2xl font-black text-lg shadow-lg`}>دخول المتجر</div>
-                      
-                      {/* Decorative sparkle */}
-                      <Sparkles className="absolute top-4 right-4 text-white/10 w-12 h-12 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <h3 className={`text-5xl font-normal font-['Lalezar'] ${cat.text} leading-tight`}>{cat.title}</h3>
+                      <div className={`${cat.id === 'sandwiches' ? 'bg-black text-[#FAB520]' : 'bg-[#FAB520] text-black'} px-12 py-4 rounded-[2rem] font-black text-xl shadow-xl`}>افتح المنيو</div>
+                      <Sparkles className="absolute top-6 right-6 text-white/10 w-16 h-16 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                     </motion.div>
                   ))}
                 </div>
@@ -269,77 +268,77 @@ const App: React.FC = () => {
             </main>
 
             {/* Global Animated Cart Button */}
-            <div className="fixed bottom-8 left-8 md:bottom-12 md:left-12 flex flex-col items-start gap-4 z-[100]">
+            <div className="fixed bottom-10 left-10 md:bottom-16 md:left-16 flex flex-col items-start gap-4 z-[100]">
               <motion.button 
-                whileHover={{ scale: 1.15, rotate: 5 }}
-                whileTap={{ scale: 0.85 }}
+                whileHover={{ scale: 1.2, rotate: 10 }}
+                whileTap={{ scale: 0.8 }}
                 onClick={() => setIsGlobalSummaryOpen(true)} 
-                className={`bg-[#FAB520] text-black p-5 md:p-7 rounded-full shadow-[0_20px_50px_rgba(250,181,32,0.6)] flex items-center gap-4 border-4 border-black transition-all ${cartAnimate ? 'cart-boing' : ''}`}
+                className={`bg-[#FAB520] text-black p-6 md:p-8 rounded-full shadow-[0_25px_60px_rgba(250,181,32,0.6)] flex items-center gap-5 border-4 border-black transition-all ${cartAnimate ? 'cart-animate' : ''}`}
               >
                 <div className="relative">
-                  <ShoppingBasket className="w-8 h-8 md:w-10 md:h-10" />
+                  <ShoppingBasket className="w-10 h-10 md:w-14 md:h-14" />
                   <AnimatePresence>
                     {totalItemCount > 0 && (
                       <motion.span 
                         key={totalItemCount}
-                        initial={{ scale: 0, rotate: -45 }} 
+                        initial={{ scale: 0, rotate: -90 }} 
                         animate={{ scale: 1, rotate: 0 }} 
                         exit={{ scale: 0 }}
-                        className="absolute -top-3 -right-3 bg-red-600 text-white text-xs md:text-sm font-black w-7 h-7 md:w-9 md:h-9 rounded-full flex items-center justify-center border-4 border-white shadow-xl"
+                        className="absolute -top-4 -right-4 bg-red-600 text-white text-sm md:text-lg font-black w-9 h-9 md:w-12 md:h-12 rounded-full flex items-center justify-center border-4 border-white shadow-2xl"
                       >
                         {totalItemCount}
                       </motion.span>
                     )}
                   </AnimatePresence>
                 </div>
-                <span className="text-2xl font-['Lalezar'] hidden sm:inline">السلة يا عم</span>
+                <span className="text-3xl font-['Lalezar'] hidden sm:inline pt-1">السلة يا عم</span>
               </motion.button>
             </div>
 
             <AnimatePresence>
               {isGlobalSummaryOpen && (
                 <div className="fixed inset-0 z-[1000] flex justify-end items-stretch overflow-hidden">
-                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsGlobalSummaryOpen(false)} className="absolute inset-0 bg-black/90 backdrop-blur-2xl" />
-                  <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 30, stiffness: 250 }} className="relative w-full md:w-[500px] h-full bg-[#0c0c0c] flex flex-col shadow-2xl border-l-4 border-[#FAB520]">
-                    <div className="p-6 md:p-10 flex justify-between items-center border-b border-white/5 bg-black/40 shrink-0">
-                      <div className="flex items-center gap-4">
-                        <ShoppingBasket className="text-[#FAB520] w-8 h-8" />
-                        <h2 className="text-3xl font-normal font-['Lalezar']">طلباتك يا عم</h2>
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsGlobalSummaryOpen(false)} className="absolute inset-0 bg-black/90 backdrop-blur-3xl" />
+                  <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 30, stiffness: 200 }} className="relative w-full md:w-[550px] h-full bg-[#0c0c0c] flex flex-col shadow-2xl border-l-8 border-[#FAB520]">
+                    <div className="p-8 md:p-12 flex justify-between items-center border-b border-white/5 bg-black/40 shrink-0">
+                      <div className="flex items-center gap-5">
+                        <ShoppingBasket className="text-[#FAB520] w-10 h-10" />
+                        <h2 className="text-4xl font-normal font-['Lalezar']">طلباتك يا عم</h2>
                       </div>
-                      <button onClick={() => setIsGlobalSummaryOpen(false)} className="p-3 bg-white/5 rounded-full hover:bg-red-500/20 transition-colors"><X className="w-6 h-6" /></button>
+                      <button onClick={() => setIsGlobalSummaryOpen(false)} className="p-4 bg-white/5 rounded-full hover:bg-red-500/20 transition-colors"><X className="w-8 h-8" /></button>
                     </div>
                     
-                    <div className="flex-1 overflow-y-auto px-6 py-8 space-y-6 scrollbar-hide">
+                    <div className="flex-1 overflow-y-auto px-8 py-10 space-y-8 scrollbar-hide">
                       {fullOrderSummary.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center h-full opacity-30 text-center space-y-4">
-                          <ShoppingBasket className="w-24 h-24" />
-                          <p className="text-2xl font-bold">لسه مفيش أكل يا عم!</p>
+                        <div className="flex flex-col items-center justify-center h-full opacity-30 text-center space-y-6">
+                          <ShoppingBasket className="w-32 h-32" />
+                          <p className="text-3xl font-black">لسه مفيش أكل يا عم!</p>
                         </div>
                       ) : (
                         fullOrderSummary.map((item, idx) => (
                           <motion.div 
                             layout 
-                            initial={{ opacity: 0, x: 30 }} 
+                            initial={{ opacity: 0, x: 50 }} 
                             animate={{ opacity: 1, x: 0 }} 
                             key={`${item.name}-${idx}`} 
-                            className="p-6 bg-white/5 rounded-[2rem] border-2 border-white/5 transition-all hover:bg-white/10 hover:border-[#FAB520]/20"
+                            className="p-8 bg-white/5 rounded-[3rem] border-4 border-white/5 transition-all hover:bg-white/10 hover:border-[#FAB520]/30"
                           >
-                            <div className="flex justify-between items-start mb-4">
+                            <div className="flex justify-between items-start mb-6">
                               <div>
-                                  <h4 className="font-black text-xl mb-2">{item.name}</h4>
-                                  <div className="flex gap-3 flex-wrap">
-                                      {item.variant && <span className="text-xs font-black text-[#FAB520] bg-[#FAB520]/10 px-3 py-1 rounded-full border border-[#FAB520]/20">{item.variant === 'nuts' ? 'بالمكسرات' : 'سادة'}</span>}
-                                      {item.bread && <span className="text-xs font-black text-gray-400 bg-white/5 px-3 py-1 rounded-full border border-white/5">خبز {item.bread === 'baladi' ? 'بلدي' : 'فينو فرنسي'}</span>}
+                                  <h4 className="font-black text-2xl mb-3">{item.name}</h4>
+                                  <div className="flex gap-4 flex-wrap">
+                                      {item.variant && <span className="text-sm font-black text-[#FAB520] bg-[#FAB520]/10 px-4 py-2 rounded-full border border-[#FAB520]/30">{item.variant === 'nuts' ? 'بالمكسرات' : 'سادة'}</span>}
+                                      {item.bread && <span className="text-sm font-black text-gray-400 bg-white/5 px-4 py-2 rounded-full border border-white/10">خبز {item.bread === 'baladi' ? 'بلدي' : 'فينو فرنسي'}</span>}
                                   </div>
                               </div>
-                              <motion.button whileTap={{ scale: 0.8 }} onClick={() => removeGlobalItem(item.name, item.category)} className="text-gray-600 hover:text-red-500 p-2"><Trash2 className="w-6 h-6" /></motion.button>
+                              <motion.button whileTap={{ scale: 0.7 }} onClick={() => removeGlobalItem(item.name, item.category)} className="text-gray-700 hover:text-red-500 p-3"><Trash2 className="w-8 h-8" /></motion.button>
                             </div>
-                            <div className="flex justify-between items-center bg-black/50 p-4 rounded-2xl border border-white/10">
-                              <span className="text-2xl font-black text-[#FAB520]">{item.quantity * item.price} ج.م</span>
-                              <div className="flex items-center gap-4">
-                                <motion.button whileTap={{ scale: 1.2 }} onClick={() => updateGlobalQuantity(item.name, item.category, -1)} className="text-[#FAB520] bg-white/5 p-2 rounded-xl"><Minus className="w-5 h-5" /></motion.button>
-                                <span className="font-black text-xl w-8 text-center">{item.quantity}</span>
-                                <motion.button whileTap={{ scale: 1.2 }} onClick={() => updateGlobalQuantity(item.name, item.category, 1)} className="text-[#FAB520] bg-white/5 p-2 rounded-xl"><Plus className="w-5 h-5" /></motion.button>
+                            <div className="flex justify-between items-center bg-black/60 p-6 rounded-[2rem] border-2 border-white/10">
+                              <span className="text-3xl font-black text-[#FAB520]">{item.quantity * item.price} ج.م</span>
+                              <div className="flex items-center gap-6">
+                                <motion.button whileTap={{ scale: 1.3 }} onClick={() => updateGlobalQuantity(item.name, item.category, -1)} className="text-[#FAB520] bg-white/5 p-3 rounded-2xl"><Minus className="w-7 h-7" /></motion.button>
+                                <span className="font-black text-2xl w-10 text-center">{item.quantity}</span>
+                                <motion.button whileTap={{ scale: 1.3 }} onClick={() => updateGlobalQuantity(item.name, item.category, 1)} className="text-[#FAB520] bg-white/5 p-3 rounded-2xl"><Plus className="w-7 h-7" /></motion.button>
                               </div>
                             </div>
                           </motion.div>
@@ -348,22 +347,22 @@ const App: React.FC = () => {
                     </div>
 
                     {fullOrderSummary.length > 0 && (
-                      <div className="p-8 md:p-10 border-t border-[#FAB520]/30 bg-black/90 space-y-5 pb-12">
-                        <div className="flex justify-between items-center mb-2">
-                            <span className="text-gray-400 font-bold">الحساب الكلي:</span>
-                            <span className="text-4xl font-black text-[#FAB520] drop-shadow-lg">{globalTotal} ج.م</span>
+                      <div className="p-10 md:p-14 border-t-4 border-[#FAB520]/40 bg-black/95 space-y-8 pb-16">
+                        <div className="flex justify-between items-center mb-4">
+                            <span className="text-gray-400 font-black text-xl">الحساب النهائي:</span>
+                            <span className="text-5xl font-black text-[#FAB520] drop-shadow-[0_0_20px_rgba(250,181,32,0.4)]">{globalTotal} ج.م</span>
                         </div>
-                        <form onSubmit={handleFinalSubmit} className="space-y-4">
-                          <input required placeholder="اسمك" className="w-full bg-white/5 border-2 border-white/10 p-5 rounded-2xl outline-none focus:border-[#FAB520] font-bold text-lg transition-all" value={userInfo.name} onChange={e => setUserInfo({...userInfo, name: e.target.value})} />
-                          <input required type="tel" placeholder="رقم تليفونك" className="w-full bg-white/5 border-2 border-white/10 p-5 rounded-2xl outline-none focus:border-[#FAB520] font-bold text-lg transition-all" value={userInfo.phone} onChange={e => setUserInfo({...userInfo, phone: e.target.value})} />
-                          <input required placeholder="العنوان بالضبط يا عم؟" className="w-full bg-white/5 border-2 border-white/10 p-5 rounded-2xl outline-none focus:border-[#FAB520] font-bold text-lg transition-all" value={userInfo.address} onChange={e => setUserInfo({...userInfo, address: e.target.value})} />
+                        <form onSubmit={handleFinalSubmit} className="space-y-5">
+                          <input required placeholder="اسمك" className="w-full bg-white/5 border-4 border-white/10 p-6 rounded-[2rem] outline-none focus:border-[#FAB520] font-black text-xl transition-all" value={userInfo.name} onChange={e => setUserInfo({...userInfo, name: e.target.value})} />
+                          <input required type="tel" placeholder="رقم تليفونك" className="w-full bg-white/5 border-4 border-white/10 p-6 rounded-[2rem] outline-none focus:border-[#FAB520] font-black text-xl transition-all" value={userInfo.phone} onChange={e => setUserInfo({...userInfo, phone: e.target.value})} />
+                          <input required placeholder="العنوان بالتفصيل" className="w-full bg-white/5 border-4 border-white/10 p-6 rounded-[2rem] outline-none focus:border-[#FAB520] font-black text-xl transition-all" value={userInfo.address} onChange={e => setUserInfo({...userInfo, address: e.target.value})} />
                           <motion.button 
-                            whileHover={{ scale: 1.02 }} 
-                            whileTap={{ scale: 0.98 }} 
+                            whileHover={{ scale: 1.03 }} 
+                            whileTap={{ scale: 0.95 }} 
                             disabled={isSubmitting} 
-                            className="w-full py-6 bg-[#FAB520] text-black font-black text-2xl rounded-3xl shadow-[0_15px_40px_rgba(250,181,32,0.4)] flex items-center justify-center gap-4 disabled:opacity-50 mt-4 font-['Lalezar']"
+                            className="w-full py-8 bg-[#FAB520] text-black font-black text-3xl rounded-[2.5rem] shadow-[0_20px_50px_rgba(250,181,32,0.5)] flex items-center justify-center gap-5 disabled:opacity-50 mt-6 font-['Lalezar'] border-4 border-black"
                           >
-                            {isSubmitting ? <Loader2 className="animate-spin w-8 h-8" /> : <Send className="w-8 h-8" />}
+                            {isSubmitting ? <Loader2 className="animate-spin w-10 h-10" /> : <Send className="w-10 h-10" />}
                             {isSubmitting ? 'جاري الطيران...' : 'اطلب دلوقتي يا عم!'}
                           </motion.button>
                         </form>
@@ -383,32 +382,33 @@ const App: React.FC = () => {
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[5000] bg-black flex flex-col items-center justify-center p-8 text-center overflow-hidden">
                   <motion.div 
                     animate={{ 
-                      scale: [0, 1.4, 1], 
-                      rotate: [0, 720],
+                      scale: [0, 1.5, 1], 
+                      rotate: [0, 1080],
                     }} 
-                    transition={{ duration: 1, type: 'spring' }}
-                    className="bg-[#FAB520] p-16 rounded-full mb-10 shadow-[0_0_120px_rgba(250,181,32,0.7)] text-black relative"
+                    transition={{ duration: 1.5, type: 'spring' }}
+                    className="bg-[#FAB520] p-20 rounded-full mb-12 shadow-[0_0_150px_rgba(250,181,32,0.8)] text-black relative border-8 border-white/20"
                   >
-                    <Send className="w-24 h-24" />
+                    <Send className="w-32 h-32" />
                     <motion.div 
-                      animate={{ scale: [1, 2], opacity: [0.5, 0] }}
-                      transition={{ duration: 2, repeat: Infinity }}
+                      animate={{ scale: [1, 2.5], opacity: [0.6, 0] }}
+                      transition={{ duration: 2.5, repeat: Infinity }}
                       className="absolute inset-0 bg-white rounded-full"
                     />
                   </motion.div>
-                  <h2 className="text-6xl md:text-8xl font-normal font-['Lalezar'] text-[#FAB520] mb-6 drop-shadow-2xl">طلبك طار عندنا!</h2>
-                  <p className="text-2xl text-gray-400 font-black mb-12">هيكون عندك خلال 25 دقيقة بالضبط.. استعد! 🛵💨</p>
+                  <h2 className="text-7xl md:text-9xl font-normal font-['Lalezar'] text-[#FAB520] mb-8 drop-shadow-[0_0_30px_rgba(250,181,32,0.5)]">طلبك طار عندنا!</h2>
+                  <p className="text-3xl text-gray-400 font-black mb-16">هيكون عندك خلال 25 دقيقة بالثانية.. استعد! 🛵💨</p>
                   <motion.button 
-                    whileHover={{ scale: 1.2, color: '#FAB520' }} 
+                    whileHover={{ scale: 1.3, color: '#FAB520' }} 
                     onClick={() => setShowSuccess(false)} 
-                    className="mt-12 text-gray-600 font-black text-xl hover:text-white transition-colors"
+                    className="mt-16 text-gray-600 font-black text-2xl hover:text-white transition-all underline underline-offset-8"
                   >
                     رجوع للرئيسية يا عم
                   </motion.button>
                   
-                  {/* Decorative celebration elements */}
-                  <Star className="absolute top-20 left-[10%] text-[#FAB520] w-12 h-12 animate-pulse" />
-                  <Star className="absolute bottom-40 right-[15%] text-[#FAB520] w-16 h-16 animate-pulse" />
+                  {/* Celebration stars */}
+                  <Star className="absolute top-20 left-[15%] text-[#FAB520] w-20 h-20 animate-pulse" />
+                  <Star className="absolute bottom-40 right-[20%] text-[#FAB520] w-24 h-24 animate-bounce" />
+                  <Sparkles className="absolute top-1/2 left-10 text-white/20 w-32 h-32" />
                 </motion.div>
               )}
             </AnimatePresence>

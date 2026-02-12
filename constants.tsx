@@ -29,14 +29,19 @@ export const SANDWICH_ITEMS = [
     image: 'https://ya3m.com/pic/hawwshy.png' 
   },
   { 
-    name: 'طبق فراخ استربس كريسبي', 
-    price: 140, 
-    image: 'https://ya3m.com/pic/kres.png' 
-  },
-  { 
     name: 'صينية شهية لفرد واحد', 
     price: 95, 
     image: 'https://ya3m.com/pic/shahia.png' 
+  },
+  { 
+    name: 'طبق مكرونة نجريسكو لفرد واحد', 
+    price: 75, 
+    image: 'https://ya3m.com/pic/neg.png' 
+  },
+  { 
+    name: 'طبق فراخ استربس كريسبي', 
+    price: 140, 
+    image: 'https://ya3m.com/pic/kres.png' 
   },
   { 
     name: 'مكرونة بالبشامل لفرد واحد', 
