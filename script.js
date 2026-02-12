@@ -5,7 +5,6 @@ const SANDWICH_ITEMS = [
     name: 'برجر يا عم', 
     price: 65, 
     image: 'https://ya3m.com/pic/burg.png' 
-    // No description as requested
   },
   { 
     name: 'صينية سمين مشكل بلدي لفرد واحد', 
@@ -116,13 +115,21 @@ function startPreloader() {
     if (progress >= 100) {
       progress = 100;
       clearInterval(interval);
+      
+      // End animation for "Dastoor" text
       setTimeout(() => {
-        preloader.classList.add('opacity-0');
+        if (preloaderText) {
+          preloaderText.classList.add('fade-out-right');
+        }
+        
         setTimeout(() => {
-          preloader.style.display = 'none';
-          mainContent.classList.remove('opacity-0');
-          mainContent.classList.add('opacity-100');
-        }, 500);
+          preloader.classList.add('opacity-0');
+          setTimeout(() => {
+            preloader.style.display = 'none';
+            mainContent.classList.remove('opacity-0');
+            mainContent.classList.add('opacity-100');
+          }, 500);
+        }, 600);
       }, 800);
     }
     loaderBar.style.width = `${progress}%`;
@@ -137,6 +144,7 @@ function renderSandwiches() {
   container.innerHTML = SANDWICH_ITEMS.map(item => {
     const qty = cart[item.name]?.quantity || 0;
     const bread = cart[item.name]?.bread || 'baladi';
+    const variant = cart[item.name]?.variant || 'plain';
     
     // Items that don't need bread choice
     const noOptionsItems = [
@@ -153,6 +161,12 @@ function renderSandwiches() {
     ];
     
     const showBread = !noOptionsItems.includes(item.name);
+    const isRicePudding = item.name === 'أرز بلبن يا عم';
+    
+    // Specific price display for rice pudding
+    let displayPrice = item.price;
+    if (isRicePudding && variant === 'nuts') displayPrice = 40;
+    else if (isRicePudding) displayPrice = 30;
 
     return `
       <div class="p-4 md:p-6 rounded-[2rem] md:rounded-[2.5rem] border-2 transition-all duration-500 ${qty > 0 ? 'bg-white/5 border-[#FAB520] shadow-2xl scale-[1.01]' : 'bg-white/5 border-transparent'} hover:translate-y-[-5px]">
@@ -165,7 +179,7 @@ function renderSandwiches() {
           <!-- Product Details -->
           <div class="flex-1 text-right">
             <h3 class="text-lg md:text-3xl font-['Lalezar'] mb-0.5 leading-tight">${item.name}</h3>
-            <p class="text-[#FAB520] font-black text-base md:text-xl mb-1">${item.price} ج.م</p>
+            <p class="text-[#FAB520] font-black text-base md:text-xl mb-1">${displayPrice} ج.م</p>
             ${item.desc ? `<p class="text-gray-400 text-[10px] md:text-sm font-bold leading-tight line-clamp-2">${item.desc}</p>` : ''}
           </div>
           
@@ -183,6 +197,13 @@ function renderSandwiches() {
             <button onclick="setBread('${item.name}', 'western')" class="py-2.5 rounded-lg md:rounded-xl font-black text-[10px] md:text-sm transition-all ${bread === 'western' ? 'bg-[#FAB520] text-black shadow-lg scale-[1.02]' : 'bg-white/5 text-gray-500 hover:bg-white/10'}">فينو فرنسي</button>
           </div>
         ` : ''}
+
+        ${isRicePudding && qty > 0 ? `
+          <div class="mt-4 pt-4 border-t border-white/10 grid grid-cols-2 gap-3 animate-fade-in">
+            <button onclick="setVariant('${item.name}', 'plain')" class="variant-btn py-2.5 rounded-lg md:rounded-xl font-black text-[10px] md:text-sm ${variant === 'plain' ? 'active' : 'bg-white/5 text-gray-500 hover:bg-white/10'}">سادة (30 ج)</button>
+            <button onclick="setVariant('${item.name}', 'nuts')" class="variant-btn py-2.5 rounded-lg md:rounded-xl font-black text-[10px] md:text-sm ${variant === 'nuts' ? 'active' : 'bg-white/5 text-gray-500 hover:bg-white/10'}">بالمكسرات (40 ج)</button>
+          </div>
+        ` : ''}
       </div>
     `;
   }).join('');
@@ -191,7 +212,7 @@ function renderSandwiches() {
 
 function updateQty(name, delta, price) {
   if (!cart[name]) {
-    cart[name] = { quantity: 0, price: price, bread: 'baladi' };
+    cart[name] = { quantity: 0, price: price, bread: 'baladi', variant: 'plain' };
   }
   cart[name].quantity = Math.max(0, cart[name].quantity + delta);
   if (cart[name].quantity === 0) {
@@ -215,6 +236,15 @@ function setBread(name, type) {
   if (cart[name]) {
     cart[name].bread = type;
     renderSandwiches();
+  }
+}
+
+function setVariant(name, type) {
+  if (cart[name]) {
+    cart[name].variant = type;
+    cart[name].price = type === 'nuts' ? 40 : 30;
+    renderSandwiches();
+    updateMainSummary();
   }
 }
 
@@ -277,7 +307,8 @@ function renderCartSummary() {
           <div>
             <h4 class="font-black text-lg md:text-xl leading-tight">${name} (x${item.quantity})</h4>
             <div class="flex gap-2 mt-1 md:mt-2">
-               ${!['برجر يا عم', 'حواوشي يا عم', 'طبق فراخ استربس كريسبي', 'طبق محشي لفرد واحد'].includes(name) ? `<span class="text-[9px] md:text-[10px] font-black text-[#FAB520] bg-[#FAB520]/10 px-2 py-0.5 md:px-3 md:py-1 rounded-full">خبز ${item.bread === 'baladi' ? 'بلدي' : 'فرنسي'}</span>` : ''}
+               ${!['برجر يا عم', 'حواوشي يا عم', 'طبق فراخ استربس كريسبي', 'طبق محشي لفرد واحد', 'أرز بلبن يا عم'].includes(name) ? `<span class="text-[9px] md:text-[10px] font-black text-[#FAB520] bg-[#FAB520]/10 px-2 py-0.5 md:px-3 md:py-1 rounded-full">خبز ${item.bread === 'baladi' ? 'بلدي' : 'فرنسي'}</span>` : ''}
+               ${name === 'أرز بلبن يا عم' ? `<span class="text-[9px] md:text-[10px] font-black text-[#FAB520] bg-[#FAB520]/10 px-2 py-0.5 md:px-3 md:py-1 rounded-full">${item.variant === 'nuts' ? 'بالمكسرات' : 'سادة'}</span>` : ''}
             </div>
           </div>
           <span class="font-black text-[#FAB520] text-lg md:text-xl">${item.quantity * item.price} ج.م</span>
