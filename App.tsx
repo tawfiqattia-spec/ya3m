@@ -239,14 +239,12 @@ const App: React.FC = () => {
                   ].map((cat, i) => (
                     <motion.div 
                       key={cat.id}
-                      initial={{ opacity: 0, y: 30 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.1, type: 'spring' }}
-                      viewport={{ once: true }}
-                      whileHover={{ scale: 1.05 }} 
-                      whileTap={{ scale: 0.95 }}
+                      initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                      whileInView={{ opacity: 1, y: 0, scale: 1.1 }}
+                      viewport={{ amount: 0.6, margin: "-10% 0px -10% 0px" }}
+                      transition={{ type: 'spring', damping: 20, stiffness: 100 }}
                       onClick={() => setActiveModal(cat.id as any)} 
-                      className={`cursor-pointer ${cat.color} p-10 md:p-12 rounded-[3rem] flex flex-col items-center justify-center text-center gap-6 group relative shadow-xl transition-all overflow-hidden ${cat.shadow}`}
+                      className={`cursor-pointer ${cat.color} p-10 md:p-12 rounded-[3rem] flex flex-col items-center justify-center text-center gap-6 group relative shadow-xl transition-all overflow-hidden ${cat.shadow} accessibility-focus`}
                     >
                       <cat.icon className={`w-20 h-20 ${cat.text} group-hover:scale-110 transition-transform duration-300`} />
                       <h3 className={`text-4xl font-normal font-['Lalezar'] ${cat.text} leading-tight`}>{cat.title}</h3>

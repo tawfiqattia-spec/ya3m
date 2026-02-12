@@ -41,6 +41,9 @@
 </head>
 <body class="bg-black text-white selection:bg-[#FAB520] selection:text-black overflow-x-hidden">
 
+    <!-- React Root -->
+    <div id="root"></div>
+
     <!-- Preloader Screen -->
     <div id="preloader" class="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center transition-opacity duration-700">
         <div class="relative flex flex-col items-center">
@@ -67,12 +70,19 @@
         <div class="floating-item absolute text-3xl md:text-4xl opacity-10 select-none" style="top: 50%; right: 20%;">🍟</div>
     </div>
 
-    <!-- Main Content -->
+    <!-- Main Content (Fallback / SEO Content) -->
     <main id="main-content" class="max-w-6xl mx-auto px-4 pt-4 relative z-10 pb-32 opacity-0 transition-opacity duration-1000">
         
         <!-- Header Section -->
         <section class="relative flex flex-col items-center justify-center text-center pt-8 pb-6">
-            <img src="https://ya3m.com/pic/logo-ya3m.png" alt="Ya3m Logo" class="h-32 md:h-56 object-contain mb-4 cursor-pointer drop-shadow-[0_0_30px_rgba(250,181,32,0.4)]" onclick="scrollToMenu()">
+            <img src="https://ya3m.com/pic/logo-ya3m.png" alt="Ya3m Logo" class="h-32 md:h-56 object-contain mb-2 cursor-pointer drop-shadow-[0_0_30px_rgba(250,181,32,0.4)]" onclick="scrollToMenu()">
+            
+            <!-- Install Button Placeholder (Hidden by default) -->
+            <button id="pwa-install-btn" class="hidden z-20 mb-4 flex items-center gap-3 bg-[#FAB520] text-black border-2 border-black px-6 py-3 rounded-2xl transition-all shadow-lg font-black text-sm hover:scale-105 active:scale-95">
+                <i data-lucide="download" class="w-4 h-4 animate-bounce"></i>
+                <span>نزّل التطبيق يا عم</span>
+            </button>
+
             <h2 class="text-xl md:text-3xl text-[#FAB520] font-black font-['Lalezar'] flex items-center gap-2 justify-center">
                 <i data-lucide="star" class="w-5 h-5 fill-current text-[#FAB520]"></i>
                 أكل بيتي بيتحضرلك طازة مخصوص
@@ -184,6 +194,7 @@
     </div>
 
     <!-- Scripts -->
-    <script src="script.js"></script>
+    <script src="script.js" type="module"></script>
+    <script src="index.tsx" type="module"></script>
 </body>
 </html>

@@ -101,6 +101,17 @@ h1, h2, h3, .heading-font {
     animation: fade-in 0.3s ease-out forwards;
 }
 
+/* Accessibility Focus Effect */
+.accessibility-focus {
+    transition: box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.active-focus {
+    box-shadow: 0 0 30px rgba(250, 181, 32, 0.4);
+    border-color: #FAB520 !important;
+    z-index: 10;
+}
+
 /* Special styling for variants */
 .variant-btn {
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);

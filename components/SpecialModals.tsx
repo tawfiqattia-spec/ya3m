@@ -102,7 +102,7 @@ const SpecialModal: React.FC<ModalProps> = ({
 
           {/* Menu Items List */}
           <div className="flex-1 overflow-y-auto px-6 md:px-12 py-8 space-y-6 scrollbar-hide">
-            <div className="space-y-6">
+            <div className="space-y-6 pb-20">
               {initialItems.map((item, i) => {
                 const qty = persistentState.quantities[item.name] || 0;
                 const choice = persistentState.breadChoices?.[item.name] || 'baladi';
@@ -113,12 +113,12 @@ const SpecialModal: React.FC<ModalProps> = ({
 
                 return (
                   <motion.div 
-                    initial={{ opacity: 0, x: -30 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.08, type: 'spring' }}
-                    whileHover={{ scale: 1.02 }}
+                    initial={{ opacity: 0.5, scale: 0.95 }}
+                    whileInView={{ opacity: 1, scale: 1.08 }}
+                    viewport={{ amount: 0.7, margin: "-20% 0px -20% 0px" }}
+                    transition={{ type: 'spring', damping: 15, stiffness: 100 }}
                     key={item.name} 
-                    className={`p-6 md:p-8 rounded-[2.5rem] border-2 transition-all ${qty > 0 ? 'bg-white/5 border-[#FAB520] shadow-2xl' : 'bg-white/5 border-transparent'}`}
+                    className={`p-6 md:p-8 rounded-[2.5rem] border-2 transition-all accessibility-focus ${qty > 0 ? 'bg-white/5 border-[#FAB520] shadow-2xl active-focus' : 'bg-white/5 border-transparent'}`}
                   >
                     <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
                       <div className="flex items-center gap-6 w-full sm:w-auto">
@@ -128,12 +128,14 @@ const SpecialModal: React.FC<ModalProps> = ({
                            </motion.div>
                         )}
                         <div className="flex-1 text-right">
-                          <h3 className="text-2xl md:text-3xl font-black mb-1">{item.name}</h3>
+                          <h3 className="text-2xl md:text-3xl font-black mb-1 leading-tight">{item.name}</h3>
                           <p className="text-[#FAB520] font-black text-xl">{isRicePudding && variant === 'nuts' ? 40 : item.price} ج.م</p>
-                          <div className="flex items-center gap-2 text-gray-500 text-sm mt-2">
-                             <Star className="w-3 h-3 fill-current" />
-                             <span>طعم خيالي يا عم</span>
-                          </div>
+                          {item.name !== 'برجر يا عم' && (
+                            <div className="flex items-center gap-2 text-gray-500 text-sm mt-2">
+                               <Star className="w-3 h-3 fill-current" />
+                               <span>طعم خيالي يا عم</span>
+                            </div>
+                          )}
                         </div>
                       </div>
                       
@@ -174,7 +176,7 @@ const SpecialModal: React.FC<ModalProps> = ({
             </div>
 
             {/* Modal Footer Area */}
-            <div className="p-8 md:p-12 bg-black/95 backdrop-blur-xl border-t-2 border-[#FAB520]/20 shrink-0 pb-16 shadow-[0_-20px_60px_rgba(0,0,0,0.9)] mt-6">
+            <div className="p-8 md:p-12 bg-black/95 backdrop-blur-xl border-t-2 border-[#FAB520]/20 shrink-0 pb-16 shadow-[0_-20px_60px_rgba(0,0,0,0.9)] mt-6 sticky bottom-0">
               <div className="flex flex-col md:flex-row justify-between items-center gap-8">
                 <div className="flex flex-col items-center md:items-start">
                   <span className="text-gray-400 font-bold text-lg">إجمالي طلبك حتى الآن:</span>

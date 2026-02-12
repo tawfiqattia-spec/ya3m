@@ -44,21 +44,8 @@ const Hero: React.FC = () => {
         whileHover={{ scale: 1.05 }}
         src={LOGO_URL} 
         alt="Ya3m Logo" 
-        className="h-32 md:h-56 object-contain mb-4 cursor-pointer drop-shadow-[0_0_30px_rgba(250,181,32,0.4)]"
+        className="h-32 md:h-56 object-contain mb-2 cursor-pointer drop-shadow-[0_0_30px_rgba(250,181,32,0.4)]"
       />
-      
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
-        className="mb-8"
-      >
-        <h2 className="text-xl md:text-3xl text-[#FAB520] font-black font-['Lalezar'] flex items-center gap-2 justify-center">
-          <Star className="w-5 h-5 fill-current animate-pulse" />
-          أكل بيتي بيتحضرلك طازة مخصوص
-          <Star className="w-5 h-5 fill-current animate-pulse" />
-        </h2>
-      </motion.div>
 
       <AnimatePresence>
         {deferredPrompt && (
@@ -69,13 +56,26 @@ const Hero: React.FC = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleInstallClick}
-            className="z-20 mb-6 flex items-center gap-3 bg-[#FAB520] text-black border-2 border-black px-6 py-3 rounded-2xl transition-all shadow-lg font-black text-sm"
+            className="z-20 mb-4 flex items-center gap-3 bg-[#FAB520] text-black border-2 border-black px-6 py-3 rounded-2xl transition-all shadow-lg font-black text-sm"
           >
             <Download className="w-4 h-4 animate-bounce" />
             <span>نزّل التطبيق يا عم</span>
           </motion.button>
         )}
       </AnimatePresence>
+      
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
+        className="mb-6"
+      >
+        <h2 className="text-xl md:text-3xl text-[#FAB520] font-black font-['Lalezar'] flex items-center gap-2 justify-center">
+          <Star className="w-5 h-5 fill-current animate-pulse" />
+          أكل بيتي بيتحضرلك طازة مخصوص
+          <Star className="w-5 h-5 fill-current animate-pulse" />
+        </h2>
+      </motion.div>
     </div>
   );
 };

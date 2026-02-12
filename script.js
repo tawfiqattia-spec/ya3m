@@ -79,6 +79,7 @@ let cart = {};
 let sauceQuantity = 0;
 const DELIVERY_FEE = 20;
 const SAUCE_PRICE = 10;
+let deferredPrompt;
 
 // Initialize Lucide Icons
 function initIcons() {
@@ -94,6 +95,25 @@ window.scrollToMenu = function() {
     section.scrollIntoView({ behavior: 'smooth' });
   }
 };
+
+// PWA Install Prompt Logic
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const installBtn = document.getElementById('pwa-install-btn');
+  if (installBtn) {
+    installBtn.classList.remove('hidden');
+    installBtn.addEventListener('click', async () => {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        console.log('User accepted the install prompt');
+      }
+      deferredPrompt = null;
+      installBtn.classList.add('hidden');
+    });
+  }
+});
 
 // Preloader Logic
 function startPreloader() {
