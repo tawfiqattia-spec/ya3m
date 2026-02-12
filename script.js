@@ -79,6 +79,7 @@ let cart = {};
 let sauceQuantity = 0;
 const DELIVERY_FEE = 20;
 const SAUCE_PRICE = 10;
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mdaleedl";
 let deferredPrompt;
 
 // Initialize Lucide Icons
@@ -327,7 +328,7 @@ function renderCartSummary() {
           <div>
             <h4 class="font-black text-lg md:text-xl leading-tight">${name} (x${item.quantity})</h4>
             <div class="flex gap-2 mt-1 md:mt-2">
-               ${!['برجر يا عم', 'حواوشي يا عم', 'طبق فراخ استربس كريسبي', 'طبق محشي لفرد واحد', 'أرز بلبن يا عم'].includes(name) ? `<span class="text-[9px] md:text-[10px] font-black text-[#FAB520] bg-[#FAB520]/10 px-2 py-0.5 md:px-3 md:py-1 rounded-full">خبز ${item.bread === 'baladi' ? 'بلدي' : 'فرنسي'}</span>` : ''}
+               ${!['برجر يا عم', 'حواوشي يا عم', 'طبق فراخ استربس كريسبي', 'طبق محشي لفرد واحد', 'أرز بلبن يا عم'].includes(name) ? `<span class="text-[9px] md:text-[10px] font-black text-[#FAB520] bg-[#FAB520]/10 px-2 py-0.5 md:px-3 md:py-1 rounded-full">خبز ${item.bread === 'baladi' ? 'بلدي' : 'فينو'}</span>` : ''}
                ${name === 'أرز بلبن يا عم' ? `<span class="text-[9px] md:text-[10px] font-black text-[#FAB520] bg-[#FAB520]/10 px-2 py-0.5 md:px-3 md:py-1 rounded-full">${item.variant === 'nuts' ? 'بالمكسرات' : 'سادة'}</span>` : ''}
             </div>
           </div>
@@ -354,18 +355,56 @@ function renderCartSummary() {
 // Order Form Submission
 const orderForm = document.getElementById('order-form');
 if(orderForm) {
-  orderForm.addEventListener('submit', (e) => {
+  orderForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = document.getElementById('submit-btn');
+    const formData = new FormData(orderForm);
+    const userInfo = Object.fromEntries(formData.entries());
+    
     btn.disabled = true;
     btn.innerHTML = `<i data-lucide="loader" class="w-6 h-6 md:w-8 md:h-8 animate-spin"></i><span>جاري إرسال الطلب...</span>`;
     initIcons();
-  
-    setTimeout(() => {
+
+    try {
+      let subtotal = Object.values(cart).reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      subtotal += (sauceQuantity * SAUCE_PRICE);
+      const total = subtotal + DELIVERY_FEE;
+
+      const orderLines = Object.entries(cart).map(([name, item]) => {
+        let line = `${name} x${item.quantity}`;
+        if (item.variant && name === 'أرز بلبن يا عم') line += ` (${item.variant === 'nuts' ? 'مكسرات' : 'سادة'})`;
+        if (item.bread && !['برجر يا عم', 'حواوشي يا عم'].includes(name)) line += ` (خبز ${item.bread === 'baladi' ? 'بلدي' : 'فينو'})`;
+        return line;
+      });
+      if (sauceQuantity > 0) orderLines.push(`صوص أعجوبة x${sauceQuantity}`);
+
+      const response = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...userInfo,
+          order: orderLines.join('\n'),
+          total: `${total} ج.م`
+        })
+      });
+
+      if (response.ok) {
         document.getElementById('success-screen').classList.remove('hidden');
         document.getElementById('success-screen').classList.add('flex');
         initIcons();
-    }, 1500);
+      } else {
+        alert("حصل مشكلة، جرب تاني يا عم!");
+        btn.disabled = false;
+        btn.innerHTML = `<span>اطلب دلوقتي!</span><i data-lucide="send" class="w-6 h-6 md:w-7 md:h-7"></i>`;
+        initIcons();
+      }
+    } catch (error) {
+      console.error("Submission error:", error);
+      alert("مشكلة فنية، اتأكد من النت!");
+      btn.disabled = false;
+      btn.innerHTML = `<span>اطلب دلوقتي!</span><i data-lucide="send" class="w-6 h-6 md:w-7 md:h-7"></i>`;
+      initIcons();
+    }
   });
 }
 

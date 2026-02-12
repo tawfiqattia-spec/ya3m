@@ -9,6 +9,7 @@ import { Utensils, IceCream, Sandwich, ShoppingBasket, X, Trash2, Send, Plus, Mi
 
 const DELIVERY_FEE = 20;
 const SAUCE_PRICE = 10;
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mdaleedl";
 
 const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
@@ -149,10 +150,39 @@ const App: React.FC = () => {
       return;
     }
     setIsSubmitting(true);
-    setTimeout(() => {
+
+    try {
+      const orderDetailsString = fullOrderSummary.map(item => {
+        let details = `${item.name} x${item.quantity}`;
+        if (item.variant) details += ` (${item.variant === 'nuts' ? 'مكسرات' : 'سادة'})`;
+        if (item.bread) details += ` (خبز ${item.bread === 'baladi' ? 'بلدي' : 'فينو'})`;
+        return details;
+      }).join('\n');
+
+      const response = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: userInfo.name,
+          phone: userInfo.phone,
+          address: userInfo.address,
+          notes: userInfo.notes,
+          order: orderDetailsString,
+          total: `${globalTotal} ج.م`
+        })
+      });
+
+      if (response.ok) {
         setShowSuccess(true);
-        setIsSubmitting(false);
-    }, 2000);
+      } else {
+        alert("حصل مشكلة في إرسال الطلب، جرب تاني يا عم!");
+      }
+    } catch (error) {
+      console.error("Submission error:", error);
+      alert("حصل مشكلة فنية، اتأكد من النت وجرب تاني!");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const totalItemCount = useMemo(() => {
