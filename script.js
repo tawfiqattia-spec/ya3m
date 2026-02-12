@@ -4,7 +4,7 @@ const SANDWICH_ITEMS = [
   { 
     name: 'برجر يا عم', 
     price: 65, 
-    image: 'https://ya3m.com/pic/burger.png' 
+    image: 'https://ya3m.com/pic/burg.png' 
   },
   { 
     name: 'صينية سمين مشكل بلدي لفرد واحد', 
@@ -19,7 +19,7 @@ const SANDWICH_ITEMS = [
   { 
     name: 'سجق', 
     price: 35, 
-    image: 'https://ya3m.com/pic/sjq.png' 
+    image: 'https://ya3m.com/pic/sogok.png' 
   },
   { 
     name: 'حواوشي يا عم', 
@@ -27,9 +27,9 @@ const SANDWICH_ITEMS = [
     image: 'https://ya3m.com/pic/hawwshy.png' 
   },
   { 
-    name: 'سندوتش فراخ استربس', 
-    price: 85, 
-    image: 'https://ya3m.com/pic/strips.png' 
+    name: 'طبق فراخ استربس كريسبي', 
+    price: 140, 
+    image: 'https://ya3m.com/pic/kres.png' 
   },
   { 
     name: 'صينية شهية لفرد واحد', 
@@ -39,17 +39,17 @@ const SANDWICH_ITEMS = [
   { 
     name: 'مكرونة بالبشاميل لفرد واحد', 
     price: 75, 
-    image: 'https://ya3m.com/pic/pasta.png' 
+    image: 'https://ya3m.com/pic/baashamil.png' 
   },
   { 
     name: 'كرات بطاطس بالجبنة لفرد واحد', 
     price: 35, 
-    image: 'https://ya3m.com/pic/potato.png' 
+    image: 'https://ya3m.com/pic/botito.png' 
   },
   { 
     name: 'أرز بلبن يا عم', 
     price: 30, 
-    image: 'https://ya3m.com/pic/rice-pudding.png' 
+    image: 'https://ya3m.com/pic/roz.png' 
   },
 ];
 
@@ -113,7 +113,7 @@ function renderSandwiches() {
     const noOptionsItems = [
         'برجر يا عم',
         'حواوشي يا عم', 
-        'سندوتش فراخ استربس', 
+        'طبق فراخ استربس كريسبي', 
         'صينية شهية لفرد واحد', 
         'صينية سمين مشكل بلدي لفرد واحد',
         'مكرونة بالبشاميل لفرد واحد', 
@@ -140,6 +140,7 @@ function renderSandwiches() {
             ${item.name === 'برجر يا عم' ? '<p class="text-gray-400 text-xs mt-1">برجر بلدي مشوي على الفحم</p>' : ''}
             ${item.name === 'صينية سمين مشكل بلدي لفرد واحد' ? '<p class="text-gray-400 text-xs mt-1">فشة وطحال وحلويات.. السمين الأصلي!</p>' : ''}
             ${isRicePudding ? '<p class="text-gray-400 text-xs mt-1">رز بلبن كريمي وطعم خيالي</p>' : ''}
+            ${item.name === 'طبق فراخ استربس كريسبي' ? '<p class="text-gray-400 text-xs mt-1">أصابع دجاج مقرمشة مع البطاطس والبهارات</p>' : ''}
           </div>
           
           <!-- Controls -->
@@ -288,7 +289,7 @@ function renderCartSummary() {
               <h4 class="font-bold text-base leading-tight">${name} (عدد ${item.quantity})</h4>
               <div class="flex gap-2 mt-1">
                 ${name === 'أرز بلبن يا عم' ? `<span class="text-[9px] font-bold text-[#FAB520] bg-[#FAB520]/10 px-2 py-0.5 rounded-full inline-block">${item.variant === 'nuts' ? 'بالمكسرات' : 'سادة'}</span>` : ''}
-                ${!['برجر يا عم', 'حواوشي يا عم', 'سندوتش فراخ استربس', 'صينية شهية لفرد واحد', 'صينية سمين مشكل بلدي لفرد واحد', 'مكرونة بالبشاميل لفرد واحد', 'كرات بطاطس بالجبنة لفرد واحد', 'أرز بلبن يا عم'].includes(name) ? `<span class="text-[9px] font-bold text-[#FAB520] bg-[#FAB520]/10 px-2 py-0.5 rounded-full inline-block">خبز ${item.bread === 'baladi' ? 'بلدي' : 'فينو فرنسي'}</span>` : ''}
+                ${!['برجر يا عم', 'حواوشي يا عم', 'طبق فراخ استربس كريسبي', 'صينية شهية لفرد واحد', 'صينية سمين مشكل بلدي لفرد واحد', 'مكرونة بالبشاميل لفرد واحد', 'كرات بطاطس بالجبنة لفرد واحد', 'أرز بلبن يا عم'].includes(name) ? `<span class="text-[9px] font-bold text-[#FAB520] bg-[#FAB520]/10 px-2 py-0.5 rounded-full inline-block">خبز ${item.bread === 'baladi' ? 'بلدي' : 'فينو فرنسي'}</span>` : ''}
               </div>
             </div>
             <span class="font-bold text-[#FAB520] text-sm">${item.quantity * item.price} ج.م</span>

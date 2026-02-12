@@ -1,12 +1,12 @@
 
 export const PRIMARY_COLOR = '#FAB520';
-export const LOGO_URL = 'https://ya3m.com/pic/ya3m.png';
+export const LOGO_URL = 'https://ya3m.com/pic/logo-ya3m.png';
 
 export const SANDWICH_ITEMS = [
   { 
     name: 'برجر يا عم', 
     price: 65, 
-    image: 'https://ya3m.com/pic/burger.png' 
+    image: 'https://ya3m.com/pic/burg.png' 
   },
   { 
     name: 'صينية سمين مشكل بلدي لفرد واحد', 
@@ -21,7 +21,7 @@ export const SANDWICH_ITEMS = [
   { 
     name: 'سجق', 
     price: 35, 
-    image: 'https://ya3m.com/pic/sjq.png' 
+    image: 'https://ya3m.com/pic/sogok.png' 
   },
   { 
     name: 'حواوشي يا عم', 
@@ -29,9 +29,9 @@ export const SANDWICH_ITEMS = [
     image: 'https://ya3m.com/pic/hawwshy.png' 
   },
   { 
-    name: 'سندوتش فراخ استربس', 
-    price: 85, 
-    image: 'https://ya3m.com/pic/strips.png' 
+    name: 'طبق فراخ استربس كريسبي', 
+    price: 140, 
+    image: 'https://ya3m.com/pic/kres.png' 
   },
   { 
     name: 'صينية شهية لفرد واحد', 
@@ -41,17 +41,17 @@ export const SANDWICH_ITEMS = [
   { 
     name: 'مكرونة بالبشامل لفرد واحد', 
     price: 75, 
-    image: 'https://ya3m.com/pic/pasta.png' 
+    image: 'https://ya3m.com/pic/baashamil.png' 
   },
   { 
     name: 'كرات بطاطس بالجبنة لفرد واحد', 
     price: 35, 
-    image: 'https://ya3m.com/pic/potato.png' 
+    image: 'https://ya3m.com/pic/botito.png' 
   },
   { 
     name: 'أرز بلبن يا عم', 
     price: 30, 
-    image: 'https://ya3m.com/pic/rice-pudding.png' 
+    image: 'https://ya3m.com/pic/roz.png' 
   },
 ];
 
@@ -64,7 +64,7 @@ export const SWEET_ITEMS = [
   { 
     name: 'أرز بلبن يا عم', 
     price: 30, 
-    image: 'https://ya3m.com/pic/rice-pudding.png' 
+    image: 'https://ya3m.com/pic/roz.png' 
   },
   { name: 'رز بلبن قنبلة', price: 50 },
   { name: 'أم علي بالمكسرات', price: 55 },

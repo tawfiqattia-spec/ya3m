@@ -99,7 +99,7 @@ const SpecialModal: React.FC<ModalProps> = ({
                 const choice = persistentState.breadChoices?.[item.name] || 'baladi';
                 const variant = persistentState.ricePuddingVariants?.[item.name] || 'plain';
                 
-                const showBread = type === 'sandwiches' && !['برجر يا عم', 'حواوشي يا عم', 'سندوتش فراخ استربس', 'صينية سمين مشكل بلدي لفرد واحد', 'صينية شهية لفرد واحد', 'مكرونة بالبشامل لفرد واحد', 'كرات بطاطس بالجبنة لفرد واحد', 'أرز بلبن يا عم'].includes(item.name);
+                const showBread = type === 'sandwiches' && !['برجر يا عم', 'حواوشي يا عم', 'طبق فراخ استربس كريسبي', 'صينية سمين مشكل بلدي لفرد واحد', 'صينية شهية لفرد واحد', 'مكرونة بالبشامل لفرد واحد', 'كرات بطاطس بالجبنة لفرد واحد', 'أرز بلبن يا عم'].includes(item.name);
                 const isRicePudding = item.name === 'أرز بلبن يا عم';
 
                 return (
